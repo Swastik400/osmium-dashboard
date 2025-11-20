@@ -1,0 +1,1372 @@
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <title>Exam Builder UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css">
+  <style>
+    .mobile-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 30;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Comprehensive Responsive Design */
+
+    /* Ultra-wide screens (1920px+) */
+    @media (min-width: 1920px) {
+      .sidebar { width: 320px; }
+      .main-content { margin-left: 320px; }
+      .header-bar { left: 320px; }
+      .max-w-5xl { max-width: 80rem; }
+    }
+
+    /* Large Desktop (1280px - 1919px) */
+    @media (min-width: 1280px) and (max-width: 1919px) {
+      .sidebar { width: 280px; }
+      .main-content { margin-left: 280px; }
+      .header-bar { left: 280px; }
+      .max-w-5xl { max-width: 72rem; }
+    }
+
+    /* Desktop (1024px - 1279px) */
+    @media (min-width: 1024px) and (max-width: 1279px) {
+      .sidebar { width: 260px; }
+      .main-content { margin-left: 260px; }
+      .header-bar { left: 260px; }
+      .max-w-5xl { max-width: 64rem; }
+    }
+
+    /* Tablet Landscape (768px - 1023px) */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
+        transition: transform 0.3s ease;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; width: 100%; }
+      .header-bar { left: 0; padding: 16px 20px; }
+      .question-card { padding: 1.25rem; border-radius: 12px; }
+      .option-item { padding: 12px 0; }
+    }
+
+    /* Mobile Portrait (480px - 767px) */
+    @media (min-width: 480px) and (max-width: 767px) {
+      .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
+        transition: transform 0.3s ease;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; width: 100%; }
+      .header-bar { left: 0; padding: 12px 16px; }
+      .question-card {
+        margin: 0 -8px;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+      .option-item { padding: 10px 0; min-height: 44px; }
+      .drag-handle { display: none !important; }
+      .remove-option { opacity: 1 !important; }
+      .question-type, .points-input { font-size: 12px; }
+    }
+
+    /* Small Mobile (320px - 479px) */
+    @media (max-width: 479px) {
+      .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
+        transition: transform 0.3s ease;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; width: 100%; }
+      .header-bar { left: 0; padding: 8px 12px; }
+      .question-card {
+        margin: 0 -12px;
+        border-radius: 6px;
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+      .option-item { padding: 8px 0; min-height: 44px; }
+      .options-container { margin-left: 0 !important; }
+      .question-type { font-size: 11px; padding: 6px 8px; }
+      .points-input { width: 40px; font-size: 11px; }
+      #subjectToggle { min-width: 50px !important; font-size: 11px !important; }
+      #saveBtn { padding: 6px 10px !important; font-size: 11px !important; }
+    }
+
+    /* Touch-friendly for all mobile devices */
+    @media (hover: none) and (pointer: coarse) {
+      button, .option-item, .nav-item { min-height: 44px; }
+      .mobile-menu-btn { min-width: 44px; min-height: 44px; }
+      .question-type, .points-input { min-height: 40px; }
+    }
+
+    /* Drag and drop styles */
+    .drop-zone-active {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      border-color: #3b82f6;
+    }
+
+    .question-card {
+      transition: all 0.2s ease;
+    }
+
+    .question-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Sidebar Styles - AI Mentor Theme */
+    .sidebar {
+      width: 280px;
+      background-color: #faf8f6;
+      border-right: 1px solid #ebe8e2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 0;
+      overflow-y: auto;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    .sidebar-top {
+      flex: 1;
+    }
+
+    .logo {
+      width: 70%;
+      margin-bottom: 0;
+      padding: 0;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #8b8b8b;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 0 20px;
+      margin: 16px 0 8px 0;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      margin: 0 12px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #5a5a5a;
+      transition: all 0.2s ease;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background-color: #f0ede8;
+    }
+
+    .nav-item.active {
+      background-color: #e8e3da;
+      color: #2e2e2e;
+      font-weight: 500;
+    }
+
+    .sidebar-bottom {
+      border-top: 1px solid #ebe8e2;
+      padding-top: 16px;
+      padding: 0 8px;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      margin: 16px 0 0 0;
+      border-radius: 8px;
+      background-color: #ffffff;
+      cursor: pointer;
+    }
+
+    .user-details {
+      flex: 1;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #2e2e2e;
+    }
+
+    .user-plan {
+      font-size: 11px;
+      color: #8b8b8b;
+      margin-top: 2px;
+    }
+
+    .settings-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .search-container {
+      position: relative;
+      margin: 0 20px 32px 20px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 12px 10px 36px;
+      border: 1px solid #ebe8e2;
+      border-radius: 8px;
+      background: #f5f3f0;
+      font-size: 14px;
+      color: #666;
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: #999;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      opacity: 0.5;
+    }
+
+    .search-shortcut {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 11px;
+      color: #999;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      margin-bottom: 32px;
+    }
+
+    .menu-btn {
+      width: 32px;
+      height: 32px;
+      background: #ffffff;
+      border: 1px solid #ebe8e2;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .menu-btn:hover {
+      background: #f5f3f0;
+      border-color: #d4cfc8;
+    }
+
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 999;
+    }
+
+    .sidebar-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
+        transition: transform 0.3s ease;
+      }
+      
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .sidebar {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 280px;
+        width: calc(100% - 280px);
+      }
+
+      .header-bar {
+        left: 280px;
+      }
+
+      .mobile-menu-btn {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-bar {
+        left: 0;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+        background: white;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 8px;
+        cursor: pointer;
+      }
+
+      .mobile-menu-btn:hover {
+        background: #f5f5f5;
+      }
+    }
+
+
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.left-0{left:0px}.right-0{right:0px}.top-0{top:0px}.top-full{top:100%}.z-10{z-index:10}.z-20{z-index:20}.mx-auto{margin-left:auto;margin-right:auto}.mb-4{margin-bottom:1rem}.ml-0{margin-left:0px}.ml-1{margin-left:0.25rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.hidden{display:none}.h-12{height:3rem}.h-4{height:1rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-28{width:7rem}.w-4{width:1rem}.w-full{width:100%}.min-w-0{min-width:0px}.min-w-\[100px\]{min-width:100px}.min-w-\[50px\]{min-width:50px}.max-w-5xl{max-width:64rem}.max-w-full{max-width:100%}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.cursor-grab{cursor:grab}.resize-none{resize:none}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.space-x-1 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.25rem * var(--tw-space-x-reverse));margin-left:calc(0.25rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-none{border-style:none}.border-\[\#D4C4A8\]{--tw-border-opacity:1;border-color:rgb(212 196 168 / var(--tw-border-opacity, 1))}.border-\[\#D9C8B1\]{--tw-border-opacity:1;border-color:rgb(217 200 177 / var(--tw-border-opacity, 1))}.border-\[\#E0D2BD\]{--tw-border-opacity:1;border-color:rgb(224 210 189 / var(--tw-border-opacity, 1))}.border-\[\#E8DCC6\]{--tw-border-opacity:1;border-color:rgb(232 220 198 / var(--tw-border-opacity, 1))}.border-\[\#E8DCC6\]\/50{border-color:rgb(232 220 198 / 0.5)}.border-transparent{border-color:transparent}.bg-\[\#C58F39\]{--tw-bg-opacity:1;background-color:rgb(197 143 57 / var(--tw-bg-opacity, 1))}.bg-\[\#F6F2EB\]{--tw-bg-opacity:1;background-color:rgb(246 242 235 / var(--tw-bg-opacity, 1))}.bg-\[\#FEFCF8\]\/80{background-color:rgb(254 252 248 / 0.8)}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-1{padding:0.25rem}.p-2{padding:0.5rem}.p-4{padding:1rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pb-4{padding-bottom:1rem}.pt-3{padding-top:0.75rem}.text-left{text-align:left}.text-center{text-align:center}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-\[\#2D2A24\]{--tw-text-opacity:1;color:rgb(45 42 36 / var(--tw-text-opacity, 1))}.text-\[\#2F2A24\]{--tw-text-opacity:1;color:rgb(47 42 36 / var(--tw-text-opacity, 1))}.text-\[\#4A3F35\]{--tw-text-opacity:1;color:rgb(74 63 53 / var(--tw-text-opacity, 1))}.text-\[\#4B3F31\]{--tw-text-opacity:1;color:rgb(75 63 49 / var(--tw-text-opacity, 1))}.text-\[\#4B4134\]{--tw-text-opacity:1;color:rgb(75 65 52 / var(--tw-text-opacity, 1))}.text-\[\#5A4F40\]{--tw-text-opacity:1;color:rgb(90 79 64 / var(--tw-text-opacity, 1))}.text-\[\#5D4C37\]{--tw-text-opacity:1;color:rgb(93 76 55 / var(--tw-text-opacity, 1))}.text-\[\#6B5D4F\]{--tw-text-opacity:1;color:rgb(107 93 79 / var(--tw-text-opacity, 1))}.text-\[\#8E806D\]{--tw-text-opacity:1;color:rgb(142 128 109 / var(--tw-text-opacity, 1))}.text-\[\#A18C6B\]{--tw-text-opacity:1;color:rgb(161 140 107 / var(--tw-text-opacity, 1))}.text-\[\#B2A28E\]{--tw-text-opacity:1;color:rgb(178 162 142 / var(--tw-text-opacity, 1))}.text-\[\#C0AE99\]{--tw-text-opacity:1;color:rgb(192 174 153 / var(--tw-text-opacity, 1))}.text-\[\#C1B09B\]{--tw-text-opacity:1;color:rgb(193 176 155 / var(--tw-text-opacity, 1))}.text-\[\#C58F39\]{--tw-text-opacity:1;color:rgb(197 143 57 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-0{opacity:0}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.outline-none{outline:2px solid transparent;outline-offset:2px}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-shadow{transition-property:box-shadow;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.ease-in-out{transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1)}.hover\:border-\[\#C58F39\]:hover{--tw-border-opacity:1;border-color:rgb(197 143 57 / var(--tw-border-opacity, 1))}.hover\:bg-\[\#B8832F\]:hover{--tw-bg-opacity:1;background-color:rgb(184 131 47 / var(--tw-bg-opacity, 1))}.hover\:bg-\[\#F2E5D3\]:hover{--tw-bg-opacity:1;background-color:rgb(242 229 211 / var(--tw-bg-opacity, 1))}.hover\:bg-\[\#F9F2E7\]:hover{--tw-bg-opacity:1;background-color:rgb(249 242 231 / var(--tw-bg-opacity, 1))}.hover\:bg-\[\#F9F6F0\]:hover{--tw-bg-opacity:1;background-color:rgb(249 246 240 / var(--tw-bg-opacity, 1))}.hover\:text-\[\#8D7F6B\]:hover{--tw-text-opacity:1;color:rgb(141 127 107 / var(--tw-text-opacity, 1))}.hover\:text-\[\#A18C6B\]:hover{--tw-text-opacity:1;color:rgb(161 140 107 / var(--tw-text-opacity, 1))}.hover\:text-\[\#A38F77\]:hover{--tw-text-opacity:1;color:rgb(163 143 119 / var(--tw-text-opacity, 1))}.hover\:shadow-md:hover{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.focus\:bg-\[\#F9F6F0\]:focus{--tw-bg-opacity:1;background-color:rgb(249 246 240 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.group:hover .group-hover\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:ml-2{margin-left:0.5rem}.sm\:ml-7{margin-left:1.75rem}.sm\:mt-2{margin-top:0.5rem}.sm\:mt-4{margin-top:1rem}.sm\:block{display:block}.sm\:inline{display:inline}.sm\:hidden{display:none}.sm\:h-14{height:3.5rem}.sm\:h-3{height:0.75rem}.sm\:w-12{width:3rem}.sm\:w-3{width:0.75rem}.sm\:w-36{width:9rem}.sm\:min-w-\[70px\]{min-width:70px}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:gap-0{gap:0px}.sm\:gap-2{gap:0.5rem}.sm\:gap-3{gap:0.75rem}.sm\:space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.sm\:space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.sm\:space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.sm\:space-y-0 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0px * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0px * var(--tw-space-y-reverse))}.sm\:space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.sm\:space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.sm\:rounded-2xl{border-radius:1rem}.sm\:p-1\.5{padding:0.375rem}.sm\:p-5{padding:1.25rem}.sm\:px-2{padding-left:0.5rem;padding-right:0.5rem}.sm\:px-3{padding-left:0.75rem;padding-right:0.75rem}.sm\:px-4{padding-left:1rem;padding-right:1rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.sm\:py-2{padding-top:0.5rem;padding-bottom:0.5rem}.sm\:py-4{padding-top:1rem;padding-bottom:1rem}.sm\:py-8{padding-top:2rem;padding-bottom:2rem}.sm\:pb-6{padding-bottom:1.5rem}.sm\:pt-4{padding-top:1rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:mt-6{margin-top:1.5rem}.md\:block{display:block}.md\:inline-flex{display:inline-flex}.md\:h-16{height:4rem}.md\:w-14{width:3.5rem}.md\:min-w-\[90px\]{min-width:90px}.md\:gap-6{gap:1.5rem}.md\:space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.md\:space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.md\:p-2{padding:0.5rem}.md\:px-3{padding-left:0.75rem;padding-right:0.75rem}.md\:px-4{padding-left:1rem;padding-right:1rem}.md\:px-6{padding-left:1.5rem;padding-right:1.5rem}.md\:py-2{padding-top:0.5rem;padding-bottom:0.5rem}.md\:text-base{font-size:1rem;line-height:1.5rem}.md\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width: 1024px){.lg\:w-16{width:4rem}.lg\:p-6{padding:1.5rem}.lg\:px-6{padding-left:1.5rem;padding-right:1.5rem}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:text-lg{font-size:1.125rem;line-height:1.75rem}.lg\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 1280px){.xl\:block{display:block}.xl\:px-8{padding-left:2rem;padding-right:2rem}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.left-0{left:0px}.right-0{right:0px}.top-0{top:0px}.top-full{top:100%}.z-10{z-index:10}.z-20{z-index:20}.mx-auto{margin-left:auto;margin-right:auto}.mb-4{margin-bottom:1rem}.ml-0{margin-left:0px}.ml-1{margin-left:0.25rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.hidden{display:none}.h-12{height:3rem}.h-4{height:1rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-28{width:7rem}.w-4{width:1rem}.w-full{width:100%}.min-w-0{min-width:0px}.min-w-\[100px\]{min-width:100px}.min-w-\[50px\]{min-width:50px}.max-w-5xl{max-width:64rem}.max-w-full{max-width:100%}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.cursor-grab{cursor:grab}.resize-none{resize:none}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.space-x-1 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.25rem * var(--tw-space-x-reverse));margin-left:calc(0.25rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-none{border-style:none}.border-\[\#D4C4A8\]{--tw-border-opacity:1;border-color:rgb(212 196 168 / var(--tw-border-opacity, 1))}.border-\[\#D9C8B1\]{--tw-border-opacity:1;border-color:rgb(217 200 177 / var(--tw-border-opacity, 1))}.border-\[\#E0D2BD\]{--tw-border-opacity:1;border-color:rgb(224 210 189 / var(--tw-border-opacity, 1))}.border-\[\#E8DCC6\]{--tw-border-opacity:1;border-color:rgb(232 220 198 / var(--tw-border-opacity, 1))}.border-\[\#E8DCC6\]\/50{border-color:rgb(232 220 198 / 0.5)}.border-transparent{border-color:transparent}.bg-\[\#C58F39\]{--tw-bg-opacity:1;background-color:rgb(197 143 57 / var(--tw-bg-opacity, 1))}.bg-\[\#F6F2EB\]{--tw-bg-opacity:1;background-color:rgb(246 242 235 / var(--tw-bg-opacity, 1))}.bg-\[\#FEFCF8\]\/80{background-color:rgb(254 252 248 / 0.8)}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-1{padding:0.25rem}.p-2{padding:0.5rem}.p-4{padding:1rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pb-4{padding-bottom:1rem}.pt-3{padding-top:0.75rem}.text-left{text-align:left}.text-center{text-align:center}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-\[\#2D2A24\]{--tw-text-opacity:1;color:rgb(45 42 36 / var(--tw-text-opacity, 1))}.text-\[\#2F2A24\]{--tw-text-opacity:1;color:rgb(47 42 36 / var(--tw-text-opacity, 1))}.text-\[\#4A3F35\]{--tw-text-opacity:1;color:rgb(74 63 53 / var(--tw-text-opacity, 1))}.text-\[\#4B3F31\]{--tw-text-opacity:1;color:rgb(75 63 49 / var(--tw-text-opacity, 1))}.text-\[\#4B4134\]{--tw-text-opacity:1;color:rgb(75 65 52 / var(--tw-text-opacity, 1))}.text-\[\#5A4F40\]{--tw-text-opacity:1;color:rgb(90 79 64 / var(--tw-text-opacity, 1))}.text-\[\#5D4C37\]{--tw-text-opacity:1;color:rgb(93 76 55 / var(--tw-text-opacity, 1))}.text-\[\#6B5D4F\]{--tw-text-opacity:1;color:rgb(107 93 79 / var(--tw-text-opacity, 1))}.text-\[\#8E806D\]{--tw-text-opacity:1;color:rgb(142 128 109 / var(--tw-text-opacity, 1))}.text-\[\#A18C6B\]{--tw-text-opacity:1;color:rgb(161 140 107 / var(--tw-text-opacity, 1))}.text-\[\#B2A28E\]{--tw-text-opacity:1;color:rgb(178 162 142 / var(--tw-text-opacity, 1))}.text-\[\#C0AE99\]{--tw-text-opacity:1;color:rgb(192 174 153 / var(--tw-text-opacity, 1))}.text-\[\#C1B09B\]{--tw-text-opacity:1;color:rgb(193 176 155 / var(--tw-text-opacity, 1))}.text-\[\#C58F39\]{--tw-text-opacity:1;color:rgb(197 143 57 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-0{opacity:0}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.outline-none{outline:2px solid transparent;outline-offset:2px}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-shadow{transition-property:box-shadow;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.ease-in-out{transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1)}.hover\:border-\[\#C58F39\]:hover{--tw-border-opacity:1;border-color:rgb(197 143 57 / var(--tw-border-opacity, 1))}.hover\:bg-\[\#B8832F\]:hover{--tw-bg-opacity:1;background-color:rgb(184 131 47 / var(--tw-bg-opacity, 1))}.hover\:bg-\[\#F2E5D3\]:hover{--tw-bg-opacity:1;background-color:rgb(242 229 211 / var(--tw-bg-opacity, 1))}.hover\:bg-\[\#F9F2E7\]:hover{--tw-bg-opacity:1;background-color:rgb(249 242 231 / var(--tw-bg-opacity, 1))}.hover\:bg-\[\#F9F6F0\]:hover{--tw-bg-opacity:1;background-color:rgb(249 246 240 / var(--tw-bg-opacity, 1))}.hover\:text-\[\#8D7F6B\]:hover{--tw-text-opacity:1;color:rgb(141 127 107 / var(--tw-text-opacity, 1))}.hover\:text-\[\#A18C6B\]:hover{--tw-text-opacity:1;color:rgb(161 140 107 / var(--tw-text-opacity, 1))}.hover\:text-\[\#A38F77\]:hover{--tw-text-opacity:1;color:rgb(163 143 119 / var(--tw-text-opacity, 1))}.hover\:shadow-md:hover{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.focus\:bg-\[\#F9F6F0\]:focus{--tw-bg-opacity:1;background-color:rgb(249 246 240 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.group:hover .group-hover\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:ml-2{margin-left:0.5rem}.sm\:ml-7{margin-left:1.75rem}.sm\:mt-2{margin-top:0.5rem}.sm\:mt-4{margin-top:1rem}.sm\:block{display:block}.sm\:inline{display:inline}.sm\:hidden{display:none}.sm\:h-14{height:3.5rem}.sm\:h-3{height:0.75rem}.sm\:w-12{width:3rem}.sm\:w-3{width:0.75rem}.sm\:w-36{width:9rem}.sm\:min-w-\[70px\]{min-width:70px}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:gap-0{gap:0px}.sm\:gap-2{gap:0.5rem}.sm\:gap-3{gap:0.75rem}.sm\:space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.sm\:space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.sm\:space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.sm\:space-y-0 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0px * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0px * var(--tw-space-y-reverse))}.sm\:space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.sm\:space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.sm\:rounded-2xl{border-radius:1rem}.sm\:p-1\.5{padding:0.375rem}.sm\:p-5{padding:1.25rem}.sm\:px-2{padding-left:0.5rem;padding-right:0.5rem}.sm\:px-3{padding-left:0.75rem;padding-right:0.75rem}.sm\:px-4{padding-left:1rem;padding-right:1rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.sm\:py-2{padding-top:0.5rem;padding-bottom:0.5rem}.sm\:py-4{padding-top:1rem;padding-bottom:1rem}.sm\:py-8{padding-top:2rem;padding-bottom:2rem}.sm\:pb-6{padding-bottom:1.5rem}.sm\:pt-4{padding-top:1rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:mt-6{margin-top:1.5rem}.md\:block{display:block}.md\:inline-flex{display:inline-flex}.md\:h-16{height:4rem}.md\:w-14{width:3.5rem}.md\:min-w-\[90px\]{min-width:90px}.md\:gap-6{gap:1.5rem}.md\:space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.md\:space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.md\:p-2{padding:0.5rem}.md\:px-3{padding-left:0.75rem;padding-right:0.75rem}.md\:px-4{padding-left:1rem;padding-right:1rem}.md\:px-6{padding-left:1.5rem;padding-right:1.5rem}.md\:py-2{padding-top:0.5rem;padding-bottom:0.5rem}.md\:text-base{font-size:1rem;line-height:1.5rem}.md\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width: 1024px){.lg\:w-16{width:4rem}.lg\:p-6{padding:1.5rem}.lg\:px-6{padding-left:1.5rem;padding-right:1.5rem}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:text-lg{font-size:1.125rem;line-height:1.75rem}.lg\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 1280px){.xl\:block{display:block}.xl\:px-8{padding-left:2rem;padding-right:2rem}}</style></head>
+
+<body class="min-h-screen bg-[#F6F2EB] text-[#2F2A24] antialiased">
+
+
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <div class="min-h-screen flex">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <div class="logo-container">
+                <img src="logos/logo.svg" alt="" class="logo">
+                <button type="button" class="menu-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+                    <img src="logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+                </button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <div class="search-shortcut">Ctrl + F</div>
+            </div>
+
+            <div class="section-label">General</div>
+            <a href="../teacher dashboard/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"></rect><path d="M120,56v48a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V56A16,16,0,0,1,56,40h48A16,16,0,0,1,120,56Zm80-16H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-96,96H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Z"></path></svg> Dashboard</a>
+            <a href="../student management/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"></rect><path d="M164.47,195.63a8,8,0,0,1-6.7,12.37H10.23a8,8,0,0,1-6.7-12.37,95.83,95.83,0,0,1,47.22-37.71,60,60,0,1,1,66.5,0A95.83,95.83,0,0,1,164.47,195.63Zm87.91-.15a95.87,95.87,0,0,0-47.13-37.56A60,60,0,0,0,144.7,54.59a4,4,0,0,0-1.33,6A75.83,75.83,0,0,1,147,150.53a4,4,0,0,0,1.07,5.53,112.32,112.32,0,0,1,29.85,30.83,23.92,23.92,0,0,1,3.65,16.47,4,4,0,0,0,3.95,4.64h60.3a8,8,0,0,0,7.73-5.93A8.22,8.22,0,0,0,252.38,195.48Z"></path></svg> Student Management</a>
+            <a href="../project management/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"></rect><path d="M240,56V200a8,8,0,0,1-8,8H160a24,24,0,0,0-24,23.94,7.9,7.9,0,0,1-5.12,7.55A8,8,0,0,1,120,232a24,24,0,0,0-24-24H24a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H88a32,32,0,0,1,32,32v87.73a8.17,8.17,0,0,0,7.47,8.25,8,8,0,0,0,8.53-8V80a32,32,0,0,1,32-32h64A8,8,0,0,1,240,56Z"></path></svg> Project Management</a>
+            <a href="../research paper/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"></rect><path d="M232,216a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H181.25A72,72,0,0,0,144,80.46V136a16,16,0,0,1-16,16H80a16,16,0,0,1-16-16V32A16,16,0,0,1,80,16h48a16,16,0,0,1,16,16V64.37A88.05,88.05,0,0,1,203.94,208H224A8,8,0,0,1,232,216Zm-96-32a8,8,0,0,0,0-16H72a8,8,0,0,0,0,16Z"></path></svg> Research paper</a>
+            <div class="nav-item active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"></rect><path d="M200,32H163.74a47.92,47.92,0,0,0-71.48,0H56A16,16,0,0,0,40,48V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm-72,0a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm32,128H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z"></path></svg> Exam &amp; Tests</div>
+            <a href="../AI mentor/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"></rect><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35a80,80,0,0,0,108.34,40.65l24.71,7.27a16,16,0,0,0,19.87-19.86Zm-16.25,1.47L224,216l-27.76-8.17a8,8,0,0,0-6,.63,64.05,64.05,0,0,1-85.87-24.88A79.93,79.93,0,0,0,174.7,89.71a64,64,0,0,1,41.75,92.48A8,8,0,0,0,215.82,188.23Z"></path></svg> AI Mentor</a>
+            <a href="../Study Materials/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"></rect><path d="M226.53,56.41l-96-32a8,8,0,0,0-5.06,0l-96,32A8,8,0,0,0,24,64v80a8,8,0,0,0,16,0V75.1L73.59,86.29a64,64,0,0,0,20.65,88.05c-18,7.06-33.56,19.83-44.94,37.29a8,8,0,1,0,13.4,8.74C77.77,197.25,101.57,184,128,184s50.23,13.25,65.3,36.37a8,8,0,0,0,13.4-8.74c-11.38-17.46-27-30.23-44.94-37.29a64,64,0,0,0,20.65-88l44.12-14.7a8,8,0,0,0,0-15.18ZM176,120A48,48,0,1,1,89.35,91.55l36.12,12a8,8,0,0,0,5.06,0l36.12-12A47.89,47.89,0,0,1,176,120Z"></path></svg> Study Materials</a>
+
+            <div class="section-label">Support</div>
+            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"></rect><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"></path></svg> Notification</div>
+            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"></rect><path d="M232,128v80a40,40,0,0,1-40,40H136a8,8,0,0,1,0-16h56a24,24,0,0,0,24-24H192a24,24,0,0,1-24-24V144a24,24,0,0,1,24-24h23.65A88,88,0,0,0,66,65.54A87.29,87.29,0,0,0,40.36,120H64a24,24,0,0,1,24,24v40a24,24,0,0,1-24,24H48a24,24,0,0,1-24-24V128A104.11,104.11,0,0,1,201.89,54.66A103.41,103.41,0,0,1,232,128Z"></path></svg> Help &amp; Support</div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="user-profile">
+                <img src="logos/female avatar.svg" alt="">
+                <div class="user-details">
+                    <div class="user-name">Suman</div>
+                    <div class="user-plan">Free Plan</div>
+                </div>
+                <div class="settings-icon"><img src="logos/GearSix.svg" alt=""> </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <main class="main-content flex-1 flex flex-col overflow-hidden">
+      <!-- Top Navigation Bar -->
+      <header class="bg-[#FEFCF8]/80 backdrop-blur-md border-b border-[#E8DCC6]/50 shadow-sm fixed top-0 z-20 right-0 transition-all duration-300 ease-in-out header-bar">
+        <div class="max-w-full mx-auto px-2 sm:px-3 md:px-4 lg:px-6 xl:px-8">
+          <div class="flex items-center justify-between h-12 sm:h-14 md:h-16">
+            <!-- Mobile Menu Button -->
+            <button type="button" class="mobile-menu-btn" onclick="toggleSidebar()" title="Open menu">
+              <img src="logos/toogel.svg" alt="Menu" style="width: 16px; height: 16px;">
+            </button>
+
+            <!-- Left Section: Logo + Paper Info -->
+            <div class="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0 flex-1">
+              <!-- Logo -->
+              <div class="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                
+                <span class="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-[#2D2A24] hidden xs:block">Osmium</span>
+              </div>
+              
+              <!-- Divider -->
+            
+
+              <!-- Paper Title -->
+              <div class="min-w-0 flex-1 hidden md:block">
+                <h1 class="text-sm md:text-base lg:text-lg font-semibold text-[#2D2A24] truncate" id="paperTitle">
+                  JEE MAINS Paper 2023
+                </h1>
+              </div>
+            </div>
+
+            <!-- Right Section: Controls -->
+            <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
+              <!-- Subject Selector -->
+              <div class="flex items-center space-x-1 sm:space-x-2">
+                <span class="text-xs text-[#6B5D4F] hidden xl:block">Subject:</span>
+                <div class="relative">
+                  <button id="subjectToggle" class="inline-flex items-center justify-between px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-[#4A3F35] bg-white border border-[#D4C4A8] rounded-md hover:bg-[#F9F6F0] focus:outline-none min-w-[50px] sm:min-w-[70px] md:min-w-[90px]">
+                    <span id="subjectLabel" class="hidden sm:inline">Physics</span>
+                    <span id="subjectLabelMobile" class="sm:hidden">Phy</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="#8B7355" viewBox="0 0 256 256" class="ml-1 sm:ml-2 sm:w-3 sm:h-3">
+                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
+                    </svg>
+                  </button>
+                  <div id="subjectMenu" class="hidden absolute right-0 z-20 mt-1 sm:mt-2 w-28 sm:w-36 bg-white border border-[#E8DCC6] rounded-lg shadow-lg overflow-hidden">
+                    <div class="py-1">
+                      <button data-subject="Physics" class="block w-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-[#4A3F35] hover:bg-[#F9F6F0] text-left">
+                        Physics
+                      </button>
+                      <button data-subject="Chemistry" class="block w-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-[#4A3F35] hover:bg-[#F9F6F0] text-left">
+                        Chemistry
+                      </button>
+                      <button data-subject="Mathematics" class="block w-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-[#4A3F35] hover:bg-[#F9F6F0] text-left">
+                        Mathematics
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex items-center space-x-1 sm:space-x-2">
+                <button id="resetBtn" class="hidden md:inline-flex items-center px-2 md:px-3 py-1.5 md:py-2 text-xs sm:text-sm font-medium text-[#5A4F40] bg-white border border-[#D4C4A8] rounded-md hover:bg-[#F9F6F0] transition-colors">
+                  Reset
+                </button>
+                <button id="saveBtn" class="inline-flex items-center px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white bg-[#C58F39] border border-transparent rounded-md hover:bg-[#B8832F] transition-colors">
+                  <span class="hidden sm:inline">Save</span>
+                  <i class="ph ph-floppy-disk sm:hidden" style="font-size: 14px;"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Area -->
+      <div class="flex-1 overflow-y-auto" style="margin-top: 4rem; padding-top: 0;">
+        <!-- Question Count Header -->
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
+            <div class="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-4">
+              <span class="text-xs sm:text-sm font-medium text-[#6B5D4F]">Questions: <span id="questionCount">1</span></span>
+              <span class="text-xs sm:text-sm font-medium text-[#6B5D4F]">Total Points: <span id="totalMarks">1</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pb-4 sm:pb-6 space-y-3 sm:space-y-4" id="questionList">
+          <!-- Question 1 -->
+          <div class="question-card bg-white rounded-2xl border border-[#E0D2BD] shadow-sm hover:shadow-md transition-shadow" data-question-id="1">
+            <div class="p-4 sm:p-5 lg:p-6">
+              <!-- Question Header -->
+              <div class="flex flex-col gap-3 mb-4">
+                <div class="flex items-start gap-2 sm:gap-3">
+                  <button class="drag-handle mt-2 p-1 text-[#C1B09B] hover:text-[#A18C6B] cursor-grab hidden sm:block flex-shrink-0" title="Drag to reorder">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <circle cx="9" cy="5" r="1"></circle>
+                      <circle cx="15" cy="5" r="1"></circle>
+                      <circle cx="9" cy="12" r="1"></circle>
+                      <circle cx="15" cy="12" r="1"></circle>
+                      <circle cx="9" cy="19" r="1"></circle>
+                      <circle cx="15" cy="19" r="1"></circle>
+                    </svg>
+                  </button>
+                  <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                    <span class="question-number text-sm font-semibold text-[#8E806D] flex-shrink-0">Q.1</span>
+                    <textarea placeholder="Untitled Question" class="flex-1 text-sm sm:text-base font-medium border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B3F31] resize-none overflow-hidden min-w-0" rows="1" style="min-height: 1.5rem; height: 36px;">What is the capital of France?</textarea>
+                  </div>
+                  <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                    <select class="question-type text-xs sm:text-sm border border-[#D9C8B1] rounded px-1 sm:px-2 md:px-3 py-1 sm:py-1.5 bg-white text-[#5D4C37]" title="Question type">
+                      <option value="multiple-choice">MCQ</option>
+                      <option value="short-answer">Short</option>
+                      <option value="paragraph">Long</option>
+                    </select>
+                    <button class="delete-question p-1 sm:p-1.5 md:p-2 text-[#B2A28E] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded flex-shrink-0" title="Delete question">
+                      <svg width="12" height="12" sm:width="14" sm:height="14" md:width="16" md:height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Options Container -->
+              <div class="options-container ml-0 sm:ml-7 space-y-2 sm:space-y-3">
+                <div class="option-item flex items-center gap-2 sm:gap-3 group">
+                  <input type="radio" name="q1" class="w-4 h-4 text-[#C58F39] flex-shrink-0" title="Select as correct answer">
+                  <input type="text" placeholder="Option 1" class="flex-1 text-sm border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B4134] min-w-0" value="Paris">
+                  <button class="remove-option p-1 text-[#C0AE99] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded opacity-0 group-hover:opacity-100 flex-shrink-0" title="Remove option">
+                    <svg width="12" height="12" sm:width="14" sm:height="14" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="option-item flex items-center gap-2 sm:gap-3 group">
+                  <input type="radio" name="q1" class="w-4 h-4 text-[#C58F39] flex-shrink-0" title="Select as correct answer">
+                  <input type="text" placeholder="Option 2" class="flex-1 text-sm border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B4134] min-w-0" value="London">
+                  <button class="remove-option p-1 text-[#C0AE99] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded opacity-0 group-hover:opacity-100 flex-shrink-0" title="Remove option">
+                    <svg width="12" height="12" sm:width="14" sm:height="14" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="option-item flex items-center gap-2 sm:gap-3 group">
+                  <input type="radio" name="q1" class="w-4 h-4 text-[#C58F39] flex-shrink-0" title="Select as correct answer">
+                  <input type="text" placeholder="Option 3" class="flex-1 text-sm border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B4134] min-w-0" value="Berlin">
+                  <button class="remove-option p-1 text-[#C0AE99] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded opacity-0 group-hover:opacity-100 flex-shrink-0" title="Remove option">
+                    <svg width="12" height="12" sm:width="14" sm:height="14" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                    </svg>
+                  </button>
+                </div>
+                <button class="add-option flex items-center gap-2 text-[#A18C6B] hover:text-[#8D7F6B] p-2 text-sm">
+                  <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+                  </svg>
+                  Add option
+                </button>
+              </div>
+
+              <!-- Question Footer -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-3 sm:mt-4 md:mt-6 pt-3 sm:pt-4 border-t border-[#E8DCC6] gap-2 sm:gap-3">
+                <div class="flex flex-col xs:flex-row xs:items-center gap-2 sm:gap-3 md:gap-6">
+                  <label class="flex items-center gap-2 text-xs sm:text-sm text-[#6B5D4F]">
+                    <input type="checkbox" class="w-4 h-4 text-[#C58F39] flex-shrink-0">
+                    <span class="whitespace-nowrap">Required</span>
+                  </label>
+                  <div class="flex items-center gap-2 text-xs sm:text-sm text-[#6B5D4F]">
+                    <span class="whitespace-nowrap">Points:</span>
+                    <input type="number" value="1" min="0" max="100" class="points-input w-10 sm:w-12 md:w-14 lg:w-16 border border-[#D9C8B1] rounded px-1 sm:px-2 py-1 text-center text-xs sm:text-sm bg-white flex-shrink-0" title="Points for this question">
+                  </div>
+                  <div class="correct-answer-section relative">
+                    <button class="correct-toggle flex items-center gap-2 text-xs sm:text-sm text-[#6B5D4F] border border-[#D9C8B1] rounded px-2 py-1 bg-white hover:bg-[#F9F6F0]">
+                      <span>Correct:</span>
+                      <span class="correct-label">Option 1</span>
+                      <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M7 10l5 5 5-5z"></path>
+                      </svg>
+                    </button>
+                    <div class="correct-menu hidden absolute top-full left-0 mt-1 bg-white border border-[#E8DCC6] rounded-lg shadow-lg z-10 min-w-[100px]">
+                      <button data-correct="Option 1" class="block w-full px-3 py-2 text-xs text-left hover:bg-[#F9F6F0]">Option 1</button>
+                      <button data-correct="Option 2" class="block w-full px-3 py-2 text-xs text-left hover:bg-[#F9F6F0]">Option 2</button>
+                      <button data-correct="Option 3" class="block w-full px-3 py-2 text-xs text-left hover:bg-[#F9F6F0]">Option 3</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 justify-end">
+                  <button class="duplicate-question p-1 sm:p-1.5 md:p-2 text-[#B2A28E] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded flex-shrink-0" title="Duplicate">
+                    <svg width="12" height="12" sm:width="14" sm:height="14" md:width="16" md:height="16" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Question Button -->
+          <button id="addQuestionBtn" class="w-full border-2 border-dashed border-[#D9C8B1] rounded-xl sm:rounded-2xl py-6 sm:py-8 text-sm sm:text-base text-[#A18C6B] hover:text-[#8D7F6B] hover:border-[#C58F39] hover:bg-[#F9F2E7] transition-colors flex items-center justify-center gap-2">
+            <svg width="18" height="18" sm:width="20" sm:height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+            </svg>
+            Add question
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.querySelector('.sidebar-overlay');
+      const mobileBtn = document.querySelector('.mobile-menu-btn');
+      
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+      
+      if (window.innerWidth <= 768) {
+        if (sidebar.classList.contains('open')) {
+          mobileBtn.style.display = 'none';
+        } else {
+          mobileBtn.style.display = 'block';
+        }
+      }
+    }
+
+    function closeSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.querySelector('.sidebar-overlay');
+      const mobileBtn = document.querySelector('.mobile-menu-btn');
+      
+      sidebar.classList.remove('open');
+      overlay.classList.remove('show');
+      
+      if (window.innerWidth <= 768) {
+        mobileBtn.style.display = 'block';
+      }
+    }
+
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', (e) => {
+      const sidebar = document.querySelector('.sidebar');
+      const mobileBtn = document.querySelector('.mobile-menu-btn');
+
+      if (window.innerWidth <= 768 &&
+        !sidebar.contains(e.target) &&
+        !mobileBtn.contains(e.target) &&
+        sidebar.classList.contains('open')) {
+        closeSidebar();
+      }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 769) {
+        closeSidebar();
+      }
+    });
+
+
+
+    const subjectToggle = document.getElementById("subjectToggle");
+    const subjectMenu = document.getElementById("subjectMenu");
+    const subjectLabel = document.getElementById("subjectLabel");
+    const paperTitle = document.getElementById("paperTitle");
+
+    subjectToggle?.addEventListener("click", (e) => {
+      e.preventDefault();
+      subjectMenu.classList.toggle("hidden");
+    });
+
+    subjectMenu?.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-subject]");
+      if (!btn) return;
+      const subject = btn.getAttribute("data-subject");
+      subjectLabel.textContent = subject;
+      const subjectLabelMobile = document.getElementById("subjectLabelMobile");
+      if (subjectLabelMobile) {
+        subjectLabelMobile.textContent = subject.substring(0, 3);
+      }
+      paperTitle.textContent = `JEE MAINS Paper 2023`;
+      subjectMenu.classList.add("hidden");
+    });
+
+
+    const questionToggleMain = document.getElementById("questionToggleMain");
+    const questionMenuMain = document.getElementById("questionMenuMain");
+    const questionCountLabelMain = document.getElementById("questionCountLabelMain");
+
+    questionToggleMain?.addEventListener("click", (e) => {
+      e.preventDefault();
+      questionMenuMain.classList.toggle("hidden");
+    });
+
+    questionMenuMain?.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-count]");
+      if (!btn) return;
+      const count = btn.getAttribute("data-count");
+      questionCountLabelMain.textContent = count;
+      questionMenuMain.classList.add("hidden");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!subjectToggle?.contains(e.target) && !subjectMenu?.contains(e.target)) {
+        subjectMenu?.classList.add("hidden");
+      }
+      if (!questionToggleMain?.contains(e.target) && !questionMenuMain?.contains(e.target)) {
+        questionMenuMain?.classList.add("hidden");
+      }
+
+      // Handle correct answer dropdown
+      const correctToggle = e.target.closest('.correct-toggle');
+      if (correctToggle) {
+        e.preventDefault();
+        const menu = correctToggle.nextElementSibling;
+        menu.classList.toggle('hidden');
+        // Close other correct menus
+        document.querySelectorAll('.correct-menu').forEach(m => {
+          if (m !== menu) m.classList.add('hidden');
+        });
+      } else {
+        // Close all correct menus if clicking outside
+        document.querySelectorAll('.correct-menu').forEach(m => m.classList.add('hidden'));
+      }
+
+      // Handle correct answer selection
+      const correctBtn = e.target.closest('[data-correct]');
+      if (correctBtn) {
+        const value = correctBtn.getAttribute('data-correct');
+        const label = correctBtn.closest('.correct-menu').previousElementSibling.querySelector('.correct-label');
+        label.textContent = value;
+        correctBtn.closest('.correct-menu').classList.add('hidden');
+      }
+    });
+
+    const sidebarNav = document.getElementById("sidebarNav");
+    sidebarNav?.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-section]");
+      if (!btn) return;
+      sidebarNav.querySelectorAll("button[data-section]").forEach((el) => {
+        el.classList.remove("bg-[#F2E6D5]", "border", "border-[#E2D2BD]", "font-semibold", "text-[#3F362A]");
+        el.classList.add("font-medium", "text-[#6A6052]");
+      });
+      btn.classList.add("bg-[#F2E6D5]", "border", "border-[#E2D2BD]", "font-semibold", "text-[#3F362A]");
+    });
+
+    const questionList = document.getElementById("questionList");
+    const questionCountEl = document.getElementById("questionCount");
+    const questionCountMobileEl = document.getElementById("questionCount-mobile");
+
+    function updateQuestionCount() {
+      const count = questionList.querySelectorAll(".question-card").length;
+      const questionCountEl = document.getElementById("questionCount");
+      if (questionCountEl) questionCountEl.textContent = String(count);
+      updateTotalMarks();
+    }
+
+    function updateTotalMarks() {
+      const pointsInputs = document.querySelectorAll(".points-input");
+      let total = 0;
+      pointsInputs.forEach(input => {
+        total += parseInt(input.value) || 0;
+      });
+      const totalMarksEl = document.getElementById("totalMarks");
+      if (totalMarksEl) totalMarksEl.textContent = String(total);
+    }
+
+    updateQuestionCount();
+
+    questionList.addEventListener("click", (e) => {
+      const delBtn = e.target.closest(".delete-question");
+      if (!delBtn) return;
+      const card = delBtn.closest(".question-card");
+      if (!card) return;
+      card.remove();
+      updateQuestionCount();
+    });
+
+
+    // Add Question Button Functionality
+    const addQuestionBtn = document.getElementById("addQuestionBtn");
+    addQuestionBtn?.addEventListener("click", () => {
+      const newId = questionList.querySelectorAll(".question-card").length + 1;
+      const newQuestion = createQuestionCard(newId);
+      addQuestionBtn.before(newQuestion);
+      addDragListeners(newQuestion);
+      updateQuestionCount();
+
+      // Focus on the new question input and setup textarea auto-resize
+      const questionInput = newQuestion.querySelector('textarea[placeholder="Untitled Question"]');
+      questionInput?.focus();
+      if (questionInput) {
+        questionInput.style.height = 'auto';
+        questionInput.style.height = questionInput.scrollHeight + 'px';
+      }
+      renumberQuestions();
+    });
+
+    // Function to create a new question card
+    function createQuestionCard(id, questionText = '', questionType = 'multiple-choice') {
+      const wrapper = document.createElement("div");
+      wrapper.className = "question-card bg-white rounded-2xl border border-[#E0D2BD] shadow-sm hover:shadow-md transition-shadow";
+      wrapper.setAttribute("data-question-id", String(id));
+
+      const optionsHtml = questionType === 'multiple-choice' ? `
+        <div class="options-container ml-0 sm:ml-7 space-y-2 sm:space-y-3">
+          <div class="option-item flex items-center gap-2 sm:gap-3 group">
+            <input type="radio" name="q${id}" class="w-4 h-4 text-[#C58F39] flex-shrink-0">
+            <input type="text" placeholder="Option 1" class="flex-1 text-sm border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B4134] min-w-0">
+            <button class="remove-option p-1 text-[#C0AE99] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded opacity-0 group-hover:opacity-100 flex-shrink-0">
+              <svg width="12" height="12" sm:width="14" sm:height="14" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="option-item flex items-center gap-2 sm:gap-3 group">
+            <input type="radio" name="q${id}" class="w-4 h-4 text-[#C58F39] flex-shrink-0">
+            <input type="text" placeholder="Option 2" class="flex-1 text-sm border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B4134] min-w-0">
+            <button class="remove-option p-1 text-[#C0AE99] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded opacity-0 group-hover:opacity-100 flex-shrink-0">
+              <svg width="12" height="12" sm:width="14" sm:height="14" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+            </button>
+          </div>
+          <button class="add-option flex items-center gap-2 text-[#A18C6B] hover:text-[#8D7F6B] p-2 text-sm">
+            <svg width="14" height="14" sm:width="16" sm:height="16" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+            </svg>
+            Add option
+          </button>
+        </div>
+      ` : `
+        <div class="options-container ml-0 sm:ml-7">
+          <textarea placeholder="Short answer text" class="w-full p-3 border border-[#D9C8B1] rounded-lg text-sm resize-none bg-[#F9F6F0] text-[#4B4134]" rows="3" disabled></textarea>
+        </div>
+      `;
+
+      wrapper.innerHTML = `
+        <div class="p-4 sm:p-5 lg:p-6">
+          <div class="flex flex-col gap-3 mb-4">
+            <div class="flex items-start gap-2 sm:gap-3">
+              <button class="drag-handle mt-2 p-1 text-[#C1B09B] hover:text-[#A18C6B] cursor-grab hidden sm:block flex-shrink-0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="9" cy="5" r="1"/><circle cx="15" cy="5" r="1"/>
+                  <circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/>
+                  <circle cx="9" cy="19" r="1"/><circle cx="15" cy="19" r="1"/>
+                </svg>
+              </button>
+              <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                <span class="question-number text-sm font-semibold text-[#8E806D] flex-shrink-0">Q.${id}</span>
+                <textarea placeholder="Untitled Question" class="flex-1 text-sm sm:text-base font-medium border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B3F31] resize-none overflow-hidden min-w-0" rows="1" style="min-height: 1.5rem;">${questionText || 'Untitled Question'}</textarea>
+              </div>
+              <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                <select class="question-type text-xs sm:text-sm border border-[#D9C8B1] rounded px-1 sm:px-2 md:px-3 py-1 sm:py-1.5 bg-white text-[#5D4C37]">
+                  <option value="multiple-choice" ${questionType === 'multiple-choice' ? 'selected' : ''}>MCQ</option>
+                  <option value="short-answer" ${questionType === 'short-answer' ? 'selected' : ''}>Short</option>
+                  <option value="paragraph" ${questionType === 'paragraph' ? 'selected' : ''}>Long</option>
+                </select>
+                <button class="delete-question p-1 sm:p-1.5 md:p-2 text-[#B2A28E] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded flex-shrink-0">
+                  <svg width="12" height="12" sm:width="14" sm:height="14" md:width="16" md:height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          ${optionsHtml}
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-3 sm:mt-4 md:mt-6 pt-3 sm:pt-4 border-t border-[#E8DCC6] gap-2 sm:gap-3">
+            <div class="flex flex-col xs:flex-row xs:items-center gap-2 sm:gap-3 md:gap-6">
+              <label class="flex items-center gap-2 text-xs sm:text-sm text-[#6B5D4F]">
+                <input type="checkbox" class="w-4 h-4 text-[#C58F39] flex-shrink-0">
+                <span class="whitespace-nowrap">Required</span>
+              </label>
+              <div class="flex items-center gap-2 text-xs sm:text-sm text-[#6B5D4F]">
+                <span class="whitespace-nowrap">Points:</span>
+                <input type="number" value="1" min="0" max="100" class="points-input w-10 sm:w-12 md:w-14 lg:w-16 border border-[#D9C8B1] rounded px-1 sm:px-2 py-1 text-center text-xs sm:text-sm bg-white flex-shrink-0">
+              </div>
+              ${questionType === 'multiple-choice' ? `
+              <div class="relative">
+                <button class="correct-toggle flex items-center gap-2 text-xs sm:text-sm text-[#6B5D4F] border border-[#D9C8B1] rounded px-2 py-1 bg-white hover:bg-[#F9F6F0]">
+                  <span>Correct:</span>
+                  <span class="correct-label">Option 1</span>
+                  <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M7 10l5 5 5-5z"/>
+                  </svg>
+                </button>
+                <div class="correct-menu hidden absolute top-full left-0 mt-1 bg-white border border-[#E8DCC6] rounded-lg shadow-lg z-10 min-w-[100px]">
+                  <button data-correct="Option 1" class="block w-full px-3 py-2 text-xs text-left hover:bg-[#F9F6F0]">Option 1</button>
+                  <button data-correct="Option 2" class="block w-full px-3 py-2 text-xs text-left hover:bg-[#F9F6F0]">Option 2</button>
+                </div>
+              </div>
+              ` : ''}
+            </div>
+            <div class="flex items-center gap-2 justify-end">
+              <button class="duplicate-question p-1 sm:p-1.5 md:p-2 text-[#B2A28E] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded flex-shrink-0" title="Duplicate">
+                <svg width="12" height="12" sm:width="14" sm:height="14" md:width="16" md:height="16" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      return wrapper;
+    }
+
+    // Points input change handler
+    questionList.addEventListener("input", (e) => {
+      if (e.target.classList.contains('points-input')) {
+        updateTotalMarks();
+      }
+    });
+
+    // Function to update correct answer dropdown
+    function updateCorrectAnswerDropdown(questionCard) {
+      const correctMenu = questionCard.querySelector('.correct-menu');
+      if (!correctMenu) return;
+
+      const options = questionCard.querySelectorAll('.option-item');
+      correctMenu.innerHTML = '';
+
+      options.forEach((option, index) => {
+        const optionText = option.querySelector('input[type="text"]')?.value || `Option ${index + 1}`;
+        const button = document.createElement('button');
+        button.setAttribute('data-correct', optionText);
+        button.className = 'block w-full px-3 py-2 text-xs text-left hover:bg-[#F9F6F0]';
+        button.textContent = optionText;
+        correctMenu.appendChild(button);
+      });
+    }
+
+    // Question List Event Handlers
+    questionList.addEventListener("click", (e) => {
+      // Add option functionality
+      const addOptionBtn = e.target.closest(".add-option");
+      if (addOptionBtn) {
+        const container = addOptionBtn.parentElement;
+        const questionCard = addOptionBtn.closest('.question-card');
+        const questionId = questionCard.getAttribute('data-question-id');
+        const optionCount = container.querySelectorAll('.option-item').length + 1;
+
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'option-item flex items-center gap-2 sm:gap-3 group';
+        optionDiv.innerHTML = `
+          <input type="radio" name="q${questionId}" class="w-4 h-4 text-[#C58F39] flex-shrink-0">
+          <input type="text" placeholder="Option ${optionCount}" class="flex-1 text-sm border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B4134] min-w-0">
+          <button class="remove-option p-1 text-[#C0AE99] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded opacity-0 group-hover:opacity-100 flex-shrink-0">
+            <svg width="12" height="12" sm:width="14" sm:height="14" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          </button>
+        `;
+        container.insertBefore(optionDiv, addOptionBtn);
+        updateCorrectAnswerDropdown(questionCard);
+
+        // Focus on the new option input
+        const newInput = optionDiv.querySelector('input[type="text"]');
+        newInput?.focus();
+      }
+
+      // Remove option functionality
+      const removeOptionBtn = e.target.closest(".remove-option");
+      if (removeOptionBtn) {
+        const optionDiv = removeOptionBtn.closest('.option-item');
+        const container = optionDiv.parentElement;
+        const questionCard = removeOptionBtn.closest('.question-card');
+        if (container.querySelectorAll('.option-item').length > 1) {
+          optionDiv.remove();
+          updateCorrectAnswerDropdown(questionCard);
+        }
+      }
+
+      // Delete question functionality
+      const deleteBtn = e.target.closest(".delete-question");
+      if (deleteBtn) {
+        const card = deleteBtn.closest(".question-card");
+        if (card && confirm('Are you sure you want to delete this question?')) {
+          card.remove();
+          updateQuestionCount();
+          renumberQuestions();
+        }
+      }
+
+      // Duplicate question functionality
+      const duplicateBtn = e.target.closest(".duplicate-question");
+      if (duplicateBtn) {
+        const card = duplicateBtn.closest(".question-card");
+        const questionText = card.querySelector('input[type="text"]').value;
+        const questionType = card.querySelector('.question-type').value;
+        const points = card.querySelector('input[type="number"]').value;
+        const isRequired = card.querySelector('input[type="checkbox"]').checked;
+
+        const newId = questionList.querySelectorAll(".question-card").length + 1;
+        const newCard = createQuestionCard(newId, questionText + ' (Copy)', questionType);
+
+        // Copy settings
+        newCard.querySelector('input[type="number"]').value = points;
+        newCard.querySelector('input[type="checkbox"]').checked = isRequired;
+
+        // Copy options if multiple choice
+        if (questionType === 'multiple-choice') {
+          const originalOptions = card.querySelectorAll('.option-item input[type="text"]');
+          const newOptions = newCard.querySelectorAll('.option-item input[type="text"]');
+
+          originalOptions.forEach((option, index) => {
+            if (newOptions[index]) {
+              newOptions[index].value = option.value;
+            } else if (option.value.trim()) {
+              // Add additional options if needed
+              const addBtn = newCard.querySelector('.add-option');
+              addBtn?.click();
+              const lastOption = newCard.querySelectorAll('.option-item input[type="text"]');
+              lastOption[lastOption.length - 1].value = option.value;
+            }
+          });
+        }
+
+        card.parentNode.insertBefore(newCard, card.nextSibling);
+        addDragListeners(newCard);
+        updateQuestionCount();
+      }
+    });
+
+    // Question type change handler
+    questionList.addEventListener("change", (e) => {
+      if (e.target.classList.contains('question-type')) {
+        const questionCard = e.target.closest('.question-card');
+        const questionId = questionCard.getAttribute('data-question-id');
+        const optionsContainer = questionCard.querySelector('.options-container');
+        const questionType = e.target.value;
+
+        if (questionType === 'multiple-choice') {
+          optionsContainer.innerHTML = `
+            <div class="option-item flex items-center gap-2 sm:gap-3 group">
+              <input type="radio" name="q${questionId}" class="w-4 h-4 text-[#C58F39] flex-shrink-0">
+              <input type="text" placeholder="Option 1" class="flex-1 text-sm border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B4134] min-w-0">
+              <button class="remove-option p-1 text-[#C0AE99] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded opacity-0 group-hover:opacity-100 flex-shrink-0">
+                <svg width="12" height="12" sm:width="14" sm:height="14" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+              </button>
+            </div>
+            <div class="option-item flex items-center gap-2 sm:gap-3 group">
+              <input type="radio" name="q${questionId}" class="w-4 h-4 text-[#C58F39] flex-shrink-0">
+              <input type="text" placeholder="Option 2" class="flex-1 text-sm border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B4134] min-w-0">
+              <button class="remove-option p-1 text-[#C0AE99] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded opacity-0 group-hover:opacity-100 flex-shrink-0">
+                <svg width="12" height="12" sm:width="14" sm:height="14" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+              </button>
+            </div>
+            <button class="add-option flex items-center gap-2 text-[#A18C6B] hover:text-[#8D7F6B] p-2 text-sm">
+              <svg width="14" height="14" sm:width="16" sm:height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+              </svg>
+              Add option
+            </button>
+          `;
+        } else {
+          const rows = questionType === 'paragraph' ? '6' : '3';
+          const placeholder = questionType === 'paragraph' ? 'Long answer text' : 'Short answer text';
+          optionsContainer.innerHTML = `
+            <textarea placeholder="${placeholder}" class="w-full p-3 border border-[#D9C8B1] rounded-lg text-sm resize-none bg-[#F9F6F0] text-[#4B4134]" rows="${rows}" disabled></textarea>
+          `;
+        }
+      }
+    });
+
+    // Function to renumber questions
+    function renumberQuestions() {
+      const cards = questionList.querySelectorAll('.question-card');
+      cards.forEach((card, index) => {
+        const newId = index + 1;
+        card.setAttribute('data-question-id', String(newId));
+
+        // Update question number display
+        const questionNumber = card.querySelector('.question-number');
+        if (questionNumber) {
+          questionNumber.textContent = `Q.${newId}`;
+        }
+
+        // Update radio button names
+        const radios = card.querySelectorAll('input[type="radio"]');
+        radios.forEach(radio => {
+          radio.name = `q${newId}`;
+        });
+      });
+    }
+
+    const resetBtn = document.getElementById("resetBtn");
+    resetBtn?.addEventListener("click", () => {
+      window.location.reload();
+    });
+
+    const saveBtn = document.getElementById("saveBtn");
+    saveBtn?.addEventListener("click", () => {
+      saveBtn.textContent = "Saved";
+      saveBtn.classList.add("bg-[#B8832F]");
+      setTimeout(() => {
+        saveBtn.innerHTML = '<span class="hidden sm:inline">Update &amp; Save</span><span class="sm:hidden">Save</span>';
+        saveBtn.classList.remove("bg-[#B8832F]");
+      }, 1200);
+    });
+
+    // Choice selection functionality
+    function selectChoice(choiceElement) {
+      const questionCard = choiceElement.closest('.question-card');
+      const allChoices = questionCard.querySelectorAll('.choice-option');
+      const circle = choiceElement.querySelector('.choice-circle');
+
+      // Reset all choices in this question
+      allChoices.forEach(choice => {
+        const choiceCircle = choice.querySelector('.choice-circle');
+        choiceCircle.classList.remove('bg-[#2F2A24]', 'border-[#2F2A24]');
+        choiceCircle.classList.add('bg-white', 'border-[#D1C3B0]');
+      });
+
+      // Select clicked choice
+      circle.classList.remove('bg-white', 'border-[#D1C3B0]');
+      circle.classList.add('bg-[#2F2A24]', 'border-[#2F2A24]');
+    }
+
+    // Enhanced Drag and Drop functionality
+    let draggedElement = null;
+    let scrollInterval = null;
+    let dropIndicator = null;
+
+    // Create drop indicator
+    function createDropIndicator() {
+      const indicator = document.createElement('div');
+      indicator.className = 'drop-indicator h-1 bg-blue-500 rounded-full mx-4 my-2 opacity-0 transition-opacity duration-200';
+      indicator.style.display = 'none';
+      return indicator;
+    }
+
+    // Initialize drag listeners for existing questions and update counts
+    document.querySelectorAll('.question-card').forEach(card => {
+      addDragListeners(card);
+    });
+    updateQuestionCount();
+    renumberQuestions();
+
+    // Event delegation for all inputs
+    questionList.addEventListener('input', (e) => {
+      // Auto-resize textarea
+      if (e.target.tagName === 'TEXTAREA' && e.target.placeholder === 'Untitled Question') {
+        e.target.style.height = 'auto';
+        e.target.style.height = e.target.scrollHeight + 'px';
+      }
+      // Update total marks when points change
+      if (e.target.classList.contains('points-input')) {
+        updateTotalMarks();
+      }
+      // Update correct answer dropdown when option text changes
+      if (e.target.type === 'text' && e.target.closest('.option-item')) {
+        const questionCard = e.target.closest('.question-card');
+        updateCorrectAnswerDropdown(questionCard);
+      }
+    });
+
+    // Also listen for change events
+    questionList.addEventListener('change', (e) => {
+      if (e.target.classList.contains('points-input')) {
+        updateTotalMarks();
+      }
+    });
+
+    // Global event listener for all points inputs
+    document.addEventListener('input', (e) => {
+      if (e.target.classList.contains('points-input')) {
+        updateTotalMarks();
+      }
+    });
+
+    document.addEventListener('change', (e) => {
+      if (e.target.classList.contains('points-input')) {
+        updateTotalMarks();
+      }
+    });
+
+    // Initialize existing textareas
+    document.querySelectorAll('textarea[placeholder="Untitled Question"]').forEach(textarea => {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    });
+
+    function addDragListeners(card) {
+      const dragHandle = card.querySelector('.drag-handle');
+
+      dragHandle?.addEventListener('mousedown', (e) => {
+        card.draggable = true;
+        dragHandle.style.cursor = 'grabbing';
+      });
+
+      dragHandle?.addEventListener('mouseup', (e) => {
+        dragHandle.style.cursor = 'grab';
+      });
+
+      card.addEventListener('dragstart', (e) => {
+        draggedElement = card;
+        card.classList.add('opacity-50', 'scale-105', 'shadow-2xl', 'z-50');
+        e.dataTransfer.effectAllowed = 'move';
+
+        // Create and add drop indicator
+        dropIndicator = createDropIndicator();
+        questionList.appendChild(dropIndicator);
+
+        // Start auto-scroll monitoring
+        startAutoScroll();
+      });
+
+      card.addEventListener('dragend', (e) => {
+        card.classList.remove('opacity-50', 'scale-105', 'shadow-2xl', 'z-50');
+        const dragHandle = card.querySelector('.drag-handle');
+        if (dragHandle) dragHandle.style.cursor = 'grab';
+        draggedElement = null;
+
+        // Remove drop indicator
+        if (dropIndicator) {
+          dropIndicator.remove();
+          dropIndicator = null;
+        }
+
+        // Stop auto-scroll
+        stopAutoScroll();
+
+        // Remove all drop zone highlights
+        document.querySelectorAll('.drop-zone-active').forEach(el => {
+          el.classList.remove('drop-zone-active');
+        });
+      });
+
+      card.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+
+        if (draggedElement && draggedElement !== card) {
+          // Show drop indicator
+          const rect = card.getBoundingClientRect();
+          const midY = rect.top + rect.height / 2;
+          const dropAbove = e.clientY < midY;
+
+          // Position drop indicator
+          if (dropIndicator) {
+            dropIndicator.style.display = 'block';
+            dropIndicator.classList.add('opacity-100');
+
+            if (dropAbove) {
+              card.parentNode.insertBefore(dropIndicator, card);
+            } else {
+              card.parentNode.insertBefore(dropIndicator, card.nextSibling);
+            }
+          }
+
+          // Add visual feedback to target
+          card.classList.add('drop-zone-active');
+        }
+      });
+
+      card.addEventListener('dragleave', (e) => {
+        card.classList.remove('drop-zone-active');
+      });
+
+      card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (draggedElement && draggedElement !== card) {
+          const rect = card.getBoundingClientRect();
+          const midY = rect.top + rect.height / 2;
+          const dropAbove = e.clientY < midY;
+
+          if (dropAbove) {
+            card.parentNode.insertBefore(draggedElement, card);
+          } else {
+            card.parentNode.insertBefore(draggedElement, card.nextSibling);
+          }
+
+          renumberQuestions();
+        }
+      });
+    }
+
+    // Auto-scroll functionality
+    function startAutoScroll() {
+      scrollInterval = setInterval(() => {
+        if (!draggedElement) return;
+
+        const scrollContainer = document.querySelector('.overflow-y-auto');
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const scrollThreshold = 100;
+        const scrollSpeed = 10;
+
+        // Get mouse position during drag
+        document.addEventListener('dragover', handleAutoScroll);
+
+        function handleAutoScroll(e) {
+          const mouseY = e.clientY;
+
+          // Scroll up
+          if (mouseY < containerRect.top + scrollThreshold) {
+            scrollContainer.scrollTop -= scrollSpeed;
+          }
+          // Scroll down
+          else if (mouseY > containerRect.bottom - scrollThreshold) {
+            scrollContainer.scrollTop += scrollSpeed;
+          }
+        }
+      }, 16); // ~60fps
+    }
+
+    function stopAutoScroll() {
+      if (scrollInterval) {
+        clearInterval(scrollInterval);
+        scrollInterval = null;
+      }
+    }
+
+
+  </script>
+
+
+
+</body></html>

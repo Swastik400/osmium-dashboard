@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osmium | JEE Mains Mock Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .brand span:nth-of-type(1) {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .brand span:nth-of-type(2) {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Groups for header layout */
+        .header-group-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+            gap: 4px;
+        }
+
+        .hamburger span {
+            width: 20px;
+            height: 2px;
+            background: #1e293b;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Mobile overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+        
+        .header-group-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Sub-header styles */
+        .sub-header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 16px 16px 0 16px;
+            border-radius: 8px 8px 0 0;
+            border: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+
+        .sub-header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .sub-header-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        /* Custom dropdown styles */
+        .custom-dropdown {
+            position: relative;
+        }
+
+        .dropdown-selected {
+            padding: 10px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            transition: all 0.2s;
+        }
+
+        .dropdown-selected:hover {
+            border-color: #C58F39;
+            box-shadow: 0 0 0 3px rgba(197, 143, 57, 0.1);
+        }
+
+        .dropdown-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            display: none;
+            margin-top: 4px;
+        }
+
+        .dropdown-options.show {
+            display: block;
+        }
+
+        .dropdown-option {
+            padding: 10px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .dropdown-option:hover {
+            background: #f8fafc;
+        }
+
+        .dropdown-option:first-child {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .dropdown-option:last-child {
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        /* Stat styles (used in header and question card) */
+        .header-stat {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .header-stat span {
+            font-weight: 600;
+            color: #1e293b;
+            margin-left: 8px;
+        }
+
+        .mark-positive {
+            color: #1E7021 !important;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .mark-negative {
+            color: #892929 !important;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        .time-remaining {
+            text-align: right;
+        }
+
+        .time-label {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .time-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-details {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        .user-id {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #dcfce7;
+            color: #166534;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* Main Content Area */
+        .main-container {
+            display: flex;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .question-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 0 0 8px 8px;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin: 0 16px 16px 16px;
+            min-height: 0;
+        }
+        
+
+
+        .question-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .question-text {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            color: #1e293b;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .option:hover {
+            background: #f8fafc;
+        }
+
+        /* Radio button style to match image */
+        .radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        /* CORRECTED: Selected radio style from image */
+        .radio.selected {
+            border-color: #C58F39;
+            background: #f5f0e8;
+        }
+
+        .radio.selected::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #C58F39;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .option-text {
+            font-size: 16px;
+            color: #1e293b;
+        }
+
+        /* Question Actions Bar */
+        .actions {
+            border-top: 1px solid #e2e8f0;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fdfdfd;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .actions-left {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        /* This is the light grey button style */
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* This is the accent button style */
+        .btn-primary {
+            background: black;
+            color: white;
+            width: 140px;
+        }
+
+        
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 320px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            overflow: hidden;
+            border-left: 1px solid #e2e8f0;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        /* Mobile close button */
+        .sidebar-close {
+            display: none;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #64748b;
+            z-index: 10;
+        }
+
+        .sidebar-close:hover {
+            background: #e2e8f0;
+        }
+
+        /* Single sidebar card */
+        .palette-card {
+            background: white;
+            border-radius: 0;
+            border: none;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: inset 0 1px 0 0 #f1f5f9;
+        }
+
+        .palette-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            background: white;
+            position: relative;
+        }
+
+        .palette-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.025em;
+        }
+
+        /* Legend Styles - horizontal layout */
+        .palette-legend {
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #334155;
+            background: #fafbfc;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-item .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-answered {
+            background: #4A8C53;
+        }
+
+        .dot-marked {
+            background: #6F6CBF;
+        }
+
+        .dot-not-answered {
+            background: #F3F3F2;
+            border: 1px solid #d1d5db;
+        }
+
+        .palette-grid {
+            padding: 16px 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .question-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-answered {
+            background: #4A8C53;
+            color: white;
+        }
+
+        .btn-marked {
+            background: #6F6CBF;
+            color: white;
+        }
+
+        .btn-not-answered {
+            background: #F3F3F2;
+            color: #1e293b;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-current {
+            background: #C58F39;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(197, 143, 57, 0.5);
+        }
+
+        .palette-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #f1f5f9;
+            background: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: #FBFBFA;
+            border: #EAE7E1 1px solid;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #383838;
+            cursor: pointer;
+        }
+
+        /* Submit Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #fff;
+            width: 480px;
+            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            max-width: 90vw;
+        }
+
+        .modal-box h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            padding: 0 10px;
+        }
+
+        .modal-box .sub-text {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 28px;
+            padding: 0 20px;
+            line-height: 1.4;
+        }
+
+        .status-box {
+            border: 1px solid #eee;
+            padding: 22px 20px;
+            border-radius: 16px;
+            margin-top: 10px;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .status-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .status-green { background: #4CAF50; }
+        .status-purple { background: #6C63FF; }
+        .status-grey { background: #E0E0E0; color: #555; }
+
+        .status-label {
+            font-size: 15px;
+            letter-spacing: 0.3px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .modal-btn-area {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 35px;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 15px;
+            cursor: pointer;
+            border: none;
+            flex: 1;
+        }
+
+        .modal-cancel-btn {
+            background: #fff;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+
+        .modal-submit-btn {
+            background: #000;
+            color: #fff;
+        }
+
+        .modal-cancel-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .modal-submit-btn:hover {
+            background: #333;
+        }
+
+        /* --- Responsive Design --- */
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 280px;
+            }
+            .question-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .sub-header {
+                margin: 16px;
+                margin-bottom: 0;
+                padding: 16px;
+            }
+            .question-card {
+                margin: 0 16px 16px 16px;
+            }
+        }
+
+        /* Mobile Footer */
+        .mobile-footer {
+            display: none;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 16px;
+            }
+
+            .hamburger {
+                display: flex;
+                order: -1;
+            }
+
+            .brand span:nth-of-type(2) {
+                display: none;
+            }
+
+            .user-details {
+                display: none;
+            }
+
+            .time-label {
+                display: none;
+            }
+
+            .time-value {
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .main-container {
+                flex-direction: column;
+                padding-bottom: 80px;
+            }
+
+            .question-area {
+                overflow-y: auto;
+            }
+
+            .mobile-footer {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                border-top: 1px solid #e2e8f0;
+                padding: 12px 16px;
+                gap: 8px;
+                z-index: 100;
+                box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .mobile-footer .btn {
+                flex: 1;
+                padding: 12px 8px;
+                font-size: 11px;
+                text-align: center;
+            }
+
+            .mobile-footer .btn-primary {
+                background: #000
+                ;
+            }
+
+            .mobile-footer .btn-primary:hover {
+                background: #000000;
+            }
+
+            .actions {
+                display: none;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                right: -280px;
+                height: 100vh;
+                width: 280px;
+                z-index: 999;
+                border-left: none;
+                box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .sidebar.open {
+                right: 0;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+
+            .sidebar-close {
+                display: flex;
+            }
+
+            .sub-header {
+                margin: 12px;
+                margin-bottom: 0;
+                padding: 12px 16px;
+                flex-direction: column;
+                gap: 8px;
+                align-items: stretch;
+            }
+
+            .sub-header-right {
+                justify-content: space-between;
+            }
+
+            .question-card {
+                margin: 0 12px 12px 12px;
+                min-height: auto;
+            }
+
+            .question-content {
+                padding: 16px;
+                overflow-y: visible;
+            }
+
+            .question-text {
+                font-size: 15px;
+                margin-bottom: 16px;
+            }
+
+            .palette-header {
+                padding: 24px 24px 20px 24px;
+            }
+
+            .palette-legend {
+                flex-direction: column;
+                gap: 16px;
+                padding: 20px 24px;
+                font-size: 12px;
+            }
+
+            .legend-item {
+                justify-content: flex-start;
+                gap: 12px;
+            }
+
+            .palette-grid {
+                padding: 20px 24px;
+            }
+
+            .question-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 12px;
+            }
+
+            .question-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 13px;
+            }
+
+            .palette-footer {
+                padding: 20px 24px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .submit-btn {
+                padding: 14px 16px;
+                font-size: 13px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <!-- Left side of header -->
+        <div class="header-group-left">
+            <div class="hamburger" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="brand">
+                <img loading="lazy" style="height:30px; width:auto;" src="https://osmium.co.in/cdnLogo" alt="Osmium Logo">
+                <span>Osmium</span>
+                <span>JEE Mains Mock Test</span>
+            </div>
+        </div>
+        
+        <!-- Right side of header -->
+        <div class="header-group-right">
+            <div class="time-remaining">
+                <div class="time-label">Time Remaining:</div>
+                <div class="time-value" id="timer">00:45:48</div>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-details">
+                    <div class="user-name">Shristi Patel</div>
+                    <div class="user-id">24BTCSE046</div>
+                </div>
+                <div class="user-avatar">SP</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sidebar overlay -->
+    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <div class="main-container">
+        <!-- Main Question Area -->
+        <div class="question-area">
+            <!-- Sub-header with subject selector and stats -->
+            <div class="sub-header">
+                <div class="sub-header-left">
+                    <div class="custom-dropdown">
+                        <div class="dropdown-selected" onclick="toggleDropdown()">
+                            <span id="selectedSubject">Physics</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="dropdown-options" id="dropdownOptions">
+                            <div class="dropdown-option" onclick="selectSubject('Physics')">Physics</div>
+                            <div class="dropdown-option" onclick="selectSubject('Chemistry')">Chemistry</div>
+                            <div class="dropdown-option" onclick="selectSubject('Mathematics')">Mathematics</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sub-header-right">
+                    <div class="header-stat">
+                        Marks
+                        <span class="mark-positive">+4</span>
+                        <span class="mark-negative">-1</span>
+                    </div>
+                    <div class="header-stat">
+                        Time
+                        <span>5:48</span>
+                    </div>
+                </div>
+            </div>
+            <div class="question-card">
+                
+
+                
+                <!-- Question content -->
+                <div class="question-content">
+                    <div class="question-text">
+                        <strong>1.</strong> A 3 m long wire of radius 3 mm shows an extension of 0.1 mm when loaded vertically by a mass of 50 kg in an experiment to determine Young's modulus. The value of Young's modulus of the wire as per this experiment is Nm, where the value of g is: (Take m/s)
+                    </div>
+                    
+                    <div class="options">
+                        <div class="option" onclick="selectOption(1)">
+                            <div class="radio" id="radio1"></div>
+                            <div class="option-text">2.5</div>
+                        </div>
+                        <div class="option" onclick="selectOption(2)">
+                            <div class="radio" id="radio2"></div>
+                            <div class="option-text">25</div>
+                        </div>
+                        <div class="option" onclick="selectOption(3)">
+                            <!-- CORRECTED: Restored light gold background -->
+                            <div class="radio selected" id="radio3"></div>
+                            <div class="option-text">10</div>
+                        </div>
+                        <div class="option" onclick="selectOption(4)">
+                            <div class="radio" id="radio4"></div>
+                            <div class="option-text">5</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action bar at bottom -->
+                <div class="actions">
+                    <div class="actions-left">
+                        <button class="btn btn-secondary" onclick="markForReview()">Mark for Review & Next</button>
+                        <button class="btn btn-secondary" onclick="clearAnswer()">Clear</button>
+                    </div>
+                    <button class="btn btn-primary" onclick="saveAndNext()">Save & Next</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar (Question Palette) -->
+        <div class="sidebar">
+            <button class="sidebar-close" onclick="closeSidebar()">&times;</button>
+            <div class="palette-card">
+                <div class="palette-header">
+                    <div class="palette-title">Physics</div>
+                </div>
+                
+                <div class="palette-legend">
+                    <div class="legend-item">
+                        <div class="status-dot dot-answered"></div>
+                        8 Answered
+                    </div>
+                    <div class="legend-item">
+                        <div class="status-dot dot-marked"></div>
+                        6 Marked
+                    </div>
+                    <div class="legend-item">
+                        <div class="status-dot dot-not-answered"></div>
+                        6 Not Answered
+                    </div>
+                </div>
+                
+                <div class="palette-grid">
+                    <div class="question-grid" id="questionGrid"></div>
+                </div>
+                
+                <div class="palette-footer">
+                    <button class="submit-btn" onclick="submitTest()">Submit Test</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Mobile Footer -->
+    <div class="mobile-footer">
+        <button class="btn btn-secondary" onclick="markForReview()">Mark & Next</button>
+        <button class="btn btn-secondary" onclick="clearAnswer()">Clear</button>
+        <button class="btn btn-primary" onclick="saveAndNext()">Save & Next</button>
+    </div>
+
+    <!-- Submit Confirmation Modal -->
+    <div class="modal-overlay" id="submitModal">
+        <div class="modal-box">
+            <h2>Are you sure want to submit?</h2>
+            <p class="sub-text">After submitting test, you won't be able to re-attempt</p>
+            
+            <div class="status-box">
+                <div class="status-row">
+                    <div class="status-circle status-green" id="answeredCount">0</div>
+                    <div class="status-label">ANSWERED</div>
+                </div>
+                
+                <div class="status-row">
+                    <div class="status-circle status-purple" id="markedCount">0</div>
+                    <div class="status-label">MARKED FOR REVIEW</div>
+                </div>
+                
+                <div class="status-row">
+                    <div class="status-circle status-grey" id="notAnsweredCount">0</div>
+                    <div class="status-label">NOT ANSWERED</div>
+                </div>
+            </div>
+            
+            <div class="modal-btn-area">
+                <button class="modal-btn modal-cancel-btn" onclick="closeSubmitModal()">Cancel</button>
+                <button class="modal-btn modal-submit-btn" onclick="confirmSubmit()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSubject = 'Physics';
+        let currentQuestion = 1;
+        let timeRemaining = 45 * 60 + 48;
+        
+        const questionData = {
+            Physics: Array.from({length: 25}, (_, i) => {
+                const questions = [
+                    { text: "A 3 m long wire of radius 3 mm shows an extension of 0.1 mm when loaded vertically by a mass of 50 kg in an experiment to determine Young's modulus. The value of Young's modulus of the wire as per this experiment is Nm, where the value of g is: (Take m/s)", options: ["2.5", "25", "10", "5"] },
+                    { text: "A particle moves in a circle of radius 20 cm. What is the distance covered by the particle when it completes 3/4 of revolution?", options: ["30π cm", "15π cm", "10π cm", "20π cm"] },
+                    { text: "The dimensional formula for impulse is:", options: ["[MLT⁻¹]", "[MLT⁻²]", "[ML²T⁻¹]", "[MLT⁻³]"] },
+                    { text: "A body of mass 2 kg is moving with velocity 10 m/s. Its kinetic energy is:", options: ["100 J", "200 J", "50 J", "20 J"] },
+                    { text: "The SI unit of electric current is:", options: ["Volt", "Ampere", "Ohm", "Watt"] },
+                    { text: "Which law states that energy cannot be created or destroyed?", options: ["Newton's Law", "Conservation of Energy", "Ohm's Law", "Hooke's Law"] },
+                    { text: "The acceleration due to gravity on Earth is approximately:", options: ["9.8 m/s²", "10 m/s²", "8.9 m/s²", "11 m/s²"] },
+                    { text: "Sound waves are:", options: ["Transverse", "Longitudinal", "Electromagnetic", "Light waves"] },
+                    { text: "The unit of force is:", options: ["Joule", "Newton", "Watt", "Pascal"] },
+                    { text: "Ohm's law relates:", options: ["V = IR", "F = ma", "E = mc²", "P = VI"] }
+                ];
+                return questions[i % questions.length] || { text: `Physics Question ${i + 1}`, options: ["Option A", "Option B", "Option C", "Option D"] };
+            }).reduce((acc, q, i) => ({ ...acc, [i + 1]: q }), {}),
+            
+            Chemistry: Array.from({length: 25}, (_, i) => {
+                const questions = [
+                    { text: "Which of the following is the most electronegative element?", options: ["Oxygen", "Fluorine", "Nitrogen", "Chlorine"] },
+                    { text: "The hybridization of carbon in methane (CH₄) is:", options: ["sp", "sp²", "sp³", "sp³d"] },
+                    { text: "Which gas is evolved when zinc reacts with dilute HCl?", options: ["Oxygen", "Hydrogen", "Chlorine", "Carbon dioxide"] },
+                    { text: "The atomic number of carbon is:", options: ["4", "6", "8", "12"] },
+                    { text: "Which of the following is a noble gas?", options: ["Nitrogen", "Oxygen", "Helium", "Hydrogen"] },
+                    { text: "The pH of pure water is:", options: ["6", "7", "8", "9"] },
+                    { text: "Which element has the symbol 'Na'?", options: ["Nitrogen", "Sodium", "Nickel", "Neon"] },
+                    { text: "The molecular formula of water is:", options: ["H₂O", "CO₂", "NaCl", "CH₄"] },
+                    { text: "Which acid is found in vinegar?", options: ["Hydrochloric acid", "Sulfuric acid", "Acetic acid", "Nitric acid"] },
+                    { text: "The number of electrons in a neutral carbon atom is:", options: ["4", "6", "8", "12"] }
+                ];
+                return questions[i % questions.length] || { text: `Chemistry Question ${i + 1}`, options: ["Option A", "Option B", "Option C", "Option D"] };
+            }).reduce((acc, q, i) => ({ ...acc, [i + 1]: q }), {}),
+            
+            Mathematics: Array.from({length: 25}, (_, i) => {
+                const questions = [
+                    { text: "If log₂ x = 3, then x equals:", options: ["6", "8", "9", "12"] },
+                    { text: "The derivative of sin(x) with respect to x is:", options: ["cos(x)", "-cos(x)", "sin(x)", "-sin(x)"] },
+                    { text: "The value of ∫₀¹ x dx is:", options: ["1/2", "1", "2", "0"] },
+                    { text: "What is 2 + 2?", options: ["3", "4", "5", "6"] },
+                    { text: "The square root of 64 is:", options: ["6", "7", "8", "9"] },
+                    { text: "What is 5! (5 factorial)?", options: ["100", "120", "125", "150"] },
+                    { text: "The value of π (pi) is approximately:", options: ["3.14", "2.71", "1.41", "1.73"] },
+                    { text: "If x² = 25, then x equals:", options: ["±4", "±5", "±6", "±7"] },
+                    { text: "The slope of the line y = 2x + 3 is:", options: ["1", "2", "3", "4"] },
+                    { text: "What is 10% of 200?", options: ["10", "20", "30", "40"] }
+                ];
+                return questions[i % questions.length] || { text: `Mathematics Question ${i + 1}`, options: ["Option A", "Option B", "Option C", "Option D"] };
+            }).reduce((acc, q, i) => ({ ...acc, [i + 1]: q }), {})
+        };
+        
+        const userAnswers = {};
+        const markedQuestions = new Set();
+        
+        function selectOption(option) {
+            document.querySelectorAll('.radio').forEach(r => r.classList.remove('selected'));
+            document.getElementById(`radio${option}`).classList.add('selected');
+            
+            const key = `${currentSubject}_${currentQuestion}`;
+            userAnswers[key] = option;
+            generateQuestionGrid();
+        }
+        
+        function loadQuestion() {
+            const question = questionData[currentSubject][currentQuestion];
+            if (!question) {
+                document.querySelector('.question-text').innerHTML = `<strong>${currentQuestion}.</strong> Question not available`;
+                document.querySelector('.options').innerHTML = '';
+                return;
+            }
+            
+            document.querySelector('.question-text').innerHTML = `<strong>${currentQuestion}.</strong> ${question.text}`;
+            
+            const optionsHtml = question.options.map((option, index) => 
+                `<div class="option" onclick="selectOption(${index + 1})">
+                    <div class="radio" id="radio${index + 1}"></div>
+                    <div class="option-text">${option}</div>
+                </div>`
+            ).join('');
+            
+            document.querySelector('.options').innerHTML = optionsHtml;
+            
+            const key = `${currentSubject}_${currentQuestion}`;
+            if (userAnswers[key]) {
+                document.getElementById(`radio${userAnswers[key]}`).classList.add('selected');
+            }
+        }
+        
+        function generateQuestionGrid() {
+            const grid = document.getElementById('questionGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            for (let i = 1; i <= 25; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'question-btn';
+                btn.textContent = i;
+                
+                const key = `${currentSubject}_${i}`;
+                
+                if (markedQuestions.has(key)) {
+                    btn.classList.add('btn-marked');
+                } else if (userAnswers[key]) {
+                    btn.classList.add('btn-answered');
+                } else {
+                    btn.classList.add('btn-not-answered');
+                }
+                
+                if (i === currentQuestion) {
+                    btn.classList.add('btn-current');
+                }
+                
+                btn.onclick = () => selectQuestion(i);
+                grid.appendChild(btn);
+            }
+            
+            updateLegend();
+        }
+        
+        function updateLegend() {
+            let answered = 0, marked = 0, notAnswered = 0;
+            
+            for (let i = 1; i <= 25; i++) {
+                const key = `${currentSubject}_${i}`;
+                if (markedQuestions.has(key)) {
+                    marked++;
+                } else if (userAnswers[key]) {
+                    answered++;
+                } else {
+                    notAnswered++;
+                }
+            }
+            
+            document.querySelector('.palette-legend').innerHTML = `
+                <div class="legend-item">
+                    <div class="status-dot dot-answered"></div>
+                    ${answered} Answered
+                </div>
+                <div class="legend-item">
+                    <div class="status-dot dot-marked"></div>
+                    ${marked} Marked
+                </div>
+                <div class="legend-item">
+                    <div class="status-dot dot-not-answered"></div>
+                    ${notAnswered} Not Answered
+                </div>
+            `;
+        }
+        
+        function selectQuestion(num) {
+            currentQuestion = num;
+            loadQuestion();
+            generateQuestionGrid();
+        }
+        
+        function selectSubject(subject) {
+            currentSubject = subject;
+            currentQuestion = 1;
+            document.getElementById('selectedSubject').textContent = subject;
+            document.querySelector('.palette-title').textContent = subject;
+            document.getElementById('dropdownOptions').classList.remove('show');
+            
+            loadQuestion();
+            generateQuestionGrid();
+        }
+        
+        function markForReview() {
+            const key = `${currentSubject}_${currentQuestion}`;
+            markedQuestions.add(key);
+            nextQuestion();
+        }
+        
+        function clearAnswer() {
+            const key = `${currentSubject}_${currentQuestion}`;
+            delete userAnswers[key];
+            markedQuestions.delete(key);
+            document.querySelectorAll('.radio').forEach(r => r.classList.remove('selected'));
+            generateQuestionGrid();
+        }
+        
+        function saveAndNext() {
+            nextQuestion();
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < 25) {
+                selectQuestion(currentQuestion + 1);
+            }
+        }
+        
+        function submitTest() {
+            showSubmitModal();
+        }
+        
+        function showSubmitModal() {
+            updateModalStats();
+            document.getElementById('submitModal').classList.add('show');
+        }
+        
+        function closeSubmitModal() {
+            document.getElementById('submitModal').classList.remove('show');
+        }
+        
+        function updateModalStats() {
+            let totalAnswered = 0, totalMarked = 0, totalNotAnswered = 0;
+            
+            ['Physics', 'Chemistry', 'Mathematics'].forEach(subject => {
+                for (let i = 1; i <= 25; i++) {
+                    const key = `${subject}_${i}`;
+                    if (markedQuestions.has(key)) {
+                        totalMarked++;
+                    } else if (userAnswers[key]) {
+                        totalAnswered++;
+                    } else {
+                        totalNotAnswered++;
+                    }
+                }
+            });
+            
+            document.getElementById('answeredCount').textContent = totalAnswered;
+            document.getElementById('markedCount').textContent = totalMarked;
+            document.getElementById('notAnsweredCount').textContent = totalNotAnswered;
+        }
+        
+        function confirmSubmit() {
+            closeSubmitModal();
+            alert('Test submitted successfully!');
+        }
+        
+        function updateTimer() {
+            const timerEl = document.getElementById('timer');
+            if (!timerEl) return;
+            
+            const hours = Math.floor(timeRemaining / 3600);
+            const minutes = Math.floor((timeRemaining % 3600) / 60);
+            const seconds = timeRemaining % 60;
+            
+            timerEl.textContent = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            if (timeRemaining > 0) {
+                timeRemaining--;
+            } else {
+                alert('Time is up! Test will be submitted automatically.');
+                submitTest();
+            }
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            const hamburger = document.querySelector('.hamburger');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+            hamburger.classList.toggle('active');
+        }
+        
+        function closeSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            const hamburger = document.querySelector('.hamburger');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+            hamburger.classList.remove('active');
+        }
+        
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownOptions');
+            dropdown.classList.toggle('show');
+        }
+        
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.custom-dropdown');
+            if (!dropdown.contains(event.target)) {
+                document.getElementById('dropdownOptions').classList.remove('show');
+            }
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuestion();
+            generateQuestionGrid();
+            setInterval(updateTimer, 1000);
+            updateTimer();
+        });
+    </script>
+</body>
+</html>

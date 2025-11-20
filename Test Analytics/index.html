@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osmium - Study Materials</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #faf8f6;
+            color: #2e2e2e;
+            display: flex;
+        }
+
+        /* ============ SIDEBAR FROM OTHER DASHBOARDS ============ */
+        .sidebar {
+            width: 280px;
+            background-color: #faf8f6;
+            border-right: 1px solid #ebe8e2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 0;
+            overflow-y: auto;
+            height: 100vh;
+            position: fixed;
+        }
+
+        .sidebar-top {
+            flex: 1;
+        }
+
+        .logo {
+            width: 80%;
+            margin-bottom: 32px;
+            padding: 0 20px;
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #8b8b8b;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 0 20px;
+            margin: 16px 0 8px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            margin: 0 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #5a5a5a;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background-color: #f0ede8;
+        }
+
+        .nav-item.active {
+            background-color: #e8e3da;
+            color: #2e2e2e;
+            font-weight: 500;
+        }
+
+        .sidebar-bottom {
+            border-top: 1px solid #ebe8e2;
+            padding-top: 16px;
+            padding: 0 8px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            margin: 16px 0 0 0;
+            border-radius: 8px;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: #2e2e2e;
+        }
+
+        .user-plan {
+            font-size: 11px;
+            color: #8b8b8b;
+            margin-top: 2px;
+        }
+
+        .settings-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .search-container {
+            position: relative;
+            margin: 0 20px 32px 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border: 1px solid #ebe8e2;
+            border-radius: 8px;
+            background: #f5f3f0;
+            font-size: 14px;
+            color: #666;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            opacity: 0.5;
+        }
+
+        .search-shortcut {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            color: #999;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            margin-bottom: 32px;
+        }
+
+        .menu-btn {
+            width: 32px;
+            height: 32px;
+            background: #ffffff;
+            border: 1px solid #ebe8e2;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .menu-btn:hover {
+            background: #f5f3f0;
+            border-color: #d4cfc8;
+        }
+
+        .logo {
+            width: 70%;
+            margin-bottom: 0;
+            padding: 0;
+        }
+
+        /* ============ MAIN CONTENT ============ */
+        .main-content {
+            margin-left: 280px;
+            padding: 32px;
+            width: calc(100% - 280px);
+            min-height: 100vh;
+        }
+
+        .content-wrapper {
+            display: flex;
+            gap: 24px;
+        }
+
+        .left-content {
+            flex: 1;
+        }
+
+        .right-panel {
+            width: 480px;
+        }
+
+        /* ============ TEST SUMMARY ============ */
+        .test-summary-container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .header-left h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+
+        .header-left p {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .time-badge {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .time-label {
+            color: #999;
+            margin-right: 4px;
+        }
+
+        .time-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .score-card, .accuracy-card {
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .score-card {
+            background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e9 100%);
+        }
+
+        .accuracy-card {
+            background: #E7F2F1
+        }
+
+        .card-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .score-display {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .score-value {
+            font-size: 40px;
+            font-weight: 700;
+            color: #627F43;
+            line-height: 1;
+        }
+
+        .score-total {
+            font-size: 20px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .score-improvement {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .accuracy-content {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .accuracy-left {
+            flex: 1;
+        }
+
+        .accuracy-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2b7b78;
+            line-height: 1;
+        }
+
+        .accuracy-stats {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .stat-box {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .stat-correct {
+            color: #2f8a48;
+        }
+
+        .stat-incorrect {
+            color: #dc3545;
+        }
+
+        /* ============ DETAILED ANALYSIS ============ */
+        .analysis-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid #f0f0f0;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .analysis-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .analysis-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2e2e2e;
+            margin-bottom: 4px;
+        }
+
+        .analysis-header p {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .subject-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .subject-btn {
+            padding: 8px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: white;
+            color: #666;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .subject-btn:hover {
+            border-color: #d1d5db;
+            background: #f9fafb;
+        }
+
+        .subject-btn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: white;
+        }
+
+        .subject-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            background: #F4F3EF;
+            padding: 6px;
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .tab {
+            padding: 10px 24px;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            font-size: 15px;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        
+
+        .tab.active {
+            background: #ffffff;
+            color: #6D4B05;
+        }
+
+        /* Question Card */
+        .question-number {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .question-number.incorrect {
+            color: #dc3545;
+        }
+
+        .question-number.correct {
+            color: #2f8a48;
+        }
+
+        .status-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .status-icon.incorrect {
+            background: #fee;
+            color: #dc3545;
+        }
+
+        .status-icon.correct {
+            background: #e8f5e9;
+            color: #2f8a48;
+        }
+
+        .answer-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .answer-badge.incorrect {
+            background: #ffebee;
+            color: #dc3545;
+        }
+
+        .answer-badge.correct {
+            background: #e8f5e9;
+            color: #2f8a48;
+        }
+
+        .time-info {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .topic-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag.electro {
+            background: #fef3e2;
+            color: #9a6e3a;
+        }
+
+        .tag.solid {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .tag.kinematics {
+            background: #e0f2f1;
+            color: #00796b;
+        }
+
+        .tag.thermodynamics {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .tag.energyconservation {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .tag.organicchemistry {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .tag.iupacnomenclature {
+            background: #e1f5fe;
+            color: #0277bd;
+        }
+
+        .tag.chemicalequilibrium {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .tag.integration {
+            background: #f9fbe7;
+            color: #689f38;
+        }
+
+        .tag.calculus {
+            background: #fff8e1;
+            color: #f9a825;
+        }
+
+        .tag.linearalgebra {
+            background: #f3e5f5;
+            color: #8e24aa;
+        }
+
+        .tag.matrices {
+            background: #e0f2f1;
+            color: #00695c;
+        }
+
+        /* Options Section */
+        .options-label {
+            font-size: 14px;
+            font-style: italic;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: #f8f9fa;
+            transition: all 0.2s ease;
+        }
+
+        .option.correct {
+            border-color: #2f8a48;
+            border-style: dashed;
+            background: white;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .option.neutral {
+            background: #f8f9fa;
+        }
+
+        .option-letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .option-letter.correct {
+            background: #2f8a48;
+            color: white;
+        }
+
+        .option-letter.incorrect {
+            background: #dc3545;
+            color: white;
+        }
+
+        .option-letter.neutral {
+            background: #9ca3af;
+            color: white;
+        }
+
+        .option-text {
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* Subject Questions */
+        .subject-questions {
+            display: none;
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 8px;
+        }
+
+        .subject-questions.active {
+            display: block;
+        }
+
+        .subject-questions::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .subject-questions::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .subject-questions::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        .subject-questions::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* ============ QUESTION CARDS ============ */
+        .question-card {
+            border-bottom: 1px dashed #e9ecef;
+            padding: 20px 0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+        }
+
+        .question-header {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .question-status {
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 100px;
+        }
+
+        .question-status.incorrect {
+            color: #dc3545;
+        }
+
+        .question-status.correct {
+            color: #2f8a48;
+        }
+
+        .question-text {
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .question-meta {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin: 16px 0;
+            font-size: 14px;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-label {
+            font-style: italic;
+            color: #999;
+        }
+
+        .meta-value {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .answer-tag {
+            font-weight: 600;
+        }
+
+        .answer-incorrect {
+            color: #dc3545;
+        }
+
+        .answer-correct {
+            color: #2f8a48;
+        }
+
+        .ask-mentor-btn {
+            background: #fff8e6;
+            border: 1px solid #f1d27b;
+            color: #7b6a3b;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            margin-left: auto;
+        }
+
+        .ask-mentor-btn:hover {
+            background: #f5e6a3;
+            border-color: #e6c76b;
+            transform: translateY(-1px);
+        }
+
+        .ask-mentor-btn svg {
+            flex-shrink: 0;
+        }
+
+        .question-tags {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0 12px 116px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .options-container {
+            margin: 16px 0 0 116px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            background: white;
+        }
+
+        .option.correct {
+            border-color: #2f8a48;
+            background: rgba(47, 138, 72, 0.05);
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: rgba(220, 53, 69, 0.05);
+        }
+
+        .option-label {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .option-label.correct {
+            background: #e8f5e9;
+            color: #2f8a48;
+        }
+
+        .option-label.incorrect {
+            background: #ffebee;
+            color: #dc3545;
+        }
+
+        .option-label.neutral {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        /* ============ RIGHT PANEL ============ */
+        .score-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            width: 100%;
+        }
+        .score-card1 {
+            background: #F1F4E9;
+            border-radius: 16px;
+            padding: 32px;
+            width: 100%;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .menu-icon {
+            color: #999;
+            cursor: pointer;
+            font-size: 24px;
+            padding: 4px;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 32px;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.physics {
+            background: #a7d9d4;
+        }
+
+        .legend-dot.chemistry {
+            background: #f6e5b2;
+        }
+
+        .legend-dot.mathematics {
+            background: #a8d5a6;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .stats-table thead {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .stats-table th {
+            text-align: left;
+            font-size: 13px;
+            font-weight: 500;
+            color: #666;
+            padding: 12px 8px;
+            font-style: italic;
+        }
+
+        .stats-table th:first-child {
+            padding-left: 0;
+        }
+
+        .stats-table th:last-child {
+            text-align: right;
+            padding-right: 0;
+        }
+
+        .stats-table td {
+            padding: 16px 8px;
+            font-size: 15px;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .stats-table td:first-child {
+            padding-left: 0;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .stats-table td:last-child {
+            text-align: right;
+            padding-right: 0;
+        }
+
+        .stats-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .marks-cell {
+            color: #347FB4;
+            font-weight: 700;
+        }
+
+        .accuracy-cell {
+            font-weight: 600;
+        }
+
+        .accuracy-high {
+            color: #33AC4E;
+        }
+
+        .accuracy-medium {
+            color: #33AC4E;
+        }
+
+        .time-cell {
+            color: #d4a574;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: white;
+            border: 1px solid #ebe8e2;
+            border-radius: 8px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: #f5f3f0;
+            border-color: #d4cfc8;
+        }
+
+        .breadcrumb {
+            margin-bottom: 25px;
+            font-size: 15px;
+            color: #525252;
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb span {
+            color: #0d0909;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breadcrumb svg {
+            margin: 0 4px;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 1200px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            .test-summary-container {
+                order: 1;
+            }
+            .right-panel {
+                width: 100%;
+                order: 2;
+            }
+            .analysis-section {
+                order: 3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .test-summary-container {
+                order: 1;
+            }
+            .right-panel {
+                order: 2;
+            }
+            .analysis-section {
+                order: 3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .sidebar {
+                position: fixed;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 16px;
+            }
+            
+            .menu-btn {
+                display: block;
+            }
+            
+            .content-wrapper {
+                flex-direction: column;
+            }
+            
+            .test-summary-container {
+                order: 1;
+                padding: 20px;
+            }
+            
+            .right-panel {
+                order: 2;
+                width: 100%;
+            }
+            
+            .analysis-section {
+                order: 3;
+            }
+            
+            .summary-cards {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .summary-header {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .analysis-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .subject-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .subject-btn {
+                flex: 1;
+                text-align: center;
+            }
+            
+            .score-value {
+                font-size: 36px;
+            }
+            
+            .accuracy-value {
+                font-size: 28px;
+            }
+            
+            .accuracy-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .accuracy-stats {
+                width: 100%;
+            }
+            
+            .score-card {
+                padding: 20px;
+            }
+            
+            .chart-container {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .stats-table th,
+            .stats-table td {
+                font-size: 12px;
+                padding: 8px 4px;
+            }
+            
+            .subject-tabs {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .tab {
+                flex: 1;
+                text-align: center;
+                padding: 8px 8px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <div class="logo-container">
+                <img src="../logos/logo.svg" alt="" class="logo">
+                <button type="button" class="menu-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+                    <img src="../logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+                </button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                </svg>
+                <div class="search-shortcut">Ctrl + F</div>
+            </div>
+
+            <div class="section-label">General</div>
+            <a href="../teacher dashboard/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M120,56v48a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V56A16,16,0,0,1,56,40h48A16,16,0,0,1,120,56Zm80-16H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-96,96H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Z"/></svg> Dashboard</a>
+            <a href="../student management/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M164.47,195.63a8,8,0,0,1-6.7,12.37H10.23a8,8,0,0,1-6.7-12.37,95.83,95.83,0,0,1,47.22-37.71,60,60,0,1,1,66.5,0A95.83,95.83,0,0,1,164.47,195.63Zm87.91-.15a95.87,95.87,0,0,0-47.13-37.56A60,60,0,0,0,144.7,54.59a4,4,0,0,0-1.33,6A75.83,75.83,0,0,1,147,150.53a4,4,0,0,0,1.07,5.53,112.32,112.32,0,0,1,29.85,30.83,23.92,23.92,0,0,1,3.65,16.47,4,4,0,0,0,3.95,4.64h60.3a8,8,0,0,0,7.73-5.93A8.22,8.22,0,0,0,252.38,195.48Z"/></svg> Student Management</a>
+            <a href="../project management/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M240,56V200a8,8,0,0,1-8,8H160a24,24,0,0,0-24,23.94,7.9,7.9,0,0,1-5.12,7.55A8,8,0,0,1,120,232a24,24,0,0,0-24-24H24a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H88a32,32,0,0,1,32,32v87.73a8.17,8.17,0,0,0,7.47,8.25,8,8,0,0,0,8.53-8V80a32,32,0,0,1,32-32h64A8,8,0,0,1,240,56Z"/></svg> Project Management</a>
+            <a href="../research paper/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232,216a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H181.25A72,72,0,0,0,144,80.46V136a16,16,0,0,1-16,16H80a16,16,0,0,1-16-16V32A16,16,0,0,1,80,16h48a16,16,0,0,1,16,16V64.37A88.05,88.05,0,0,1,203.94,208H224A8,8,0,0,1,232,216Zm-96-32a8,8,0,0,0,0-16H72a8,8,0,0,0,0,16Z"/></svg> Research paper</a>
+            <a href="../exam and test/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M200,32H163.74a47.92,47.92,0,0,0-71.48,0H56A16,16,0,0,0,40,48V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm-72,0a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm32,128H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z"/></svg> Exam & Tests</a>
+            <a href="../AI mentor/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.34,40.65l24.71,7.27a16,16,0,0,0,19.87-19.86Zm-16.25,1.47L224,216l-27.76-8.17a8,8,0,0,0-6,.63,64.05,64.05,0,0,1-85.87-24.88A79.93,79.93,0,0,0,174.7,89.71a64,64,0,0,1,41.75,92.48A8,8,0,0,0,215.82,188.23Z"/></svg>AI Mentor</a>
+            <div class="nav-item active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"  width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M226.53,56.41l-96-32a8,8,0,0,0-5.06,0l-96,32A8,8,0,0,0,24,64v80a8,8,0,0,0,16,0V75.1L73.59,86.29a64,64,0,0,0,20.65,88.05c-18,7.06-33.56,19.83-44.94,37.29a8,8,0,1,0,13.4,8.74C77.77,197.25,101.57,184,128,184s50.23,13.25,65.3,36.37a8,8,0,0,0,13.4-8.74c-11.38-17.46-27-30.23-44.94-37.29a64,64,0,0,0,20.65-88l44.12-14.7a8,8,0,0,0,0-15.18ZM176,120A48,48,0,1,1,89.35,91.55l36.12,12a8,8,0,0,0,5.06,0l36.12-12A47.89,47.89,0,0,1,176,120Z"/></svg> Study Materials</div>
+
+            <div class="section-label">Support</div>
+            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg> Notification</div>
+            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232,128v80a40,40,0,0,1-40,40H136a8,8,0,0,1,0-16h56a24,24,0,0,0,24-24H192a24,24,0,0,1-24-24V144a24,24,0,0,1,24-24h23.65A88,88,0,0,0,66,65.54A87.29,87.29,0,0,0,40.36,120H64a24,24,0,0,1,24,24v40a24,24,0,0,1-24,24H48a24,24,0,0,1-24-24V128A104.11,104.11,0,0,1,201.89,54.66A103.41,103.41,0,0,1,232,128Z"/></svg> Help & Support</div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="user-profile">
+                <img src="../logos/female avatar.svg" alt="">
+                <div class="user-details">
+                    <div class="user-name">Suman</div>
+                    <div class="user-plan">Free Plan</div>
+                </div>
+                <div class="settings-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#abaaaa" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm109.94-52.79a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A112.1,112.1,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.62a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21Zm-15,34.91-28.57,16.25a8,8,0,0,0-3,3c-.58,1-1.19,2.06-1.81,3.06a7.94,7.94,0,0,0-1.22,4.21l-.15,32.25a95.89,95.89,0,0,1-25.37,14.3L134,199.13a8,8,0,0,0-3.91-1h-.19c-1.21,0-2.43,0-3.64,0a8.08,8.08,0,0,0-4.1,1l-28.84,16.1A96,96,0,0,1,67.88,201l-.11-32.2a8,8,0,0,0-1.22-4.22c-.62-1-1.23-2-1.8-3.06a8.09,8.09,0,0,0-3-3.06l-28.6-16.29a90.49,90.49,0,0,1,0-28.26L61.67,97.63a8,8,0,0,0,3-3c.58-1,1.19-2.06,1.81-3.06a7.94,7.94,0,0,0,1.22-4.21l.15-32.25a95.89,95.89,0,0,1,25.37-14.3L122,56.87a8,8,0,0,0,4.1,1c1.21,0,2.43,0,3.64,0a8.08,8.08,0,0,0,4.1-1l28.84-16.1A96,96,0,0,1,188.12,55l.11,32.2a8,8,0,0,0,1.22,4.22c.62,1,1.23,2,1.8,3.06a8.09,8.09,0,0,0,3,3.06l28.6,16.29A90.49,90.49,0,0,1,222.9,142.12Z"></path></svg> </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <button type="button" class="mobile-menu-btn" onclick="toggleSidebar()" title="Open menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#292929" viewBox="0 0 256 256"><path d="M93.31,70,28,128l65.27,58a8,8,0,1,1-10.62,12l-72-64a8,8,0,0,1,0-12l72-64A8,8,0,1,1,93.31,70Zm152,52-72-64a8,8,0,0,0-10.62,12L228,128l-65.27,58a8,8,0,1,0,10.62,12l72-64a8,8,0,0,0,0-12Z"></path></svg>
+        </button>
+        
+        <!-- Breadcrumb Navigation -->
+        <div class="breadcrumb">
+            <span>Exam &amp; Test <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg> B.Tech - Sem 4 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg> Varun Kumar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg> Python Advanced Test <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg> Result</span>
+        </div>
+        <div class="content-wrapper">
+            <!-- Left Content -->
+            <div class="left-content">
+                <!-- Test Summary -->
+                <div class="test-summary-container">
+                    <!-- Header -->
+                    <div class="summary-header">
+                        <div class="header-left">
+                            <h2>Test Summary</h2>
+                            <p>Performance at a Glance</p>
+                        </div>
+                        <div class="time-badge">
+                            <span class="time-label">Time:</span>
+                            <span class="time-value">02:34:23</span>
+                        </div>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="summary-cards">
+                        <!-- Score Card -->
+                        <div class="score-card1">
+                            <div class="card-title">You Scored</div>
+                            <div class="score-display">
+                                <span class="score-value">113</span>
+                                <span class="score-total">/300</span>
+                            </div>
+                            <div class="score-improvement">+24 Marks than previous test</div>
+                        </div>
+
+                        <!-- Accuracy Card -->
+                        <div class="accuracy-card">
+                            <div class="card-title">Your Accuracy</div>
+                            <div class="accuracy-content">
+                                <div class="accuracy-left">
+                                    <div class="accuracy-value">67.22%</div>
+                                </div>
+                                <div class="accuracy-stats">
+                                    <div class="stat-box">
+                                        <div class="stat-label">Correct</div>
+                                        <div class="stat-value stat-correct">+56</div>
+                                    </div>
+                                    <div class="stat-box">
+                                        <div class="stat-label">Incorrect</div>
+                                        <div class="stat-value stat-incorrect">-9</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Analysis -->
+                <div class="analysis-section">
+                    <div class="analysis-header">
+                        <div>
+                            <h3>Detailed Question Analysis</h3>
+                            <p>Detailed Analytics of Your Performance</p>
+                        </div>
+                       <div class="subject-tabs">
+                        <button class="tab active" data-subject="physics">Physics</button>
+                        <button class="tab" data-subject="chemistry">Chemistry</button>
+                        <button class="tab" data-subject="mathematics">Mathematics</button>
+                    </div>
+                    </div>
+
+                
+
+                    <!-- Physics Questions -->
+                    <div class="subject-questions active" data-subject="physics">
+                        <!-- Question 1 -->
+                        <div class="question-card">
+                            <div class="question-number incorrect">
+                                <span class="status-icon incorrect">✕</span>
+                                Question 1
+                            </div>
+                            <div class="question-text">
+                                A 3 m long wire of radius 3 mm shows an extension of 0.1 mm when loaded vertically by a mass of 50 kg in an experiment to determine Young's modulus. The value of Young's modulus of the wire as per this experiment is Nm, where the value of is: (Take m/s)
+                            </div>
+                            <div class="question-meta">
+                                <div class="meta-item">
+                                    <span class="meta-label">Your Answer:</span>
+                                    <span class="answer-badge incorrect">C</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Correct:</span>
+                                    <span class="answer-badge correct">A</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Time Spent:</span>
+                                    <span class="meta-value">2.23 Min</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Expected Time:</span>
+                                    <span class="meta-value">180s</span>
+                                </div>
+                                <button class="ask-mentor-btn">
+                                    <img src="../logos/Vector (3).svg" alt="">
+                                    Ask Mentor
+                                </button>
+                            </div>
+                            <div class="topic-tags">
+                                <span class="tag electro">Electro Magnetic Waves</span>
+                                <span class="tag solid">Solid Elasticity</span>
+                                <span class="tag kinematics">Kinematics</span>
+                            </div>
+                            <div class="options-label">Options:</div>
+                            <div class="options-list">
+                                <div class="option correct">
+                                    <div class="option-letter correct">A</div>
+                                    <div class="option-text">2.5</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">B</div>
+                                    <div class="option-text">456</div>
+                                </div>
+                                <div class="option incorrect">
+                                    <div class="option-letter incorrect">C</div>
+                                    <div class="option-text">46</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">D</div>
+                                    <div class="option-text">36</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="question-card">
+                            <div class="question-number correct">
+                                <span class="status-icon correct">✓</span>
+                                Question 2
+                            </div>
+                            <div class="question-text">
+                                Water falls from a height of 200 m into a pool. Calculate the rise in temperature of the water assuming no heat dissipation from the water in the pool. (Take g = 10 m/s², specific heat of water = 4200 J/(kg K))
+                            </div>
+                            <div class="question-meta">
+                                <div class="meta-item">
+                                    <span style="font-style: italic; color: #999;">Your Answer:</span>
+                                    <span class="answer-badge correct">B</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span style="font-style: italic; color: #999;">Correct:</span>
+                                    <span class="answer-badge correct">B</span>
+                                </div>
+                                <div class="meta-item">
+                                    Time Spent: <span class="time-info">1.40 Min</span>
+                                </div>
+                                <button class="ask-mentor-btn">
+                                    <img src="../logos/Vector (3).svg" alt="">
+                                    Ask Mentor
+                                </button>
+                            </div>
+                            <div class="topic-tags">
+                                <span class="tag thermodynamics">Thermodynamics</span>
+                                <span class="tag energyconservation">Energy Conservation</span>
+                            </div>
+                            <div class="options-label">Options:</div>
+                            <div class="options-list">
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">A</div>
+                                    <div class="option-text">0.047°C</div>
+                                </div>
+                                <div class="option correct">
+                                    <div class="option-letter correct">B</div>
+                                    <div class="option-text">0.048°C</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">C</div>
+                                    <div class="option-text">0.049°C</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">D</div>
+                                    <div class="option-text">0.050°C</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chemistry Questions -->
+                    <div class="subject-questions" data-subject="chemistry">
+                        <!-- Question 1 -->
+                        <div class="question-card">
+                            <div class="question-number incorrect">
+                                <span class="status-icon incorrect">✕</span>
+                                Question 1
+                            </div>
+                            <div class="question-text">
+                                Identify the IUPAC name of the compound with molecular formula C₄H₈O₂ that shows positive iodoform test.
+                            </div>
+                            <div class="question-meta">
+                                <div class="meta-item">
+                                    <span style="font-style: italic; color: #999;">Your Answer:</span>
+                                    <span class="answer-badge incorrect">A</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span style="font-style: italic; color: #999;">Correct:</span>
+                                    <span class="answer-badge correct">C</span>
+                                </div>
+                                <div class="meta-item">
+                                    Time Spent: <span class="time-info">3.15 Min</span>
+                                </div>
+                                <div class="meta-item">
+                                    Expected Time: <span class="time-info">200s</span>
+                                </div>
+                                <button class="ask-mentor-btn">
+                                    <img src="../logos/Vector (3).svg" alt="">
+                                    Ask Mentor
+                                </button>
+                            </div>
+                            <div class="topic-tags">
+                                <span class="tag organicchemistry">Organic Chemistry</span>
+                                <span class="tag iupacnomenclature">IUPAC Nomenclature</span>
+                            </div>
+                            <div class="options-label">Options:</div>
+                            <div class="options-list">
+                                <div class="option incorrect">
+                                    <div class="option-letter incorrect">A</div>
+                                    <div class="option-text">Butanoic acid</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">B</div>
+                                    <div class="option-text">Methyl propanoate</div>
+                                </div>
+                                <div class="option correct">
+                                    <div class="option-letter correct">C</div>
+                                    <div class="option-text">Ethyl ethanoate</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">D</div>
+                                    <div class="option-text">Propyl methanoate</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="question-card">
+                            <div class="question-number correct">
+                                <span class="status-icon correct">✓</span>
+                                Question 2
+                            </div>
+                            <div class="question-text">
+                                For the reaction N₂ + 3H₂ ⇌ 2NH₃, if the equilibrium constant Kc = 0.5 at 400°C, what is the value of Kp?
+                            </div>
+                            <div class="question-meta">
+                                <div class="meta-item">
+                                    <span style="font-style: italic; color: #999;">Your Answer:</span>
+                                    <span class="answer-badge correct">D</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span style="font-style: italic; color: #999;">Correct:</span>
+                                    <span class="answer-badge correct">D</span>
+                                </div>
+                                <div class="meta-item">
+                                    Time Spent: <span class="time-info">2.30 Min</span>
+                                </div>
+                                <button class="ask-mentor-btn">
+                                    <img src="../logos/Vector (3).svg" alt="">
+                                    Ask Mentor
+                                </button>
+                            </div>
+                            <div class="topic-tags">
+                                <span class="tag chemicalequilibrium">Chemical Equilibrium</span>
+                                <span class="tag thermodynamics">Thermodynamics</span>
+                            </div>
+                            <div class="options-label">Options:</div>
+                            <div class="options-list">
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">A</div>
+                                    <div class="option-text">0.5</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">B</div>
+                                    <div class="option-text">1.0</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">C</div>
+                                    <div class="option-text">2.0</div>
+                                </div>
+                                <div class="option correct">
+                                    <div class="option-letter correct">D</div>
+                                    <div class="option-text">0.0082</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mathematics Questions -->
+                    <div class="subject-questions" data-subject="mathematics">
+                        <!-- Question 1 -->
+                        <div class="question-card">
+                            <div class="question-number correct">
+                                <span class="status-icon correct">✓</span>
+                                Question 1
+                            </div>
+                            <div class="question-text">
+                                Evaluate ∫ x·e^x dx using integration by parts.
+                            </div>
+                            <div class="question-meta">
+                                <div class="meta-item">
+                                    <span style="font-style: italic; color: #999;">Your Answer:</span>
+                                    <span class="answer-badge correct">B</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span style="font-style: italic; color: #999;">Correct:</span>
+                                    <span class="answer-badge correct">B</span>
+                                </div>
+                                <div class="meta-item">
+                                    Time Spent: <span class="time-info">4.20 Min</span>
+                                </div>
+                                <button class="ask-mentor-btn">
+                                    <img src="../logos/Vector (3).svg" alt="">
+                                    Ask Mentor
+                                </button>
+                            </div>
+                            <div class="topic-tags">
+                                <span class="tag integration">Integration</span>
+                                <span class="tag calculus">Calculus</span>
+                            </div>
+                            <div class="options-label">Options:</div>
+                            <div class="options-list">
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">A</div>
+                                    <div class="option-text">xe^x + C</div>
+                                </div>
+                                <div class="option correct">
+                                    <div class="option-letter correct">B</div>
+                                    <div class="option-text">e^x(x-1) + C</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">C</div>
+                                    <div class="option-text">xe^x - e^x + C</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">D</div>
+                                    <div class="option-text">e^x + C</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="question-card">
+                            <div class="question-number incorrect">
+                                <span class="status-icon incorrect">✕</span>
+                                Question 2
+                            </div>
+                            <div class="question-text">
+                                Find the determinant of the matrix [[2, 3], [1, 4]].
+                            </div>
+                            <div class="question-meta">
+                                <div class="meta-item">
+                                    <span style="font-style: italic; color: #999;">Your Answer:</span>
+                                    <span class="answer-badge incorrect">A</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span style="font-style: italic; color: #999;">Correct:</span>
+                                    <span class="answer-badge correct">C</span>
+                                </div>
+                                <div class="meta-item">
+                                    Time Spent: <span class="time-info">1.50 Min</span>
+                                </div>
+                                <div class="meta-item">
+                                    Expected Time: <span class="time-info">120s</span>
+                                </div>
+                                <button class="ask-mentor-btn">
+                                   <img src="../logos/Vector (3).svg" alt="">
+                                    Ask Mentor
+                                </button>
+                            </div>
+                            <div class="topic-tags">
+                                <span class="tag linearalgebra">Linear Algebra</span>
+                                <span class="tag matrices">Matrices</span>
+                            </div>
+                            <div class="options-label">Options:</div>
+                            <div class="options-list">
+                                <div class="option incorrect">
+                                    <div class="option-letter incorrect">A</div>
+                                    <div class="option-text">11</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">B</div>
+                                    <div class="option-text">6</div>
+                                </div>
+                                <div class="option correct">
+                                    <div class="option-letter correct">C</div>
+                                    <div class="option-text">5</div>
+                                </div>
+                                <div class="option neutral">
+                                    <div class="option-letter neutral">D</div>
+                                    <div class="option-text">8</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <div class="score-card">
+                    <!-- Header -->
+                    <div class="card-header">
+                        <h2 class="card-title">Subject Wise Score</h2>
+                        <div class="menu-icon">⋮</div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="chart-container">
+                        <canvas id="scoreChart" class="chart-canvas"></canvas>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot physics"></div>
+                            <span>Physics</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot chemistry"></div>
+                            <span>Chemistry</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot mathematics"></div>
+                            <span>Mathematics</span>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Table -->
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Subjects</th>
+                                <th>Marks<br>Obtained</th>
+                                <th>Accuracy</th>
+                                <th>Time Spent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Physics</td>
+                                <td class="marks-cell">76</td>
+                                <td class="accuracy-cell accuracy-high">86.2%</td>
+                                <td class="time-cell">52 Min</td>
+                            </tr>
+                            <tr>
+                                <td>Chemistry</td>
+                                <td class="marks-cell">35</td>
+                                <td class="accuracy-cell accuracy-medium">56.6%</td>
+                                <td class="time-cell">40 Min</td>
+                            </tr>
+                            <tr>
+                                <td>Mathematics</td>
+                                <td class="marks-cell">52</td>
+                                <td class="accuracy-cell accuracy-high">85.56%</td>
+                                <td class="time-cell">35 Min</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+            sidebar.classList.toggle('open');
+            
+            if (window.innerWidth <= 768) {
+                if (sidebar.classList.contains('open')) {
+                    mobileBtn.style.display = 'none';
+                } else {
+                    mobileBtn.style.display = 'block';
+                }
+            }
+        }
+
+        // Chart data
+        const data = {
+            labels: ['Physics', 'Chemistry', 'Mathematics'],
+            datasets: [{
+                data: [76, 35, 52],
+                backgroundColor: ['#a7d9d4', '#f6e5b2', '#a8d5a6'],
+                borderWidth: 0,
+                spacing: 2
+            }]
+        };
+
+        // Chart configuration
+        const config = {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        bodyFont: {
+                            family: 'Inter',
+                            size: 14
+                        },
+                        titleFont: {
+                            family: 'Inter',
+                            size: 14,
+                            weight: '600'
+                        },
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + ' marks';
+                            }
+                        }
+                    }
+                },
+                layout: {
+                    padding: 0
+                }
+            },
+            plugins: [{
+                id: 'doughnutLabels',
+                afterDatasetsDraw: function(chart) {
+                    const ctx = chart.ctx;
+                    chart.data.datasets.forEach(function(dataset, i) {
+                        const meta = chart.getDatasetMeta(i);
+                        meta.data.forEach(function(element, index) {
+                            // Get position
+                            const position = element.tooltipPosition();
+                            
+                            // Set font
+                            ctx.fillStyle = '#333';
+                            ctx.font = 'bold 16px Inter';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            
+                            // Get data
+                            const data = dataset.data[index];
+                            
+                            // Display value
+                            ctx.fillText(data, position.x, position.y);
+                        });
+                    });
+                }
+            }]
+        };
+
+        // Create chart
+        const ctx = document.getElementById('scoreChart');
+        new Chart(ctx, config);
+
+        // Question data
+        const questionData = {
+            'physics-1': {
+                title: 'Question 1: Young\'s Modulus Calculation',
+                status: 'incorrect',
+                text: 'A 3 m long wire of radius 3 mm shows an extension of 0.1 mm when loaded vertically by a mass of 50 kg in an experiment to determine Young\'s modulus. The value of Young\'s modulus of the wire as per this experiment is Nm, where the value of is: (Take m/s)',
+                yourAnswer: 'C',
+                correctAnswer: 'A',
+                timeSpent: '2.23 Min',
+                expectedTime: '180s',
+                tags: ['Electro Magnetic Waves', 'Solid Elasticity', 'Kinematics'],
+                options: [{ letter: 'A', text: '2.5', correct: true }, { letter: 'B', text: '456' }, { letter: 'C', text: '46', selected: true }, { letter: 'D', text: '36' }]
+            },
+            'physics-2': {
+                title: 'Question 2: Temperature Rise in Water',
+                status: 'correct',
+                text: 'Water falls from a height of 200 m into a pool. Calculate the rise in temperature of the water assuming no heat dissipation from the water in the pool. (Take g = 10 m/s², specific heat of water = 4200 J/(kg K))',
+                yourAnswer: 'B',
+                correctAnswer: 'B',
+                timeSpent: '1.40 Min',
+                tags: ['Thermodynamics', 'Energy Conservation'],
+                options: [{ letter: 'A', text: '0.047°C' }, { letter: 'B', text: '0.048°C', correct: true, selected: true }, { letter: 'C', text: '0.049°C' }, { letter: 'D', text: '0.050°C' }]
+            },
+            'chemistry-1': {
+                title: 'Question 1: Organic Compound Structure',
+                status: 'incorrect',
+                text: 'Identify the IUPAC name of the compound with molecular formula C₄H₈O₂ that shows positive iodoform test.',
+                yourAnswer: 'A',
+                correctAnswer: 'C',
+                timeSpent: '3.15 Min',
+                expectedTime: '200s',
+                tags: ['Organic Chemistry', 'IUPAC Nomenclature'],
+                options: [{ letter: 'A', text: 'Butanoic acid', selected: true }, { letter: 'B', text: 'Methyl propanoate' }, { letter: 'C', text: 'Ethyl ethanoate', correct: true }, { letter: 'D', text: 'Propyl methanoate' }]
+            },
+            'chemistry-2': {
+                title: 'Question 2: Chemical Equilibrium',
+                status: 'correct',
+                text: 'For the reaction N₂ + 3H₂ ⇌ 2NH₃, if the equilibrium constant Kc = 0.5 at 400°C, what is the value of Kp?',
+                yourAnswer: 'D',
+                correctAnswer: 'D',
+                timeSpent: '2.30 Min',
+                tags: ['Chemical Equilibrium', 'Thermodynamics'],
+                options: [{ letter: 'A', text: '0.5' }, { letter: 'B', text: '1.0' }, { letter: 'C', text: '2.0' }, { letter: 'D', text: '0.0082', correct: true, selected: true }]
+            },
+            'math-1': {
+                title: 'Question 1: Integration by Parts',
+                status: 'correct',
+                text: 'Evaluate ∫ x·e^x dx using integration by parts.',
+                yourAnswer: 'B',
+                correctAnswer: 'B',
+                timeSpent: '4.20 Min',
+                tags: ['Integration', 'Calculus'],
+                options: [{ letter: 'A', text: 'xe^x + C' }, { letter: 'B', text: 'e^x(x-1) + C', correct: true, selected: true }, { letter: 'C', text: 'xe^x - e^x + C' }, { letter: 'D', text: 'e^x + C' }]
+            },
+            'math-2': {
+                title: 'Question 2: Matrix Determinant',
+                status: 'incorrect',
+                text: 'Find the determinant of the matrix [[2, 3], [1, 4]].',
+                yourAnswer: 'A',
+                correctAnswer: 'C',
+                timeSpent: '1.50 Min',
+                expectedTime: '120s',
+                tags: ['Linear Algebra', 'Matrices'],
+                options: [{ letter: 'A', text: '11', selected: true }, { letter: 'B', text: '6' }, { letter: 'C', text: '5', correct: true }, { letter: 'D', text: '8' }]
+            }
+        };
+
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.subject-questions').forEach(s => s.classList.remove('active'));
+                
+                tab.classList.add('active');
+                const subject = tab.dataset.subject;
+                document.querySelector(`[data-subject="${subject}"].subject-questions`).classList.add('active');
+            });
+        });
+
+        // Ask Mentor functionality
+        document.querySelectorAll('.ask-mentor-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const questionCard = btn.closest('.question-card');
+                const questionText = questionCard.querySelector('.question-text').textContent;
+                const encodedQuestion = encodeURIComponent(`I need help with this question: ${questionText}`);
+                window.location.href = `../AI mentor/index.html?question=${encodedQuestion}`;
+            });
+        });
+    </script>
+</body>
+</html>

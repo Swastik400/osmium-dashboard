@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Exam & Tests - Osmium</title>
+  <link rel="icon" type="image/x-icon" href="https://osmium.co.in/cdnLogo">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared-sidebar.css">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: { DEFAULT: '#C67A2D', hover: '#B06C28' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ============ SIDEBAR FROM OTHER DASHBOARDS ============ */
+    .sidebar {
+        width: 280px;
+        background-color: #faf8f6;
+        border-right: 1px solid #ebe8e2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 24px 0;
+        overflow-y: auto;
+        height: 100vh;
+        position: fixed;
+        transition: transform 0.3s ease;
+        z-index: 1000;
+    }
+    
+    .sidebar.hidden {
+        transform: translateX(-100%);
+    }
+    
+    .floating-toggle {
+        position: fixed;
+        top: 24px;
+        left: 20px;
+        z-index: 1001;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .floating-toggle.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .sidebar-top {
+        flex: 1;
+    }
+
+    .logo {
+        width: 80%;
+        margin-bottom: 32px;
+        padding: 0 20px;
+    }
+
+    .section-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #8b8b8b;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        padding: 0 20px;
+        margin: 16px 0 8px 0;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 24px;
+        margin: 0 12px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #5a5a5a;
+        transition: all 0.2s ease;
+        border-radius: 8px;
+        text-decoration: none;
+    }
+
+    .nav-item:hover {
+        background-color: #f0ede8;
+    }
+
+    .nav-item.active {
+        background-color: #e8e3da;
+        color: #2e2e2e;
+        font-weight: 500;
+    }
+
+    .sidebar-bottom {
+        border-top: 1px solid #ebe8e2;
+        padding-top: 16px;
+        padding: 0 8px;
+    }
+
+    .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        margin: 16px 0 0 0;
+        border-radius: 8px;
+        background-color: #ffffff;
+        cursor: pointer;
+    }
+
+    .user-details {
+        flex: 1;
+    }
+
+    .user-name {
+        font-size: 13px;
+        font-weight: 500;
+        color: #2e2e2e;
+    }
+
+    .user-plan {
+        font-size: 11px;
+        color: #8b8b8b;
+        margin-top: 2px;
+    }
+
+    .settings-icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .search-container {
+        position: relative;
+        margin: 0 20px 32px 20px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 10px 12px 10px 36px;
+        border: 1px solid #ebe8e2;
+        border-radius: 8px;
+        background: #f5f3f0;
+        font-size: 14px;
+        color: #666;
+        outline: none;
+    }
+
+    .search-input::placeholder {
+        color: #999;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        opacity: 0.5;
+    }
+
+    .search-shortcut {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 11px;
+        color: #999;
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        margin-bottom: 32px;
+    }
+
+    .menu-btn {
+        width: 32px;
+        height: 32px;
+        background: #ffffff;
+        border: 1px solid #ebe8e2;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .menu-btn:hover {
+        background: #f5f3f0;
+        border-color: #d4cfc8;
+    }
+
+    @media (max-width: 768px) {
+        .menu-btn {
+            display: none;
+        }
+    }
+
+    .logo {
+        width: 70%;
+        margin-bottom: 0;
+        padding: 0;
+    }
+
+    .mobile-menu-btn {
+        display: none;
+        background: white;
+        border: 1px solid #ebe8e2;
+        border-radius: 8px;
+        padding: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .mobile-menu-btn:hover {
+        background: #f5f3f0;
+        border-color: #d4cfc8;
+    }
+
+    /* ============ MAIN CONTENT ============ */
+    .main-content {
+        margin-left: 280px;
+        width: calc(100% - 280px);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        transition: margin-left 0.3s ease, width 0.3s ease;
+    }
+    
+    .main-content.expanded {
+        margin-left: 0;
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 768px) {
+        .mobile-menu-btn {
+            display: block;
+        }
+        
+        .sidebar {
+            position: fixed;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        
+        .main-content {
+            margin-left: 0;
+            width: 100%;
+        }
+        
+        .menu-btn {
+            display: block;
+        }
+    }
+
+    /* smaller scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f3f3f3; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb { background: #cbcaca; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #b3b3b3; }
+
+    /* subtle card shadow */
+    .card-shadow { box-shadow: 0 6px 18px rgba(13,12,11,0.04); }
+    .heading-tight { letter-spacing: -0.01em; }
+    .muted-xs { font-size: 0.75rem; color: #9CA3AF; }
+
+    /* Scheduled test styles */
+    .test-section-wrapper { background: white; border-radius: 12px; padding: 16px; padding-bottom: 60px; box-shadow: 0 6px 18px rgba(13,12,11,0.04); border: 1px solid #faf8f6; position: relative; }
+    .test-nav-arrows { position: absolute; bottom: 16px; right: 16px; display: flex; gap: 12px; z-index: 10; }
+    .test-nav-btn { width: 36px; height: 36px; border-radius: 50%; background: white; border: 1px solid #d1d5db; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+    .test-nav-btn:hover { background: #f3f4f6; border-color: #9ca3af; }
+    .test-section-title { font-family: 'Public Sans', sans-serif; font-size: 24px; font-weight: 500; color: #000000; margin-bottom: 12px; }
+    .test-item { background: #F7F5F3; border-radius: 12px; padding: 0; box-shadow: none; border: none; position: relative; }
+
+    .test-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0; background-color: #F7F5F3; padding: 12px; border-radius: 8px 8px 0 0; }
+    .test-datetime { font-size: 12px; color: #6B7280; margin-bottom: 4px; }
+    .test-title { font-size: 14px; font-weight: 600; color: #111827; margin: 0; }
+    .test-buttons { display: flex; gap: 8px; }
+    .test-btn { font-size: 12px; color: #70737F; background: white; border: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; }
+    .test-btn:hover { text-decoration: underline; }
+    .test-footer { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px; background-color: #F7F5F3; border-radius: 0 0 8px 8px; margin-top: 0; }
+    .attendees { flex: 1; }
+    .attendee-avatars { display: flex; }
+    .attendee-avatar { width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; margin-left: -8px; }
+    .attendee-avatar:first-child { margin-left: 0; }
+    .creator { text-align: right; }
+    .creator-info { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+    .creator-dot { width: 28px; height: 28px; border-radius: 50%; }
+    .creator-name { font-size: 13px; font-weight: 500; color: #111827; }
+    
+    .drop-area { border: 2px dashed #D1D5DB; background-color: #faf8f6; }
+    
+    nav a span { font-family: 'Public Sans', sans-serif; font-size: 18px; font-weight: 400; color: #000000; }
+    
+    /* Generate Popup Styles */
+    .icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        height: 120px;
+        background: #f5f1e8;
+        border: 2px solid #d4af7a;
+        border-radius: 50%;
+        margin: 0 auto 40px;
+        position: relative;
+        animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(212, 175, 122, 0.4);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 15px rgba(212, 175, 122, 0);
+        }
+    }
+    
+    .icon-wrapper svg {
+        width: 48px;
+        height: 48px;
+        fill: #c9a55a;
+    }
+    
+    .loading-spinner {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        border-top-color: #d4af7a;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    #generate-popup h1 {
+        font-size: 32px;
+        font-weight: 600;
+        color: #0f172a;
+        margin-bottom: 12px;
+        letter-spacing: -0.02em;
+    }
+    
+    .status-text {
+        font-size: 16px;
+        color: #94a3b8;
+        margin-bottom: 60px;
+        font-weight: 400;
+    }
+    
+    .quote-section {
+        background: rgba(255, 255, 255, 0.5);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid #f1f5f9;
+        border-radius: 16px;
+        padding: 40px 32px;
+        margin-bottom: 48px;
+    }
+    
+    .quote-text {
+        font-size: 18px;
+        line-height: 1.7;
+        color: #a67c52;
+        font-style: italic;
+        font-weight: 400;
+    }
+    
+    .button-group {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+    }
+    
+    .btn {
+        padding: 14px 32px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        min-width: 120px;
+    }
+    
+    .btn-attempt {
+        background: white;
+        color: #0f172a;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-save {
+        background: white;
+        color: #0f172a;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn:active {
+        transform: translateY(0);
+    }
+    
+    @media (max-width: 600px) {
+        #generate-popup h1 {
+            font-size: 26px;
+        }
+        
+        .icon-wrapper {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 32px;
+        }
+        
+        .icon-wrapper svg {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .quote-section {
+            padding: 32px 24px;
+        }
+        
+        .quote-text {
+            font-size: 16px;
+        }
+        
+        .button-group {
+            flex-direction: column;
+            width: 100%;
+        }
+        
+        .btn {
+            width: 100%;
+        }
+    }
+
+    /* -------------------------------- MAIN CONTENT STYLES ------------------------------- */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+    }
+
+    .header h1 {
+        font-size: 30px;
+        font-weight: 600;
+        color: #1b1b1b;
+    }
+
+    .schedule-btn {
+        background: #d4af7a;
+        padding: 10px 20px;
+        border-radius: 10px;
+        border: none;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .schedule-btn:hover {
+        background: #c9a55a;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 26px;
+        margin-bottom: 32px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 26px 22px;
+        border-radius: 16px;
+        border: 1px solid #eceae7;
+        box-shadow: 0 6px 18px rgba(13,12,11,0.04);
+    }
+
+    .stat-header {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        font-size: 40px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #1b1b1b;
+    }
+
+    .stat-change.positive { color: #2e7d32; font-size: 13px; }
+    .stat-change.negative { color: #d9534f; font-size: 13px; }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 28px;
+        align-items: flex-start;
+    }
+
+    .left-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 26px;
+    }
+
+    .ai-card {
+        background: linear-gradient(180deg, #f0eada, #ebe7d9);
+        padding: 38px;
+        border-radius: 20px;
+        border: 1px solid #e7e4d9;
+        position: relative;
+        min-height: 210px;
+    }
+
+    .ai-card h2 {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #1b1b1b;
+    }
+
+    .ai-card p {
+        font-size: 14px;
+        color: #666;
+        width: 75%;
+        margin-bottom: 30px;
+    }
+
+    .try-btn {
+        background: white;
+        padding: 10px 22px;
+        border-radius: 10px;
+        border: 1px solid #e8e8e8;
+        font-size: 14px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .try-btn:hover {
+        background: #f5f3f0;
+    }
+
+    .sparkle {
+        position: absolute;
+        right: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.25;
+        font-size: 130px;
+    }
+
+    .scheduled-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px 34px;
+        border: 1px solid #eceaea;
+        box-shadow: 0 6px 18px rgba(13,12,11,0.04);
+    }
+
+    .scheduled-card h2 {
+        font-size: 20px;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        color: #1b1b1b;
+    }
+
+    .days-left { color: #999; font-size: 14px; }
+
+    .sched-inner {
+        background: #faf9f7;
+        border: 1px solid #e6e4e0;
+        border-radius: 16px;
+        padding: 28px 26px;
+    }
+
+    .sched-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+    .sched-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 18px;
+        color: #1b1b1b;
+    }
+
+    .sched-details {
+        display: flex;
+        gap: 60px;
+    }
+
+    .detail-item span:first-child {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        font-size: 13px;
+        color: #777;
+    }
+
+    .detail-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1b1b1b;
+    }
+
+    .action-btn {
+        background: white;
+        padding: 7px 18px;
+        border-radius: 8px;
+        border: 1px solid #dcdcdc;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        background: #f5f3f0;
+    }
+
+    .arrows {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .arrow-btn {
+        width: 35px;
+        height: 35px;
+        border: 1px solid #ccc;
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .arrow-btn:hover {
+        background: #f5f3f0;
+    }
+
+    .generated-box {
+        background: white;
+        padding: 34px;
+        border-radius: 20px;
+        border: 1px solid #eae7e5;
+        height: calc(210px + 280px + 30px);
+        box-shadow: 0 6px 18px rgba(13,12,11,0.04);
+    }
+
+    .generated-box h2 {
+        font-size: 18px;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        color: #1b1b1b;
+    }
+
+    .sub {
+        font-size: 13px;
+        color: #999;
+        margin-bottom: 18px;
+    }
+
+    .test-list {
+        overflow-y: auto;
+        height: calc(100% - 70px);
+        padding-right: 4px;
+    }
+
+    .test-list::-webkit-scrollbar { width: 4px; }
+    .test-list::-webkit-scrollbar-thumb {
+        background: #ddd;
+        border-radius: 20px;
+    }
+
+    .test-item {
+        padding: 18px 0;
+        border-bottom: 1px solid #ededed;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .test-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .test-icon {
+        width: 42px;
+        height: 42px;
+        background: #f4f4f4;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+    }
+
+    .badge {
+        background: #fff4e3;
+        padding: 2px 6px;
+        font-size: 11px;
+        border-radius: 4px;
+        color: #b57a0c;
+        font-weight: 600;
+    }
+
+    .view-btn {
+        border: 1px solid #dedede;
+        padding: 7px 16px;
+        border-radius: 8px;
+        background: white;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .view-btn:hover {
+        background: #f5f3f0;
+    }
+
+    @media (max-width: 768px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .sched-details {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+
+    /* AI Card Sparkle Responsive */
+    @media (max-width: 600px) {
+        .ai-card .sparkle-wrap .w-28 { width: 5rem !important; height: 5rem !important; }
+        .ai-card .sparkle-wrap .w-14 { width: 2.75rem !important; height: 2.75rem !important; }
+        .ai-card .sparkle-wrap .w-8 { width: 1.5rem !important; height: 1.5rem !important; }
+    }
+  </style>
+</head>
+<body class="font-sans text-slate-900" style="background-color: #faf8f6;">
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+  
+  <!-- Floating Toggle Button -->
+  <div class="floating-toggle">
+    <button type="button" class="menu-btn" onclick="toggleSidebar()" title="Show sidebar">
+      <img src="../logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+    </button>
+  </div>
+  
+  <div class="flex min-h-screen overflow-hidden">
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <div class="logo-container">
+                <img src="../logos/logo.svg" alt="" class="logo">
+                <button type="button" class="menu-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+                    <img src="../logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+                </button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                </svg>
+                <div class="search-shortcut">Ctrl + F</div>
+            </div>
+
+            <div class="section-label">General</div>
+            <a href="../teacher dashboard/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M120,56v48a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V56A16,16,0,0,1,56,40h48A16,16,0,0,1,120,56Zm80-16H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-96,96H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Z"/></svg> Dashboard</a>
+            <a href="../student management/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M164.47,195.63a8,8,0,0,1-6.7,12.37H10.23a8,8,0,0,1-6.7-12.37,95.83,95.83,0,0,1,47.22-37.71,60,60,0,1,1,66.5,0A95.83,95.83,0,0,1,164.47,195.63Zm87.91-.15a95.87,95.87,0,0,0-47.13-37.56A60,60,0,0,0,144.7,54.59a4,4,0,0,0-1.33,6A75.83,75.83,0,0,1,147,150.53a4,4,0,0,0,1.07,5.53,112.32,112.32,0,0,1,29.85,30.83,23.92,23.92,0,0,1,3.65,16.47,4,4,0,0,0,3.95,4.64h60.3a8,8,0,0,0,7.73-5.93A8.22,8.22,0,0,0,252.38,195.48Z"/></svg> Student Management</a>
+            <a href="../project management/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M240,56V200a8,8,0,0,1-8,8H160a24,24,0,0,0-24,23.94,7.9,7.9,0,0,1-5.12,7.55A8,8,0,0,1,120,232a24,24,0,0,0-24-24H24a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H88a32,32,0,0,1,32,32v87.73a8.17,8.17,0,0,0,7.47,8.25,8,8,0,0,0,8.53-8V80a32,32,0,0,1,32-32h64A8,8,0,0,1,240,56Z"/></svg> Project Management</a>
+            <a href="../research paper/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232,216a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H181.25A72,72,0,0,0,144,80.46V136a16,16,0,0,1-16,16H80a16,16,0,0,1-16-16V32A16,16,0,0,1,80,16h48a16,16,0,0,1,16,16V64.37A88.05,88.05,0,0,1,203.94,208H224A8,8,0,0,1,232,216Zm-96-32a8,8,0,0,0,0-16H72a8,8,0,0,0,0,16Z"/></svg> Research paper</a>
+            <div class="nav-item active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M200,32H163.74a47.92,47.92,0,0,0-71.48,0H56A16,16,0,0,0,40,48V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm-72,0a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm32,128H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z"/></svg> Exam & Tests</div>
+            <a href="../AI mentor/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.34,40.65l24.71,7.27a16,16,0,0,0,19.87-19.86Zm-16.25,1.47L224,216l-27.76-8.17a8,8,0,0,0-6,.63,64.05,64.05,0,0,1-85.87-24.88A79.93,79.93,0,0,0,174.7,89.71a64,64,0,0,1,41.75,92.48A8,8,0,0,0,215.82,188.23Z"/></svg>AI Mentor</a>
+            <a href="../Study Materials/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"  width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M226.53,56.41l-96-32a8,8,0,0,0-5.06,0l-96,32A8,8,0,0,0,24,64v80a8,8,0,0,0,16,0V75.1L73.59,86.29a64,64,0,0,0,20.65,88.05c-18,7.06-33.56,19.83-44.94,37.29a8,8,0,1,0,13.4,8.74C77.77,197.25,101.57,184,128,184s50.23,13.25,65.3,36.37a8,8,0,0,0,13.4-8.74c-11.38-17.46-27-30.23-44.94-37.29a64,64,0,0,0,20.65-88l44.12-14.7a8,8,0,0,0,0-15.18ZM176,120A48,48,0,1,1,89.35,91.55l36.12,12a8,8,0,0,0,5.06,0l36.12-12A47.89,47.89,0,0,1,176,120Z"/></svg> Study Materials</a>
+
+            <div class="section-label">Support</div>
+            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg> Notification</div>
+            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232,128v80a40,40,0,0,1-40,40H136a8,8,0,0,1,0-16h56a24,24,0,0,0,24-24H192a24,24,0,0,1-24-24V144a24,24,0,0,1,24-24h23.65A88,88,0,0,0,66,65.54A87.29,87.29,0,0,0,40.36,120H64a24,24,0,0,1,24,24v40a24,24,0,0,1-24,24H48a24,24,0,0,1-24-24V128A104.11,104.11,0,0,1,201.89,54.66A103.41,103.41,0,0,1,232,128Z"/></svg> Help & Support</div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="user-profile">
+                <img src="../logos/female avatar.svg" alt="">
+                <div class="user-details">
+                    <div class="user-name">Suman</div>
+                    <div class="user-plan">Free Plan</div>
+                </div>
+                <div class="settings-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#abaaaa" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm109.94-52.79a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A112.1,112.1,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.62a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21Zm-15,34.91-28.57,16.25a8,8,0,0,0-3,3c-.58,1-1.19,2.06-1.81,3.06a7.94,7.94,0,0,0-1.22,4.21l-.15,32.25a95.89,95.89,0,0,1-25.37,14.3L134,199.13a8,8,0,0,0-3.91-1h-.19c-1.21,0-2.43,0-3.64,0a8.08,8.08,0,0,0-4.1,1l-28.84,16.1A96,96,0,0,1,67.88,201l-.11-32.2a8,8,0,0,0-1.22-4.22c-.62-1-1.23-2-1.8-3.06a8.09,8.09,0,0,0-3-3.06l-28.6-16.29a90.49,90.49,0,0,1,0-28.26L61.67,97.63a8,8,0,0,0,3-3c.58-1,1.19-2.06,1.81-3.06a7.94,7.94,0,0,0,1.22-4.21l.15-32.25a95.89,95.89,0,0,1,25.37-14.3L122,56.87a8,8,0,0,0,4.1,1c1.21,0,2.43,0,3.64,0a8.08,8.08,0,0,0,4.1-1l28.84-16.1A96,96,0,0,1,188.12,55l.11,32.2a8,8,0,0,0,1.22,4.22c.62,1,1.23,2,1.8,3.06a8.09,8.09,0,0,0,3,3.06l28.6,16.29A90.49,90.49,0,0,1,222.9,142.12Z"></path></svg> </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="px-6 lg:px-8 py-5">
+        <!-- Header -->
+        <header class="flex items-center justify-between mb-8">
+          <div class="flex items-center gap-4">
+            <button class="md:hidden w-8 h-8 bg-white border border-[#ebe8e2] rounded-lg flex items-center justify-center text-gray-600 hover:bg-[#f5f3f0] hover:border-[#d4cfc8] transition-all" onclick="toggleSidebar()">
+              <img src="../logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+            </button>
+            <h1 class="text-xl md:text-2xl font-bold text-gray-900">Exam & Tests</h1>
+          </div>
+          <button class="bg-[#C58F39] text-white px-3 md:px-5 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium flex items-center gap-2">
+            <i class="fas fa-plus text-xs"></i>
+            <span class="hidden sm:inline">Schedule Test</span>
+            <span class="sm:hidden">Schedule</span>
+          </button>
+        </header>
+
+        <!-- Stats row -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+
+          <!-- CARD 1 -->
+          <div class="bg-white rounded-xl p-5">
+            <div class="flex items-center gap-2 text-gray-600 mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-4 h-4" fill="#6b6b6b" stroke="#6b6b6b"><rect width="256" height="256" fill="none"/><circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M120,120a8,8,0,0,1,8,8v40a8,8,0,0,0,8,8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><circle cx="124" cy="84" r="12"/></svg>
+              <span class="text-[15px] font-medium text-[#4A4A4A]">Total Tests Conducted</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <span class="text-[32px] font-semibold text-black">9</span>
+              <span class="bg-[#ECF4E6] text-[#65834E] px-2.5 py-1 rounded-md text-[12px] font-medium">
+                +2 This Month
+              </span>
+            </div>
+          </div>
+
+          <!-- CARD 2 -->
+          <div class="bg-white rounded-xl p-5">
+            <div class="flex items-center gap-2 text-gray-600 mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-4 h-4" fill="#6b6b6b" stroke="#6b6b6b"><rect width="256" height="256" fill="none"/><circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M120,120a8,8,0,0,1,8,8v40a8,8,0,0,0,8,8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><circle cx="124" cy="84" r="12"/></svg>
+              <span class="text-[15px] font-medium text-[#4A4A4A]">Scheduled Upcoming Tests</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <span class="text-[32px] font-semibold text-black">5</span>
+              <span class="bg-[#ECF4E6] text-[#65834E] px-2.5 py-1 rounded-md text-[12px] font-medium">
+                +1 This Month
+              </span>
+            </div>
+          </div>
+
+          <!-- CARD 3 -->
+          <div class="bg-white rounded-xl p-5">
+            <div class="flex items-center gap-2 text-gray-600 mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-4 h-4" fill="#6b6b6b" stroke="#6b6b6b"><rect width="256" height="256" fill="none"/><circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M120,120a8,8,0,0,1,8,8v40a8,8,0,0,0,8,8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><circle cx="124" cy="84" r="12"/></svg>
+              <span class="text-[15px] font-medium text-[#4A4A4A]">Total Mock Tests Generated</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <span class="text-[32px] font-semibold text-black">12</span>
+              <span class="bg-[#F4ECE6] text-[#815931] px-2.5 py-1 rounded-md text-[12px] font-medium">
+                -1 This Month
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Main grid -->
+        <section class="grid gap-7 mt-6 lg:mt-8 grid-cols-1 lg:grid-cols-[1.2fr_1fr]">
+          <!-- LEFT COLUMN -->
+          <div class="space-y-6">
+            <!-- AI-powered mock test -->
+            <section class="rounded-xl bg-[#E8EADF] p-6 relative overflow-hidden">
+              <!-- SPARKLES -->
+              <div class="absolute right-6 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                <img src="../logos/three stae.svg" alt="">
+              </div>
+
+              <div class="relative z-10">
+                <h2 class="text-lg font-semibold text-[#1A1A1A] mb-2">AI-Powered Mock Test</h2>
+                <p class="text-sm text-[#555] leading-relaxed max-w-xs mb-4">
+                  Upload past papers – we'll generate a mock test for your exam pattern.
+                </p>
+                <button id="tryNowButton" class="bg-white text-[#1A1A1A] text-sm font-medium px-6 py-2 rounded-full flex items-center gap-2 justify-center" onclick="openModal()">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 256 256" fill="currentColor"><rect width="256" height="256" fill="none"/><path d="M208,144a15.78,15.78,0,0,1-10.42,14.94L146,178l-19,51.62a15.92,15.92,0,0,1-29.88,0L78,178l-51.62-19a15.92,15.92,0,0,1,0-29.88L78,110l19-51.62a15.92,15.92,0,0,1,29.88,0L146,110l51.62,19A15.78,15.78,0,0,1,208,144ZM152,48h16V64a8,8,0,0,0,16,0V48h16a8,8,0,0,0,0-16H184V16a8,8,0,0,0-16,0V32H152a8,8,0,0,0,0,16Zm88,32h-8V72a8,8,0,0,0-16,0v8h-8a8,8,0,0,0,0,16h8v8a8,8,0,0,0,16,0V96h8a8,8,0,0,0,0-16Z"/></svg>
+                  Try now
+                </button>
+              </div>
+            </section>
+
+            <!-- Scheduled tests -->
+            <section class="rounded-xl bg-white border border-[#EBE9E5] p-4">
+              <!-- Header -->
+              <div class="flex justify-between items-center mb-3">
+                <div class="text-base font-semibold text-[#111827]">Scheduled Tests</div>
+                <div class="text-xs text-[#9ca3af]">#3 days Left  </div>
+                
+              </div>
+
+              <!-- Date and actions row -->
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-2">
+                  <div class="text-xs text-[#6b7280]">Tue, 12 June</div>
+                  <div class="bg-[#DBE6CF] text-[#4A5141] text-xs px-2 py-1 rounded-full">Upcoming</div>
+                </div>
+
+                <div class="flex items-center gap-1">
+                  <button type="button" class="bg-[#FFFFFF] border border-[#E4E5EB] px-3 py-1.5 rounded text-xs text-[#70737F]">
+                    View
+                  </button>
+                  <button type="button" class="bg-[#FFFFFF] border border-[#E4E5EB] px-3 py-1.5 rounded text-xs text-[#70737F]">
+                    Edit
+                  </button>
+                  <button type="button" class="text-base text-[#9aa0a6] px-1">⋮</button>
+                </div>
+              </div>
+
+              <!-- Test title -->
+              <div class="text-sm font-semibold text-[#111827] mb-2">Python Advanced</div>
+
+              <!-- Separator -->
+              <div class="h-px bg-[#f0f0f0] mb-3"></div>
+
+              <!-- Details grid -->
+              <div class="grid grid-cols-3 gap-4 mb-3">
+                <div>
+                  <div class="flex items-center gap-1 text-xs text-[#9B6D24] mb-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 256 256" fill="currentColor"><rect width="256" height="256" fill="none"/><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm56,112H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48a8,8,0,0,1,0,16Z"/></svg>
+                    Time
+                  </div>
+                  <div class="text-xs font-semibold text-[#111827]">10:30 AM</div>
+                </div>
+
+                <div>
+                  <div class="flex items-center gap-1 text-xs text-[#68803E] mb-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 256 256" fill="currentColor"><rect width="256" height="256" fill="none"/><path d="M176,207.24a119,119,0,0,0,16-7.73V240a8,8,0,0,1-16,0Zm11.76-88.43-56-29.87a8,8,0,0,0-7.52,14.12L171,128l17-9.06Zm64-29.87-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V130.67L171,128l-43,22.93L43.83,106l0,0L25,96,128,41.07,231,96l-18.78,10-.06,0L188,118.94a8,8,0,0,1,4,6.93v73.64a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12Z"/></svg>
+                    Class
+                  </div>
+                  <div class="text-xs font-semibold text-[#111827]">12th section B</div>
+                </div>
+
+                <div>
+                  <div class="flex items-center gap-1 text-xs text-[#498183] mb-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 256 256" fill="#498183"><rect width="256" height="256" fill="none"/><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,184H64a8,8,0,0,1,0-16h8a8,8,0,0,1,0,16Zm0-48H64a8,8,0,0,1,0-16h8a8,8,0,0,1,0,16Zm0-48H64a8,8,0,0,1,0-16h8a8,8,0,0,1,0,16Zm120,96H104a8,8,0,0,1,0-16h88a8,8,0,0,1,0,16Zm0-48H104a8,8,0,0,1,0-16h88a8,8,0,0,1,0,16Zm0-48H104a8,8,0,0,1,0-16h88a8,8,0,0,1,0,16Z"/></svg>
+                    Questions
+                  </div>
+                  <div class="text-xs font-semibold text-[#111827]">25</div>
+                </div>
+              </div>
+
+              <!-- Navigation arrows -->
+              <div class="flex justify-end gap-2">
+                <button id="schedulePrev" type="button" class="w-8 h-8 rounded-full bg-white border border-[#e6e6e6] flex items-center justify-center text-xs text-[#475569]" title="Previous test">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><line x1="216" y1="128" x2="40" y2="128" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="112 56 40 128 112 200" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                </button>
+                <button id="scheduleNext" type="button" class="w-8 h-8 rounded-full bg-white border border-[#e6e6e6] flex items-center justify-center text-xs text-[#475569]" title="Next test">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><line x1="40" y1="128" x2="216" y2="128" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="144 56 216 128 144 200" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <!-- RIGHT COLUMN: Generated mock tests -->
+          <aside class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+
+            <div class="flex justify-between items-center mb-1">
+              <h2 class="text-xl font-semibold text-gray-900">Generated Mock Tests</h2>
+              <span class="text-xl text-gray-400 cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-5 h-5" fill="currentColor"><rect width="256" height="256" fill="none"/><path d="M156,128a28,28,0,1,1-28-28A28,28,0,0,1,156,128ZM128,76a28,28,0,1,0-28-28A28,28,0,0,0,128,76Zm0,104a28,28,0,1,0,28,28A28,28,0,0,0,128,180Z"/></svg></span>
+            </div>
+
+            <p class="text-sm text-gray-500 mb-6">
+              Check your recently saved mock test
+            </p>
+
+            <!-- Desktop: Vertical Layout -->
+            <div class="hidden md:block max-h-[400px] overflow-y-auto pr-2" style="scrollbar-width: thin; scrollbar-color: #D3D1CD transparent;">
+              
+              <!-- ITEM 1 -->
+              <div class="flex justify-between items-center py-5 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-full bg-gray-50 border border-gray-200 flex justify-center items-center text-sm font-semibold text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M168,224h32a8,8,0,0,0,8-8V88L152,32H56a8,8,0,0,0-8,8v72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="152 32 152 88 208 88" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M48,192H64a20,20,0,0,0,0-40H48v56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="108 152 128 184 148 152" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="128" y1="184" x2="128" y2="208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                      <span>11 June, 2025</span>
+                      <span class="text-gray-600 text-xs font-semibold flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 256 256" fill="#be9b6b"><rect width="256" height="256" fill="none"/><path d="M184,32H72A16,16,0,0,56,48V224a8,8,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Z"/></svg>
+                        80 Marks
+                      </span>
+                    </div>
+                    <div class="text-base font-semibold text-gray-900">Python Basic</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">View paper</button>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8f8f8f" viewBox="0 0 256 256" class="cursor-pointer hover:fill-gray-600 transition-colors"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
+                </div>
+              </div>
+
+              <!-- ITEM 2 -->
+              <div class="flex justify-between items-center py-5 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-full bg-gray-50 border border-gray-200 flex justify-center items-center text-sm font-semibold text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M168,224h32a8,8,0,0,0,8-8V88L152,32H56a8,8,0,0,0-8,8v72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="152 32 152 88 208 88" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M48,192H64a20,20,0,0,0,0-40H48v56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="108 152 128 184 148 152" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="128" y1="184" x2="128" y2="208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                      <span>11 June, 2025</span>
+                      <span class="text-gray-600 text-xs font-semibold flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 256 256" fill="#be9b6b"><rect width="256" height="256" fill="none"/><path d="M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Z"/></svg>
+                        80 Marks
+                      </span>
+                    </div>
+                    <div class="text-base font-semibold text-gray-900">OOP With C++</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">View paper</button>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8f8f8f" viewBox="0 0 256 256" class="cursor-pointer hover:fill-gray-600 transition-colors"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
+                </div>
+              </div>
+
+              <!-- ITEM 3 -->
+              <div class="flex justify-between items-center py-5 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-full bg-gray-50 border border-gray-200 flex justify-center items-center text-sm font-semibold text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M168,224h32a8,8,0,0,0,8-8V88L152,32H56a8,8,0,0,0-8,8v72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="152 32 152 88 208 88" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M48,192H64a20,20,0,0,0,0-40H48v56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="108 152 128 184 148 152" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="128" y1="184" x2="128" y2="208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                      <span>11 June, 2025</span>
+                      <span class="text-gray-600 text-xs font-semibold flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 256 256" fill="#be9b6b"><rect width="256" height="256" fill="none"/><path d="M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Z"/></svg>
+                        80 Marks
+                      </span>
+                    </div>
+                    <div class="text-base font-semibold text-gray-900">JAVA Core</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">View paper</button>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8f8f8f" viewBox="0 0 256 256" class="cursor-pointer hover:fill-gray-600 transition-colors"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
+                </div>
+              </div>
+
+              <!-- ITEM 4 -->
+              <div class="flex justify-between items-center py-5 border-b border-gray-100 last:border-b-0">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-full bg-gray-50 border border-gray-200 flex justify-center items-center text-sm font-semibold text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M168,224h32a8,8,0,0,0,8-8V88L152,32H56a8,8,0,0,0-8,8v72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="152 32 152 88 208 88" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M48,192H64a20,20,0,0,0,0-40H48v56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="108 152 128 184 148 152" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="128" y1="184" x2="128" y2="208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                      <span>11 June, 2025</span>
+                      <span class="text-gray-600 text-xs font-semibold flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 256 256" fill="#be9b6b"><rect width="256" height="256" fill="none"/><path d="M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Z"/></svg>
+                        80 Marks
+                      </span>
+                    </div>
+                    <div class="text-base font-semibold text-gray-900">Aptitude Analytics</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">View paper</button>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8f8f8f" viewBox="0 0 256 256" class="cursor-pointer hover:fill-gray-600 transition-colors"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mobile: Horizontal Layout -->
+            <div class="md:hidden overflow-x-auto pb-4">
+              <div class="flex gap-4 w-max">
+                <!-- ITEM 1 -->
+                <div class="bg-white rounded-lg border border-gray-100 p-4 w-72 flex-shrink-0">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-gray-50 border border-gray-200 flex justify-center items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M168,224h32a8,8,0,0,0,8-8V88L152,32H56a8,8,0,0,0-8,8v72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="152 32 152 88 208 88" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M48,192H64a20,20,0,0,0,0-40H48v56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="108 152 128 184 148 152" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="128" y1="184" x2="128" y2="208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                    </div>
+                    <div class="flex-1">
+                      <div class="text-sm font-semibold text-gray-900 mb-1">Python Basic</div>
+                      <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <span>11 June, 2025</span>
+                        <span class="text-gray-600 font-semibold flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 256 256" fill="#be9b6b"><rect width="256" height="256" fill="none"/><path d="M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Z"/></svg>
+                          80 Marks
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1.5 bg-white border border-gray-300 rounded text-xs font-medium hover:bg-gray-50 transition-colors flex-1">View paper</button>
+                    <button class="p-1.5 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#8f8f8f" viewBox="0 0 256 256"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- ITEM 2 -->
+                <div class="bg-white rounded-lg border border-gray-100 p-4 w-72 flex-shrink-0">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-gray-50 border border-gray-200 flex justify-center items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M168,224h32a8,8,0,0,0,8-8V88L152,32H56a8,8,0,0,0-8,8v72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="152 32 152 88 208 88" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M48,192H64a20,20,0,0,0,0-40H48v56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="108 152 128 184 148 152" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="128" y1="184" x2="128" y2="208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                    </div>
+                    <div class="flex-1">
+                      <div class="text-sm font-semibold text-gray-900 mb-1">OOP With C++</div>
+                      <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <span>11 June, 2025</span>
+                        <span class="text-gray-600 font-semibold flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 256 256" fill="#be9b6b"><rect width="256" height="256" fill="none"/><path d="M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Z"/></svg>
+                          80 Marks
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1.5 bg-white border border-gray-300 rounded text-xs font-medium hover:bg-gray-50 transition-colors flex-1">View paper</button>
+                    <button class="p-1.5 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#8f8f8f" viewBox="0 0 256 256"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- ITEM 3 -->
+                <div class="bg-white rounded-lg border border-gray-100 p-4 w-72 flex-shrink-0">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-gray-50 border border-gray-200 flex justify-center items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M168,224h32a8,8,0,0,0,8-8V88L152,32H56a8,8,0,0,0-8,8v72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="152 32 152 88 208 88" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M48,192H64a20,20,0,0,0,0-40H48v56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="108 152 128 184 148 152" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="128" y1="184" x2="128" y2="208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                    </div>
+                    <div class="flex-1">
+                      <div class="text-sm font-semibold text-gray-900 mb-1">JAVA Core</div>
+                      <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <span>11 June, 2025</span>
+                        <span class="text-gray-600 font-semibold flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 256 256" fill="#be9b6b"><rect width="256" height="256" fill="none"/><path d="M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Z"/></svg>
+                          80 Marks
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1.5 bg-white border border-gray-300 rounded text-xs font-medium hover:bg-gray-50 transition-colors flex-1">View paper</button>
+                    <button class="p-1.5 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#8f8f8f" viewBox="0 0 256 256"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- ITEM 4 -->
+                <div class="bg-white rounded-lg border border-gray-100 p-4 w-72 flex-shrink-0">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-gray-50 border border-gray-200 flex justify-center items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M168,224h32a8,8,0,0,0,8-8V88L152,32H56a8,8,0,0,0-8,8v72" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="152 32 152 88 208 88" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M48,192H64a20,20,0,0,0,0-40H48v56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="108 152 128 184 148 152" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><line x1="128" y1="184" x2="128" y2="208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                    </div>
+                    <div class="flex-1">
+                      <div class="text-sm font-semibold text-gray-900 mb-1">Aptitude Analytics</div>
+                      <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <span>11 June, 2025</span>
+                        <span class="text-gray-600 font-semibold flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 256 256" fill="#be9b6b"><rect width="256" height="256" fill="none"/><path d="M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Z"/></svg>
+                          80 Marks
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1.5 bg-white border border-gray-300 rounded text-xs font-medium hover:bg-gray-50 transition-colors flex-1">View paper</button>
+                    <button class="p-1.5 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#8f8f8f" viewBox="0 0 256 256"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </div>
+    </main>
+
+    <!-- AI Mock Test Modal -->
+    <div id="tryNowModal" class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-40 hidden">
+      <div class="bg-white rounded-2xl max-w-xl w-[90%] max-h-[90vh] overflow-y-auto shadow-lg">
+        <div class="p-10">
+          <div class="flex items-start justify-between mb-6">
+            <div>
+              <h1 class="text-2xl font-semibold text-[#1A1A1A] mb-2">AI Mock Test</h1>
+              <p class="text-sm text-[#787878] max-w-lg leading-relaxed">
+                Upload at least 5 previous year question papers to generate an AI-powered exam test that matches your exam's pattern and difficulty level.
+              </p>
+            </div>
+            <img src="../logos/three.svg" alt="">
+          </div>
+
+          <!-- Upload Box -->
+          <div id="uploadBox" class="border-2 border-dashed border-[#D5D2CD] rounded-2xl p-12 text-center bg-[#FBFAF7] cursor-pointer transition-colors hover:border-[#C2BEB8] hover:bg-[#F8F6F3] mb-8">
+            <div class="w-11 h-11 rounded-lg bg-[] mx-auto flex items-center justify-center text-xl mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#c7c7c7" viewBox="0 0 256 256"><path d="M223.16,68.42l-16-32A8,8,0,0,0,200,32H56a8,8,0,0,0-7.16,4.42l-16,32A8.08,8.08,0,0,0,32,72V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V72A8.08,8.08,0,0,0,223.16,68.42Zm-57.5,73.24a8,8,0,0,1-11.32,0L136,123.31V184a8,8,0,0,1-16,0V123.31l-18.34,18.35a8,8,0,0,1-11.32-11.32l32-32a8,8,0,0,1,11.32,0l32,32A8,8,0,0,1,165.66,141.66ZM52.94,64l8-16H195.06l8,16Z"></path></svg>
+            </div>
+            <div class="text-sm text-[#555] mb-1">
+              Drag & Drop or <span class="text-[#BE8741] cursor-pointer font-medium">Choose file</span> to upload
+            </div>
+            <div class="text-xs text-[#9A9A9A]">
+              Supported format: PDF, DOC, or image files
+            </div>
+            <input type="file" id="fileInput" class="hidden" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+          </div>
+
+          <!-- Question Papers Section -->
+          <div class="mb-8">
+            <h3 id="questionPapersTitle" class="text-base font-semibold text-[#1A1A1A] mb-4"></h3>
+            <div id="fileList" class="max-h-64 overflow-y-auto pr-2" style="scrollbar-width: thin; scrollbar-color: #D3D1CD transparent;">
+              <!-- Files will be added here dynamically -->
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-end gap-4">
+            <button id="cancelModal" class="bg-white border border-[#E3E1DD] px-8 py-3 rounded-xl text-sm text-[#666] hover:bg-[#F5F3EF] transition-colors">
+              Cancel
+            </button>
+            <button id="generateBtn" class="bg-[#C58A36] text-white px-8 py-3 rounded-xl text-base font-semibold hover:bg-[#B97E2D] transition-colors shadow-lg flex items-center gap-2" disabled>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" viewBox="0 0 256 256"><path d="M208,144a15.78,15.78,0,0,1-10.42,14.94L146,178l-19,51.62a15.92,15.92,0,0,1-29.88,0L78,178l-51.62-19a15.92,15.92,0,0,1,0-29.88L78,110l19-51.62a15.92,15.92,0,0,1,29.88,0L146,110l51.62,19A15.78,15.78,0,0,1,208,144ZM152,48h16V64a8,8,0,0,0,16,0V48h16a8,8,0,0,0,0-16H184V16a8,8,0,0,0-16,0V32H152a8,8,0,0,0,0,16Zm88,32h-8V72a8,8,0,0,0-16,0v8h-8a8,8,0,0,0,0,16h8v8a8,8,0,0,0,16,0V96h8a8,8,0,0,0,0-16Z"/></svg>
+              Generate
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Custom scrollbar via JS-injected style
+    (function() {
+      const style = document.createElement('style');
+      style.innerHTML = `
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: #DDDDDD transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background-color: #DDDDDD;
+          border-radius: 999px;
+        }
+      `;
+      document.head.appendChild(style);
+    })();
+
+    // Mock tests data
+    const mockTests = [
+      {
+        title: 'Algebra Practice Set - Medium',
+        date: 'Today · 10:32 AM',
+        marks: '80',
+        badgeType: 'green',
+        badgeText: 'Passed · 72/80',
+        subject: 'Math'
+      },
+      {
+        title: 'Physics: Kinematics & Dynamics',
+        date: 'Today · 9:05 AM',
+        marks: '100',
+        badgeType: 'yellow',
+        badgeText: 'Pending review',
+        subject: 'Science'
+      },
+      {
+        title: 'English Reading Comprehension',
+        date: 'Yesterday · 6:20 PM',
+        marks: '60',
+        badgeType: 'green',
+        badgeText: 'Completed',
+        subject: 'English'
+      },
+      {
+        title: 'Chemistry: Organic Basics',
+        date: 'Mon · 4:45 PM',
+        marks: '75',
+        badgeType: 'green',
+        badgeText: 'Passed · 68/75',
+        subject: 'Science'
+      },
+      {
+        title: 'Math Mixed Mock (Algebra + Geometry)',
+        date: 'Sun · 11:10 AM',
+        marks: '120',
+        badgeType: 'yellow',
+        badgeText: 'Attempted · 90/120',
+        subject: 'Math'
+      },
+      {
+        title: 'Biology: Human Physiology',
+        date: 'Sat · 3:30 PM',
+        marks: '90',
+        badgeType: 'green',
+        badgeText: 'Completed',
+        subject: 'Science'
+      }
+    ];
+
+    const mockListEl = document.getElementById('mockList');
+    const mockCountEl = document.getElementById('mockCount');
+
+    function createMockRow(test, index) {
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between gap-3 px-5 sm:px-6 py-3 border-b border-[#F1EFEB] hover:bg-[#FAF8F4] transition';
+
+      const left = document.createElement('div');
+      left.className = 'flex-1 flex items-center gap-3';
+      const iconWrap = document.createElement('div');
+      iconWrap.className = 'w-9 h-9 rounded-xl bg-[#F5F3EF] flex items-center justify-center border border-[#EBE9E5]';
+
+      iconWrap.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#666666]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>
+      `;
+
+      const textWrap = document.createElement('div');
+      textWrap.className = 'flex flex-col';
+
+      const title = document.createElement('div');
+      title.className = 'text-sm sm:text-[0.95rem] font-medium text-[#1A1A1A]';
+      title.textContent = test.title;
+
+      const metaRow = document.createElement('div');
+      metaRow.className = 'mt-0.5 flex flex-wrap items-center gap-2';
+
+      const date = document.createElement('span');
+      date.className = 'text-[0.7rem] sm:text-xs text-[#999999]';
+      date.textContent = test.date;
+
+      const badge = document.createElement('span');
+      badge.className = 'inline-flex items-center rounded-full text-[0.7rem] font-medium px-2 py-0.5';
+      if (test.badgeType === 'green') {
+        badge.style.backgroundColor = '#E7F6E8';
+        badge.style.color = '#2E7D32';
+      } else {
+        badge.style.backgroundColor = '#FFF4E3';
+        badge.style.color = '#B57A0C';
+      }
+      badge.textContent = test.badgeText;
+
+      metaRow.appendChild(date);
+      metaRow.appendChild(badge);
+
+      textWrap.appendChild(title);
+      textWrap.appendChild(metaRow);
+
+      left.appendChild(iconWrap);
+      left.appendChild(textWrap);
+
+      const marks = document.createElement('div');
+      marks.className = 'w-20 sm:w-24 text-right';
+      marks.innerHTML = `<span class="text-sm sm:text-[0.95rem] font-medium text-[#1A1A1A]">${test.marks}</span><span class="block text-[0.7rem] sm:text-xs text-[#999999]">Marks</span>`;
+
+      const dateCol = document.createElement('div');
+      dateCol.className = 'w-24 sm:w-28 text-right hidden sm:block text-xs text-[#999999]';
+      dateCol.textContent = test.date;
+
+      const actions = document.createElement('div');
+      actions.className = 'w-24 sm:w-28 flex items-center justify-end gap-2';
+
+      const viewBtn = document.createElement('button');
+      viewBtn.type = 'button';
+      viewBtn.className = 'inline-flex items-center justify-center rounded-full border border-[#EBE9E5] bg-white text-[0.7rem] text-[#666666] px-2.5 py-1 hover:bg-[#F5F3EF] transition';
+      viewBtn.textContent = 'View paper';
+      viewBtn.setAttribute('title', `View ${test.title}`);
+      viewBtn.addEventListener('click', () => {
+        alert(`Opening paper: "${test.title}"`);
+      });
+
+      const downloadBtn = document.createElement('button');
+      downloadBtn.type = 'button';
+      downloadBtn.className = 'inline-flex items-center justify-center rounded-full border border-[#EBE9E5] bg-white w-8 h-8 hover:bg-[#F5F3EF] transition transform hover:scale-[1.05]';
+      downloadBtn.setAttribute('aria-label', `Download ${test.title}`);
+      downloadBtn.setAttribute('title', `Download ${test.title}`);
+
+      downloadBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-[#666666]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      `;
+      downloadBtn.addEventListener('click', () => {
+        const blob = new Blob([`Dummy paper content for "${test.title}"`], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${test.title.replace(/\s+/g, '_')}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+
+      actions.appendChild(viewBtn);
+      actions.appendChild(downloadBtn);
+
+      row.appendChild(left);
+      row.appendChild(marks);
+      row.appendChild(dateCol);
+      row.appendChild(actions);
+
+      return row;
+    }
+
+    function renderMockTests() {
+      if (mockListEl) {
+        mockListEl.innerHTML = '';
+        mockTests.forEach((test, i) => {
+          mockListEl.appendChild(createMockRow(test, i));
+        });
+      }
+      if (mockCountEl) {
+        mockCountEl.textContent = mockTests.length.toString();
+      }
+    }
+
+    renderMockTests();
+
+    // Schedule navigation demo
+    const scheduleIndicator = document.getElementById('scheduleIndicator');
+    const schedulePrev = document.getElementById('schedulePrev');
+    const scheduleNext = document.getElementById('scheduleNext');
+    const scheduleStates = [
+      'Today · 3 tests',
+      'Tomorrow · 2 tests',
+      'This week · 9 tests',
+      'Next week · 6 tests'
+    ];
+    let scheduleIndex = 0;
+
+    if (schedulePrev && scheduleIndicator) {
+      schedulePrev.addEventListener('click', () => {
+        scheduleIndex = (scheduleIndex - 1 + scheduleStates.length) % scheduleStates.length;
+        scheduleIndicator.textContent = scheduleStates[scheduleIndex];
+      });
+    }
+    if (scheduleNext && scheduleIndicator) {
+      scheduleNext.addEventListener('click', () => {
+        scheduleIndex = (scheduleIndex + 1) % scheduleStates.length;
+        scheduleIndicator.textContent = scheduleStates[scheduleIndex];
+      });
+    }
+
+    // AI Mock Test Modal
+    function openModal() {
+      const modal = document.getElementById('tryNowModal');
+      const sidebar = document.querySelector('.sidebar');
+      console.log('Opening modal', modal);
+      if (modal) {
+        modal.classList.remove('hidden');
+        if (sidebar) sidebar.style.filter = 'blur(3px)';
+      }
+    }
+    
+    window.openModal = openModal;
+    
+    const tryNowButton = document.getElementById('tryNowButton');
+    const tryNowModal = document.getElementById('tryNowModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const cancelModalBtn = document.getElementById('cancelModal');
+    const uploadBox = document.getElementById('uploadBox');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const generateBtn = document.getElementById('generateBtn');
+    
+    let uploadedFiles = [];
+    
+    function closeModal() {
+      const sidebar = document.querySelector('.sidebar');
+      tryNowModal.classList.add('hidden');
+      uploadedFiles = [];
+      fileList.innerHTML = '';
+      updateGenerateButton();
+      if (sidebar) sidebar.style.filter = 'none';
+    }
+
+    function updateGenerateButton() {
+      generateBtn.disabled = uploadedFiles.length < 5;
+      generateBtn.style.opacity = uploadedFiles.length < 5 ? '0.5' : '1';
+      
+      // Update title text based on uploaded files
+      const titleEl = document.getElementById('questionPapersTitle');
+      if (titleEl) {
+        titleEl.textContent = uploadedFiles.length > 0 ? 'Uploaded Question Papers' : 'Question papers';
+      }
+    }
+
+    function createFileCard(file, index) {
+      const fileCard = document.createElement('div');
+      fileCard.className = 'bg-white rounded-full border border-[#ECEAE6] p-4 flex items-center gap-4 mb-3 shadow-sm opacity-0 transform translate-y-4 transition-all duration-300';
+      
+      fileCard.innerHTML = `
+        <div class="bg-[#F3F8FF] w-12 h-12 rounded-xl flex items-center justify-center text-xs font-semibold text-[#6B7280]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#5d9f9f" viewBox="0 0 256 256"><path d="M44,120H212a4,4,0,0,0,4-4V88a8,8,0,0,0-2.34-5.66l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40v76A4,4,0,0,0,44,120ZM152,44l44,44H152Zm72,108.53a8.18,8.18,0,0,1-8.25,7.47H192v16h15.73a8.17,8.17,0,0,1,8.25,7.47,8,8,0,0,1-8,8.53H192v15.73a8.17,8.17,0,0,1-7.47,8.25,8,8,0,0,1-8.53-8V152a8,8,0,0,1,8-8h32A8,8,0,0,1,224,152.53ZM64,144H48a8,8,0,0,0-8,8v55.73A8.17,8.17,0,0,0,47.47,216,8,8,0,0,0,56,208v-8h7.4c15.24,0,28.14-11.92,28.59-27.15A28,28,0,0,0,64,144Zm-.35,40H56V160h8a12,12,0,0,1,12,13.16A12.25,12.25,0,0,1,63.65,184ZM128,144H112a8,8,0,0,0-8,8v56a8,8,0,0,0,8,8h15.32c19.66,0,36.21-15.48,36.67-35.13A36,36,0,0,0,128,144Zm-.49,56H120V160h8a20,20,0,0,1,20,20.77C147.58,191.59,138.34,200,127.51,200Z"></path></svg>
+        </div>
+        <div class="flex-1">
+          <div class="text-sm font-semibold text-[#1E1E1E] mb-1">${file.name}</div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-[#8B8B8B] w-12">${(file.size / (1024 * 1024)).toFixed(1)} MB</span>
+            <div class="flex-1 h-1.5 bg-[#EAE8E4] rounded-full overflow-hidden">
+              <div class="progress-bar h-full bg-[#A6AE86] rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <span class="progress-text text-xs text-[#7D7D7D] w-10 text-right">0%</span>
+          </div>
+        </div>
+        <button class="text-[#A8A8A8] hover:text-[#C45353] text-lg transition-colors" onclick="removeFile(${index})">
+          🗑
+        </button>
+      `;
+      
+      // Animate in after a short delay
+      setTimeout(() => {
+        fileCard.classList.remove('opacity-0', 'translate-y-4');
+        fileCard.classList.add('opacity-100', 'translate-y-0');
+        
+        // Start progress animation
+        animateProgress(fileCard);
+      }, 50);
+      
+      return fileCard;
+    }
+
+    function animateProgress(fileCard) {
+      const progressBar = fileCard.querySelector('.progress-bar');
+      const progressText = fileCard.querySelector('.progress-text');
+      let progress = 0;
+      
+      const interval = setInterval(() => {
+        progress += Math.random() * 15 + 5; // Random increment between 5-20
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+        }
+        
+        progressBar.style.width = progress + '%';
+        progressText.textContent = Math.floor(progress) + '%';
+      }, 200); // Update every 200ms
+    }
+
+    function addFiles(files) {
+      Array.from(files).forEach(file => {
+        if (uploadedFiles.length < 10) {
+          uploadedFiles.push(file);
+          const fileCard = createFileCard(file, uploadedFiles.length - 1);
+          fileList.appendChild(fileCard);
+        }
+      });
+      updateGenerateButton();
+    }
+
+    window.removeFile = function(index) {
+      uploadedFiles.splice(index, 1);
+      fileList.innerHTML = '';
+      uploadedFiles.forEach((file, i) => {
+        const fileCard = createFileCard(file, i);
+        fileList.appendChild(fileCard);
+      });
+      updateGenerateButton();
+    }
+
+    if (uploadBox) {
+      uploadBox.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', (e) => addFiles(e.target.files));
+      
+      uploadBox.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadBox.style.borderColor = '#C2BEB8';
+        uploadBox.style.backgroundColor = '#F8F6F3';
+      });
+      
+      uploadBox.addEventListener('dragleave', () => {
+        uploadBox.style.borderColor = '#D5D2CD';
+        uploadBox.style.backgroundColor = '#FBFAF7';
+      });
+      
+      uploadBox.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadBox.style.borderColor = '#D5D2CD';
+        uploadBox.style.backgroundColor = '#FBFAF7';
+        addFiles(e.dataTransfer.files);
+      });
+    }
+
+    if (generateBtn) {
+      generateBtn.addEventListener('click', () => {
+        if (uploadedFiles.length >= 5) {
+          // Show loading state
+          generateBtn.disabled = true;
+          generateBtn.innerHTML = `
+            <svg class="animate-spin w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-opacity="0.25"></circle>
+              <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Generating...
+          `;
+          
+          // Simulate processing time
+          setTimeout(() => {
+            alert('AI Mock Test Generated Successfully!');
+            closeModal();
+            // Reset button state
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" viewBox="0 0 256 256"><path d="M208,144a15.78,15.78,0,0,1-10.42,14.94L146,178l-19,51.62a15.92,15.92,0,0,1-29.88,0L78,178l-51.62-19a15.92,15.92,0,0,1,0-29.88L78,110l19-51.62a15.92,15.92,0,0,1,29.88,0L146,110l51.62,19A15.78,15.78,0,0,1,208,144ZM152,48h16V64a8,8,0,0,0,16,0V48h16a8,8,0,0,0,0-16H184V16a8,8,0,0,0-16,0V32H152a8,8,0,0,0,0,16Zm88,32h-8V72a8,8,0,0,0-16,0v8h-8a8,8,0,0,0,0,16h8v8a8,8,0,0,0,16,0V96h8a8,8,0,0,0,0-16Z"/></svg>
+              Generate
+            `;
+          }, 3000);
+        }
+      });
+    }
+
+    if (tryNowButton) tryNowButton.addEventListener('click', openModal);
+    if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
+
+    // Mock filter & menu (with null checks)
+    const mockFilterButton = document.getElementById('mockFilterButton');
+    const mockMenuButton = document.getElementById('mockMenuButton');
+    const mockFilterMenu = document.getElementById('mockFilterMenu');
+    const mockMenu = document.getElementById('mockMenu');
+
+    if (mockFilterButton && mockFilterMenu && mockMenu) {
+      mockFilterButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mockFilterMenu.classList.toggle('hidden');
+        mockMenu.classList.add('hidden');
+      });
+    }
+
+    if (mockMenuButton && mockMenu && mockFilterMenu) {
+      mockMenuButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mockMenu.classList.toggle('hidden');
+        mockFilterMenu.classList.add('hidden');
+      });
+    }
+
+    // Close dropdowns on outside click
+    if (mockFilterMenu && mockMenu) {
+      document.addEventListener('click', () => {
+        mockFilterMenu.classList.add('hidden');
+        mockMenu.classList.add('hidden');
+      });
+
+      // Prevent closing when clicking inside menus
+      [mockFilterMenu, mockMenu].forEach(menu => {
+        if (menu) {
+          menu.addEventListener('click', (e) => e.stopPropagation());
+        }
+      });
+    }
+
+    // Responsiveness: adjust main grid to 1 column below 1200px
+    function updateGridLayout() {
+      const mainGrid = document.querySelector('section[style*="grid-template-columns"]');
+      if (!mainGrid) return;
+      if (window.innerWidth < 1200) {
+        mainGrid.style.gridTemplateColumns = 'minmax(0,1fr)';
+      } else {
+        mainGrid.style.gridTemplateColumns = 'minmax(0,1.2fr) minmax(0,1fr)';
+      }
+    }
+    window.addEventListener('resize', updateGridLayout);
+    updateGridLayout();
+  </script>
+  <script src="../shared-sidebar.js"></script>
+  
+  <style>
+    .sidebar {
+        transition: transform 0.3s ease;
+    }
+    .sidebar.hidden {
+        transform: translateX(-100%);
+    }
+    .main-content {
+        transition: margin-left 0.3s ease;
+    }
+    .main-content.expanded {
+        margin-left: -120px;
+    }
+  </style>
+
+  <script>
+    // Override the shared sidebar function for desktop toggle functionality
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        const floatingToggle = document.querySelector('.floating-toggle');
+        
+        // For mobile - existing functionality
+        if (window.innerWidth <= 768) {
+            sidebar.classList.toggle('open');
+        } else {
+            // For desktop - slide sidebar functionality
+            sidebar.classList.toggle('hidden');
+            mainContent.classList.toggle('expanded');
+            floatingToggle.classList.toggle('show');
+        }
+    }
+  </script>
+
+
+
+</body>
+</html>

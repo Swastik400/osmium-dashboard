@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management Dashboard</title>
+    
+    <!-- Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            gold: '#C89B4F', // The "Add Student" button color
+                            goldHover: '#B08640',
+                            sidebarActive: '#EBEBEB', // Light gray/beige for active menu
+                            bg: '#F9FAFB', // Main background
+                        },
+                        status: {
+                            greenBg: '#ECFDF5',
+                            greenText: '#047857',
+                            redBg: '#FEF2F2',
+                            redText: '#B91C1C',
+                            yellowBg: '#FFFBEB',
+                            yellowText: '#B45309',
+                            orangeBg: '#FFF7ED',
+                            orangeText: '#C2410C',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- FontAwesome for Modal Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom Scrollbar for Table */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af; 
+        }
+        
+        /* Responsive sidebar behavior */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                position: fixed;
+                z-index: 50;
+                height: 100vh;
+                width: 280px;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 40;
+            }
+            .overlay.open {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100vw;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .table-responsive {
+                font-size: 0.875rem;
+            }
+            .table-responsive td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            backdrop-filter: blur(4px);
+        }
+        
+        .input-group:focus-within input,
+        .input-group:focus-within select,
+        .input-group:focus-within .custom-input-bg {
+            background-color: #ffffff;
+            border-color: #d1d5db;
+            box-shadow: 0 0 0 2px rgba(229, 231, 235, 0.5);
+        }
+        
+        .error-ring {
+            box-shadow: 0 0 0 1px #EF4444 !important;
+            border-color: #EF4444 !important;
+        }
+        
+        .loader {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-brand-bg text-gray-900 font-sans antialiased">
+
+    <!-- Mobile Overlay -->
+    <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar w-64 lg:w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0 h-full overflow-y-auto">
+            <!-- Logo Section -->
+            <div class="p-5 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <!-- Logo Icon -->
+                    <div class="w-8 h-8 relative">
+                        <img src="https://osmium.co.in/cdnLogo" alt="Osmium" class="w-full h-full object-contain">
+                    </div>
+                    <span class="text-xl font-semibold text-gray-900 tracking-tight">Osmium</span>
+                </div>
+                <button class="p-1.5 rounded-md border border-gray-200 hover:bg-gray-50 text-gray-500">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Search -->
+            <div class="px-4 mb-6">
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                    <input type="text" placeholder="Search" class="w-full pl-9 pr-12 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold/20 focus:border-brand-gold transition-colors">
+                    <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-[10px] text-gray-400 border border-gray-200 rounded px-1 py-0.5">Ctr + F</span>
+                </div>
+            </div>
+
+            <!-- Menu: General -->
+            <div class="px-3 mb-6">
+                <h3 class="px-3 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">General</h3>
+                <nav class="space-y-0.5">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 group">
+                        <i data-lucide="layout-grid" class="w-4 h-4 text-gray-400 group-hover:text-gray-600"></i>
+                        Dashboard
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-900 bg-gray-100 rounded-lg">
+                        <i data-lucide="users" class="w-4 h-4 text-gray-900"></i>
+                        Student Management
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 group">
+                        <i data-lucide="book-open" class="w-4 h-4 text-gray-400 group-hover:text-gray-600"></i>
+                        Project Management
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 group">
+                        <i data-lucide="file-text" class="w-4 h-4 text-gray-400 group-hover:text-gray-600"></i>
+                        Reseach paper
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 group">
+                        <i data-lucide="clipboard-list" class="w-4 h-4 text-gray-400 group-hover:text-gray-600"></i>
+                        Exam & Tests
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 group">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-gray-400 group-hover:text-gray-600"></i>
+                        AI Mentor
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 group">
+                        <i data-lucide="graduation-cap" class="w-4 h-4 text-gray-400 group-hover:text-gray-600"></i>
+                        Study Materials
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Menu: Support -->
+            <div class="px-3 mb-auto">
+                <h3 class="px-3 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Support</h3>
+                <nav class="space-y-0.5">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 group">
+                        <i data-lucide="bell" class="w-4 h-4 text-gray-400 group-hover:text-gray-600"></i>
+                        Notification
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 group">
+                        <i data-lucide="headphones" class="w-4 h-4 text-gray-400 group-hover:text-gray-600"></i>
+                        Help & Support
+                    </a>
+                </nav>
+            </div>
+
+            <!-- User Profile -->
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center justify-between p-2 rounded-xl border border-gray-100 bg-white shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <img src="https://i.pravatar.cc/150?u=suman" alt="Suman" class="w-9 h-9 rounded-full object-cover border border-gray-200">
+                            <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-medium text-gray-900">Suman</span>
+                            <span class="text-[10px] font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded w-fit">Free Plan</span>
+                        </div>
+                    </div>
+                    <button class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="settings" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+            
+            <!-- Mobile Header -->
+            <div class="lg:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleSidebar()" class="text-gray-600">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <span class="font-semibold text-gray-900">Osmium</span>
+                </div>
+                <div class="w-8 h-8 bg-brand-gold rounded-full flex items-center justify-center text-white text-xs">S</div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 lg:p-8 custom-scrollbar">
+                
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 lg:mb-8">
+                    <h1 class="text-xl sm:text-2xl font-semibold text-gray-900">Student Management</h1>
+                    <button onclick="openAddStudentModal()" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm w-full sm:w-auto" style="background-color: #1A1A1A; color: #FFFFFF;" onmouseover="this.style.backgroundColor='#000000'" onmouseout="this.style.backgroundColor='#1A1A1A'">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span class="sm:inline">Add Student</span>
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 lg:mb-8">
+                    <!-- Card 1 -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-2 text-gray-500">
+                                <i data-lucide="info" class="w-4 h-4"></i>
+                                <span class="text-sm font-medium">Total Student</span>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-2xl sm:text-3xl font-semibold text-gray-900">49</span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-status-greenBg text-status-greenText">
+                                +2 This Month
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-2 text-gray-500">
+                                <i data-lucide="info" class="w-4 h-4"></i>
+                                <span class="text-sm font-medium">Active Student</span>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-2xl sm:text-3xl font-semibold text-gray-900">15</span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-status-greenBg text-status-greenText">
+                                +1 This Month
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-2 text-gray-500">
+                                <i data-lucide="info" class="w-4 h-4"></i>
+                                <span class="text-sm font-medium">Pending Submissions</span>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-2xl sm:text-3xl font-semibold text-gray-900">6</span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-status-orangeBg text-status-orangeText">
+                                -1 This Month
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Section -->
+                <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+                    
+                    <!-- Table Header -->
+                    <div class="p-4 sm:p-5 border-b border-gray-200">
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4 sm:mb-6">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h2 class="text-base sm:text-lg font-semibold text-gray-900">Students Onboard</h2>
+                                    <span class="text-gray-500 text-base sm:text-lg">(473)</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Check your projects submissions of your students</p>
+                            </div>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i data-lucide="more-vertical" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Filters -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="relative flex-1 max-w-full sm:max-w-md">
+                                <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                                <input type="text" placeholder="Filter by name" class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold/20 focus:border-brand-gold">
+                            </div>
+                            <div class="flex gap-2 sm:gap-3 sm:ml-auto">
+                                <div class="relative flex-1 sm:flex-none">
+                                    <select class="appearance-none bg-white border border-gray-200 text-gray-700 py-2 pl-3 sm:pl-4 pr-8 sm:pr-10 rounded-lg text-sm focus:outline-none focus:border-gray-400 cursor-pointer w-full">
+                                        <option>All Class</option>
+                                        <option>Class A</option>
+                                        <option>Class B</option>
+                                    </select>
+                                    <i data-lucide="chevron-down" class="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                                </div>
+                                <button class="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap">
+                                    <span class="hidden sm:inline">Sort</span>
+                                    <i data-lucide="arrow-up-down" class="w-3 h-3"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Card View -->
+                    <div class="block md:hidden space-y-4">
+                        <!-- Student Card 1 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=dhraval" alt="Dhraval" class="w-10 h-10 rounded-full object-cover">
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Dhraval Soni</h3>
+                                        <p class="text-sm text-gray-500">24BTCSE045</p>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600 p-1">
+                                    <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                                    <p class="text-gray-900 font-medium">B.Tech Sem 3</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                                    <p class="text-gray-900 font-medium">98638253</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                                    <p class="text-gray-900 font-medium">9:39 PM</p>
+                                    <p class="text-xs text-gray-500">6 DEC, 2005</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                        6 Pending
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Student Card 2 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=dhraval2" alt="Dhraval" class="w-10 h-10 rounded-full object-cover">
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Dhraval Soni</h3>
+                                        <p class="text-sm text-gray-500">24BTCSE045</p>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600 p-1">
+                                    <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                                    <p class="text-gray-900 font-medium">B.Tech Sem 3</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                                    <p class="text-gray-900 font-medium">98638253</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                                    <p class="text-gray-900 font-medium">9:39 PM</p>
+                                    <p class="text-xs text-gray-500">6 DEC, 2005</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                        6 Pending
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Student Card 3 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=dhraval3" alt="Dhraval" class="w-10 h-10 rounded-full object-cover">
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Dhraval Soni</h3>
+                                        <p class="text-sm text-gray-500">24BTCSE045</p>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600 p-1">
+                                    <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                                    <p class="text-gray-900 font-medium">B.Tech Sem 3</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                                    <p class="text-gray-900 font-medium">98638253</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                                    <p class="text-gray-900 font-medium">9:39 PM</p>
+                                    <p class="text-xs text-gray-500">8 DEC, 2005</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                        6 Pending
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Student Card 4 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=dhraval4" alt="Dhraval" class="w-10 h-10 rounded-full object-cover">
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Dhraval Soni</h3>
+                                        <p class="text-sm text-gray-500">24BTCSE045</p>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600 p-1">
+                                    <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                                    <p class="text-gray-900 font-medium">B.Tech Sem 3</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                                    <p class="text-gray-900 font-medium">98638253</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                                    <p class="text-gray-900 font-medium">9:39 PM</p>
+                                    <p class="text-xs text-gray-500">8 DEC, 2005</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                        6 Pending
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Student Card 5 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=dhraval5" alt="Dhraval" class="w-10 h-10 rounded-full object-cover">
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Dhraval Soni</h3>
+                                        <p class="text-sm text-gray-500">24BTCSE045</p>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600 p-1">
+                                    <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                                    <p class="text-gray-900 font-medium">B.Tech Sem 3</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                                    <p class="text-gray-900 font-medium">98638253</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                                    <p class="text-gray-900 font-medium">9:39 PM</p>
+                                    <p class="text-xs text-gray-500">8 DEC, 2005</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                        6 Pending
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Student Card 6 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=dhraval6" alt="Dhraval" class="w-10 h-10 rounded-full object-cover">
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">Dhraval Soni</h3>
+                                        <p class="text-sm text-gray-500">24BTCSE045</p>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600 p-1">
+                                    <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                                    <p class="text-gray-900 font-medium">B.Tech Sem 3</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                                    <p class="text-gray-900 font-medium">98638253</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                                    <p class="text-gray-900 font-medium">9:39 PM</p>
+                                    <p class="text-xs text-gray-500">6 DEC, 2005</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                        6 Pending
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Desktop Table -->
+                    <div class="hidden md:block overflow-x-auto table-responsive">
+                        <table class="w-full text-left border-collapse min-w-[800px]">
+                            <thead>
+                                <tr class="border-b border-gray-100">
+                                    <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider w-12 sm:w-16">No</th>
+                                    <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
+                                    <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">UID</th>
+                                    <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Class</th>
+                                    <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">Contact</th>
+                                    <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">Last Active</th>
+                                    <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Submissions</th>
+                                    <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-50">
+                                <!-- Row 1 -->
+                                <tr class="hover:bg-gray-50 transition-colors group">
+                                    <td class="p-2 sm:p-4 text-sm text-gray-500">1</td>
+                                    <td class="p-2 sm:p-4">
+                                        <div class="flex items-center gap-2 sm:gap-3">
+                                            <img src="https://i.pravatar.cc/150?u=dhraval" alt="Dhraval" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover">
+                                            <div class="flex flex-col sm:block">
+                                                <span class="text-sm font-medium text-gray-900">Dhraval Soni</span>
+                                                <span class="text-xs text-gray-500 sm:hidden">24BTCSE045</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-2 sm:p-4 text-sm text-gray-500 hidden sm:table-cell">24BTCSE045</td>
+                                    <td class="p-2 sm:p-4 text-sm text-gray-500 hidden md:table-cell">B.Tech Sem 3</td>
+                                    <td class="p-2 sm:p-4 hidden lg:table-cell">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">98638253</span>
+                                            <span class="text-xs text-gray-500">random@email.com</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-2 sm:p-4 hidden lg:table-cell">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">9:39 PM</span>
+                                            <span class="text-xs text-gray-500">6 DEC, 2005</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-2 sm:p-4">
+                                        <span class="inline-flex items-center px-2 sm:px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                            <span class="hidden sm:inline">6 </span>Pending
+                                        </span>
+                                    </td>
+                                    <td class="p-2 sm:p-4 text-right">
+                                        <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                                            <i data-lucide="more-horizontal" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 2 -->
+                                <tr class="hover:bg-gray-50 transition-colors group">
+                                    <td class="p-4 text-sm text-gray-500">2</td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <img src="https://i.pravatar.cc/150?u=dhraval2" alt="Dhraval" class="w-8 h-8 rounded-full object-cover">
+                                            <span class="text-sm font-medium text-gray-900">Dhraval Soni</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-sm text-gray-500">24BTCSE045</td>
+                                    <td class="p-4 text-sm text-gray-500">B.Tech Sem 3</td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">98638253</span>
+                                            <span class="text-xs text-gray-500">random@email.com</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">9:39 PM</span>
+                                            <span class="text-xs text-gray-500">6 DEC, 2005</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                            6 Pending
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                                            <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 3 -->
+                                <tr class="hover:bg-gray-50 transition-colors group">
+                                    <td class="p-4 text-sm text-gray-500">3</td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <img src="https://i.pravatar.cc/150?u=dhraval3" alt="Dhraval" class="w-8 h-8 rounded-full object-cover">
+                                            <span class="text-sm font-medium text-gray-900">Dhraval Soni</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-sm text-gray-500">24BTCSE045</td>
+                                    <td class="p-4 text-sm text-gray-500">B.Tech Sem 3</td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">98638253</span>
+                                            <span class="text-xs text-gray-500">random@email.com</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">9:39 PM</span>
+                                            <span class="text-xs text-gray-500">6 DEC, 2005</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                            6 Pending
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                                            <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 4 -->
+                                <tr class="hover:bg-gray-50 transition-colors group">
+                                    <td class="p-4 text-sm text-gray-500">4</td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <img src="https://i.pravatar.cc/150?u=dhraval4" alt="Dhraval" class="w-8 h-8 rounded-full object-cover">
+                                            <span class="text-sm font-medium text-gray-900">Dhraval Soni</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-sm text-gray-500">24BTCSE045</td>
+                                    <td class="p-4 text-sm text-gray-500">B.Tech Sem 3</td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">98638253</span>
+                                            <span class="text-xs text-gray-500">random@email.com</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">9:39 PM</span>
+                                            <span class="text-xs text-gray-500">6 DEC, 2005</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                            6 Pending
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                                            <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 5 -->
+                                <tr class="hover:bg-gray-50 transition-colors group">
+                                    <td class="p-4 text-sm text-gray-500">5</td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <img src="https://i.pravatar.cc/150?u=dhraval5" alt="Dhraval" class="w-8 h-8 rounded-full object-cover">
+                                            <span class="text-sm font-medium text-gray-900">Dhraval Soni</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-sm text-gray-500">24BTCSE045</td>
+                                    <td class="p-4 text-sm text-gray-500">B.Tech Sem 3</td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">98638253</span>
+                                            <span class="text-xs text-gray-500">random@email.com</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">9:39 PM</span>
+                                            <span class="text-xs text-gray-500">6 DEC, 2005</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                            6 Pending
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                                            <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 6 -->
+                                <tr class="hover:bg-gray-50 transition-colors group">
+                                    <td class="p-4 text-sm text-gray-500">6</td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <img src="https://i.pravatar.cc/150?u=dhraval6" alt="Dhraval" class="w-8 h-8 rounded-full object-cover">
+                                            <span class="text-sm font-medium text-gray-900">Dhraval Soni</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-sm text-gray-500">24BTCSE045</td>
+                                    <td class="p-4 text-sm text-gray-500">B.Tech Sem 3</td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">98638253</span>
+                                            <span class="text-xs text-gray-500">random@email.com</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900">9:39 PM</span>
+                                            <span class="text-xs text-gray-500">6 DEC, 2005</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                            6 Pending
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                                            <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="p-3 sm:p-4 border-t border-gray-200 flex items-center justify-between">
+                        <span class="text-xs sm:text-sm text-gray-500"><span class="font-medium text-gray-900">478</span> <span class="hidden sm:inline">Students</span></span>
+                        <div class="flex items-center gap-2">
+                            <button class="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 disabled:opacity-50">
+                                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                            </button>
+                            <div class="flex items-center gap-1 text-sm text-gray-600">
+                                <span class="bg-gray-100 px-2 py-1 rounded text-gray-900 font-medium">1</span>
+                                <span>of</span>
+                                <span>3</span>
+                            </div>
+                            <button class="p-1 rounded hover:bg-gray-100 text-gray-600 hover:text-gray-900">
+                                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div id="addStudentModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center modal-overlay p-2 sm:p-4">
+        <div class="bg-white w-full max-w-[95vw] sm:max-w-[600px] rounded-lg sm:rounded-xl shadow-xl overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[85vh]">
+            <!-- Header -->
+            <div class="flex justify-between items-center p-3 sm:p-4 pb-2 sm:pb-3">
+                <h1 class="text-xl font-semibold text-gray-900">Add Student</h1>
+                <button onclick="closeAddStudentModal()" class="text-gray-500 hover:text-gray-700 transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
+                    <i class="fa-solid fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Form Content -->
+            <div class="flex-1 overflow-y-auto p-3 sm:p-4 pt-1 sm:pt-2">
+                <form id="addStudentForm" class="space-y-3 sm:space-y-4">
+                    <!-- Name -->
+                    <div class="grid grid-cols-1 sm:grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-center gap-2 sm:gap-4 md:gap-6 input-group">
+                        <label class="text-gray-500 font-medium text-xs sm:text-sm md:text-base">Name</label>
+                        <input type="text" name="studentName" placeholder="Enter Student Name" class="w-full bg-gray-50 border border-transparent rounded-md sm:rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-gray-900 placeholder-gray-400 text-xs sm:text-sm transition-all duration-200 outline-none">
+                    </div>
+
+                    <!-- Class -->
+                    <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] items-start md:items-center gap-2 md:gap-6 input-group">
+                        <label class="text-gray-500 font-medium text-sm md:text-base mt-2 md:mt-0">Class</label>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                            <span class="text-gray-500 text-sm hidden sm:inline-block whitespace-nowrap">Select Course:</span>
+                            <div class="relative w-full sm:w-40">
+                                <select class="w-full appearance-none bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-8 text-gray-900 text-sm focus:outline-none cursor-pointer">
+                                    <option>B.Tech</option>
+                                    <option>M.Tech</option>
+                                    <option>BBA</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="relative w-full sm:w-40">
+                                <select class="w-full appearance-none bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-8 text-gray-900 text-sm focus:outline-none cursor-pointer">
+                                    <option>Semester 3</option>
+                                    <option>Semester 4</option>
+                                    <option>Semester 5</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UID -->
+                    <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] items-center gap-2 md:gap-6 input-group">
+                        <label class="text-gray-500 font-medium text-sm md:text-base">UID</label>
+                        <input type="text" name="uid" placeholder="Enter University UID" class="w-full bg-gray-50 border border-transparent rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 text-sm transition-all duration-200 outline-none">
+                    </div>
+
+                    <!-- DOB -->
+                    <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] items-center gap-2 md:gap-6 input-group">
+                        <label class="text-gray-500 font-medium text-sm md:text-base">DOB</label>
+                        <div class="relative w-full">
+                            <div id="dob-display" class="custom-input-bg w-full bg-gray-50 border border-transparent rounded-lg px-4 py-2.5 flex justify-between items-center transition-all duration-200">
+                                <span id="dob-text" class="text-gray-400 text-sm truncate">Enter Date of Birth</span>
+                                <i class="fa-regular fa-calendar text-gray-500 text-lg shrink-0 ml-2"></i>
+                            </div>
+                            <input type="date" id="dob-input" name="dob" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] items-center gap-2 md:gap-6 input-group">
+                        <label class="text-gray-500 font-medium text-sm md:text-base">Email</label>
+                        <input type="email" name="email" placeholder="Enter Email ID" class="w-full bg-gray-50 border border-transparent rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 text-sm transition-all duration-200 outline-none">
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] items-center gap-2 md:gap-6 input-group">
+                        <label class="text-gray-500 font-medium text-sm md:text-base">Phone</label>
+                        <div class="flex gap-3">
+                            <div class="relative w-28 shrink-0">
+                                <div class="w-full bg-gray-50 border border-transparent rounded-lg px-3 py-2.5 flex items-center gap-2 cursor-pointer hover:bg-gray-100 transition-colors custom-input-bg">
+                                    <span class="text-gray-500 text-sm font-medium truncate">+91</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 ml-auto"></i>
+                                </div>
+                            </div>
+                            <input type="tel" name="phone" placeholder="Add Phone number" class="w-full bg-gray-50 border border-transparent rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 text-sm transition-all duration-200 outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Parents -->
+                    <div class="grid grid-cols-1 md:grid-cols-[120px_1fr] items-start gap-2 md:gap-6">
+                        <label class="text-gray-500 font-medium text-sm md:text-base mt-3">Parents</label>
+                        <div class="flex flex-col gap-4 w-full">
+                            <div class="flex gap-3 input-group">
+                                <input type="text" name="fatherName" placeholder="Enter Father Name" class="w-full bg-gray-50 border border-transparent rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 text-sm transition-all duration-200 outline-none">
+                            </div>
+                            <div class="flex gap-3 input-group">
+                                <input type="text" name="motherName" placeholder="Enter Mother Name" class="w-full bg-gray-50 border border-transparent rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 text-sm transition-all duration-200 outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="flex flex-col sm:flex-row justify-end items-stretch sm:items-center p-3 sm:p-4 pt-2 sm:pt-3 gap-2 sm:gap-3">
+                <button onclick="closeAddStudentModal()" class="px-4 sm:px-6 py-2 sm:py-2.5 border border-gray-200 rounded-md sm:rounded-lg text-gray-600 text-xs sm:text-sm font-medium hover:bg-gray-50 transition-colors order-2 sm:order-1">
+                    Cancel
+                </button>
+                <button id="submitBtn" onclick="handleSubmit(event)" class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium transition-colors flex items-center gap-1 sm:gap-2 shadow-lg min-w-[120px] sm:min-w-[140px] justify-center order-1 sm:order-2" style="background-color: #1A1A1A; color: #FFFFFF;" onmouseover="this.style.backgroundColor='#000000'" onmouseout="this.style.backgroundColor='#1A1A1A'">
+                    <span id="btnText" class="flex items-center gap-2">
+                        <i class="fa-solid fa-plus text-[10px] sm:text-xs"></i>
+                        Add Student
+                    </span>
+                    <span id="btnLoader" class="loader hidden"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center modal-overlay">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center mx-4" id="successCard">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-check text-2xl text-green-600"></i>
+            </div>
+            <h2 class="text-xl font-bold text-gray-900 mb-2">Student Added!</h2>
+            <p class="text-gray-500 text-sm mb-6">The student profile has been successfully created in the system.</p>
+            <button onclick="resetAndClose()" class="w-full bg-gray-900 text-white font-medium py-2.5 rounded-lg hover:bg-black transition-all">
+                Add Another
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Sidebar Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
+
+        // Modal Functions
+        function openAddStudentModal() {
+            document.getElementById('addStudentModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddStudentModal() {
+            document.getElementById('addStudentModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('addStudentForm').reset();
+            resetDate();
+        }
+
+        // Date Picker Logic
+        const dateInput = document.getElementById('dob-input');
+        const dateText = document.getElementById('dob-text');
+        const dateDisplay = document.getElementById('dob-display');
+
+        function updateDateDisplay() {
+            if (dateInput.value) {
+                dateText.textContent = dateInput.value;
+                dateText.classList.remove('text-gray-400');
+                dateText.classList.add('text-gray-900');
+                dateDisplay.classList.add('bg-white', 'border-gray-300');
+                dateDisplay.classList.remove('bg-gray-50', 'border-transparent');
+            } else {
+                resetDate();
+            }
+        }
+
+        function resetDate() {
+            if (dateInput) {
+                dateInput.value = '';
+                dateText.textContent = 'Enter Date of Birth';
+                dateText.classList.add('text-gray-400');
+                dateText.classList.remove('text-gray-900');
+                dateDisplay.classList.remove('bg-white', 'border-gray-300');
+                dateDisplay.classList.add('bg-gray-50', 'border-transparent');
+            }
+        }
+
+        // Add event listener when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            if (dateInput) {
+                dateInput.addEventListener('change', updateDateDisplay);
+            }
+        });
+
+        // Form Handling
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"]');
+            let isValid = true;
+
+            // Simple Validation
+            inputs.forEach(input => {
+                if (!input.value && input.name !== 'fatherName' && input.name !== 'motherName') {
+                    input.classList.add('error-ring');
+                    input.addEventListener('input', () => {
+                        input.classList.remove('error-ring');
+                    });
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) return;
+
+            // Loading State
+            btnText.classList.add('hidden');
+            btnLoader.classList.remove('hidden');
+            btn.classList.add('cursor-not-allowed', 'opacity-80');
+
+            // Simulate API Call
+            setTimeout(() => {
+                btnText.classList.remove('hidden');
+                btnLoader.classList.add('hidden');
+                btn.classList.remove('cursor-not-allowed', 'opacity-80');
+                showSuccess();
+            }, 1500);
+        }
+
+        function showSuccess() {
+            document.getElementById('addStudentModal').classList.add('hidden');
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function resetAndClose() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('addStudentForm').reset();
+            resetDate();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('addStudentModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddStudentModal();
+            }
+        });
+
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                resetAndClose();
+            }
+        });
+    </script>
+</body>
+</html>
