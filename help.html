@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osmium Student Analytics</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Plus Jakarta Sans (Matches the clean UI font) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Tailwind Config for Exact Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        'osmium-bg': '#F8F8F6', // Main background
+                        'sidebar-bg': '#FFFFFF', // Sidebar background
+                        'card-bg': '#FFFFFF',
+                        'primary-text': '#111827',
+                        'secondary-text': '#6B7280',
+                        'accent-brown': '#C4A484', // The gold/brown accent
+                        'accent-brown-light': '#E8E2D2', // Lighter brown for backgrounds
+                        'active-nav': '#EBE8E2', // Sidebar active item
+                        'danger-red': '#EF4444',
+                        'success-green': '#10B981',
+                    },
+                    boxShadow: {
+                        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #E5E7EB;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D1D5DB;
+        }
+
+        /* Progress Bar Animation */
+        @keyframes loadProgress {
+            from {
+                width: 0;
+            }
+        }
+
+        .progress-bar-fill {
+            animation: loadProgress 1s ease-out forwards;
+        }
+
+        /* AI Mentor Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background-color: #faf8f6;
+            border-right: 1px solid #ebe8e2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 0;
+            overflow-y: auto;
+            height: 100vh;
+            position: fixed;
+            z-index: 50;
+            transition: transform 0.3s ease;
+            left: 0;
+            top: 0;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.sidebar-open {
+                transform: translateX(0);
+            }
+        }
+
+        /* Mobile overlay */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            display: none;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Main content responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        .sidebar-top {
+            flex: 1;
+        }
+
+        .logo {
+            width: 80%;
+            margin-bottom: 32px;
+            padding: 0 20px;
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #8b8b8b;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 0 20px;
+            margin: 16px 0 8px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            margin: 0 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #5a5a5a;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background-color: #f0ede8;
+        }
+
+        .nav-item.active {
+            background-color: #e8e3da;
+            color: #2e2e2e;
+            font-weight: 500;
+        }
+
+        .sidebar-bottom {
+            border-top: 1px solid #ebe8e2;
+            padding-top: 16px;
+            padding: 0 8px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            margin: 16px 0 0 0;
+            border-radius: 8px;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: #2e2e2e;
+        }
+
+        .user-plan {
+            font-size: 11px;
+            color: #8b8b8b;
+            margin-top: 2px;
+        }
+
+        .settings-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .search-container {
+            position: relative;
+            margin: 0 20px 32px 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border: 1px solid #ebe8e2;
+            border-radius: 8px;
+            background: #f5f3f0;
+            font-size: 14px;
+            color: #666;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            opacity: 0.5;
+        }
+
+        .search-shortcut {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            color: #999;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            margin-bottom: 32px;
+        }
+
+        .menu-btn {
+            width: 32px;
+            height: 32px;
+            background: #ffffff;
+            border: 1px solid #ebe8e2;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .menu-btn:hover {
+            background: #f5f3f0;
+            border-color: #d4cfc8;
+        }
+
+        .logo {
+            width: 70%;
+            margin-bottom: 0;
+            padding: 0;
+        }
+
+        /* Previous Exam Test Performances Styles */
+        .exam-card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 22px;
+            border: 1px solid #e7e7e7;
+        }
+
+        .exam-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #222;
+        }
+
+        .exam-subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 22px;
+        }
+
+        .exam-bar {
+            height: 10px;
+            width: 100%;
+            display: flex;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 26px;
+            background: #fff;
+        }
+
+        .b1,
+        .b2,
+        .b3,
+        .b4 {
+            height: 100%;
+        }
+
+        .b1 {
+            background: #6c5430;
+            flex: 1.4;
+            margin-right: 3px;
+        }
+
+        .b2 {
+            background: #c5ba90;
+            flex: 1.2;
+            margin-right: 3px;
+        }
+
+        .b3 {
+            background: #e0a876;
+            flex: 1.0;
+            margin-right: 3px;
+        }
+
+        .b4 {
+            background: #ced6a8;
+            flex: 1.3;
+        }
+
+        .exam-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .exam-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .exam-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .d1 {
+            background: #6c5430;
+        }
+
+        .d2 {
+            background: #a7a06d;
+        }
+
+        .d3 {
+            background: #e8a56c;
+        }
+
+        .d4 {
+            background: #d7e3a7;
+        }
+
+        .exam-view-btn {
+            padding: 8px 18px;
+            background: #eae7e2;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #3f3f3f;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+
+        .exam-score {
+            font-size: 15px;
+            color: #555;
+            margin-left: 12px;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .exam-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .exam-view-all {
+            color: #c17c39;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Subject Wise Performance Styles */
+        .subject-card {
+            background: #fff;
+            border-radius: 22px;
+            border: 1px solid #e6e6e6;
+            padding: 16px;
+        }
+
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subject-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .subject-subtitle {
+            margin-top: 4px;
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 16px;
+        }
+
+        .subject-sort-btn {
+            background: #f3efe9;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #3c3c3c;
+        }
+
+        .subject-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        .subject-table th {
+            text-align: left;
+            font-size: 13px;
+            color: #777;
+            font-weight: 500;
+            padding-bottom: 10px;
+        }
+
+        .subject-table td {
+            padding: 10px 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .subject-bar-container {
+            width: 140px;
+            height: 6px;
+            background: #f2e2c5;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .subject-bar {
+            height: 100%;
+            background: #d49c42;
+            border-radius: 20px;
+        }
+
+        .subject-footnote {
+            margin-top: 12px;
+            margin-bottom: 0;
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Recommended Career Path Styles */
+        .career-container {
+            background: #fff;
+            border-radius: 22px;
+            border: 1px solid #e6e6e6;
+            padding: 26px 28px;
+        }
+
+        .career-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d1d1d;
+            letter-spacing: -0.2px;
+            margin-bottom: 4px;
+        }
+
+        .career-subtitle {
+            font-size: 14px;
+            color: #9b9b9b;
+            margin-bottom: 22px;
+        }
+
+        .career-card {
+            background: #fcfcfc;
+            border: 1px solid #ececec;
+            border-radius: 16px;
+            padding: 18px 20px 16px;
+            margin-bottom: 14px;
+        }
+
+        .career-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .icon-wrapper {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .icon-wrapper.blue {
+            background: #eaf4fb;
+            color: #3c90d1;
+        }
+
+        .icon-wrapper.green {
+            background: #ebf7ec;
+            color: #47a44b;
+        }
+
+        .career-card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1d1d1d;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .bullet {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        .bullet.orange {
+            background: #f7a477;
+        }
+
+        .bullet.blue {
+            background: #6cbcf1;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: #5b5b5b;
+            line-height: 1.4;
+        }
+
+        .info-text strong {
+            color: #1d1d1d;
+            font-weight: 600;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .nav-arrow {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            background: #fafafa;
+            border: 1px solid #e5e5e5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: #444;
+            font-size: 16px;
+        }
+
+        .page-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            background: #ffffff;
+            border: 1px solid #dcdcdc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .page-text {
+            color: #929292;
+        }
+
+        /* Weak Topics Styles */
+        .weak-topics-card {
+            background: #fff;
+            border-radius: 22px;
+            border: 1px solid #e7e7e7;
+            padding: 26px 28px;
+        }
+
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .weak-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .weak-subtitle {
+            margin-top: 4px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .weak-sort-btn {
+            background: #f3efe9;
+            border-radius: 10px;
+            padding: 8px 14px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #444;
+        }
+
+        .weak-table {
+            margin-top: 22px;
+            width: 100%;
+        }
+
+        .weak-table-header {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr 1fr;
+            padding-bottom: 12px;
+            font-size: 14px;
+            color: #777;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 10px;
+        }
+
+        .weak-row {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr 1fr;
+            padding: 14px 0;
+            font-size: 15px;
+            color: #333;
+            align-items: center;
+        }
+
+        .topic-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weak-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #ff6b6b;
+        }
+
+        .weak-accuracy {
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .red {
+            color: #e25b5b;
+            margin-left: 6px;
+            font-size: 14px;
+        }
+
+        .green {
+            color: #2da860;
+            margin-left: 6px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body class="bg-osmium-bg text-primary-text font-sans h-screen flex overflow-hidden"
+    style="font-family: 'Inter', sans-serif; background: #faf8f6; color: #2e2e2e;">
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+            <div class="logo-container">
+                <img src="./logos/logo.svg" alt="" class="logo">
+                <button type="button" class="menu-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+                    <img src="./logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+                </button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+                    </path>
+                </svg>
+                <div class="search-shortcut">Ctrl + F</div>
+            </div>
+
+            <div class="section-label">General</div>
+            <a href="../teacher dashboard/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path
+                        d="M120,56v48a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V56A16,16,0,0,1,56,40h48A16,16,0,0,1,120,56Zm80-16H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-96,96H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Z">
+                    </path>
+                </svg> Dashboard</a>
+            <a href="../student/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20"
+                    height="20">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path
+                        d="M164.47,195.63a8,8,0,0,1-6.7,12.37H10.23a8,8,0,0,1-6.7-12.37,95.83,95.83,0,0,1,47.22-37.71,60,60,0,1,1,66.5,0A95.83,95.83,0,0,1,164.47,195.63Zm87.91-.15a95.87,95.87,0,0,0-47.13-37.56A60,60,0,0,0,144.7,54.59a4,4,0,0,0-1.33,6A75.83,75.83,0,0,1,147,150.53a4,4,0,0,0,1.07,5.53,112.32,112.32,0,0,1,29.85,30.83,23.92,23.92,0,0,1,3.65,16.47,4,4,0,0,0,3.95,4.64h60.3a8,8,0,0,0,7.73-5.93A8.22,8.22,0,0,0,252.38,195.48Z">
+                    </path>
+                </svg> Student Management</a>
+            <a href="../project management/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path
+                        d="M240,56V200a8,8,0,0,1-8,8H160a24,24,0,0,0-24,23.94,7.9,7.9,0,0,1-5.12,7.55A8,8,0,0,1,120,232a24,24,0,0,0-24-24H24a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H88a32,32,0,0,1,32,32v87.73a8.17,8.17,0,0,0,7.47,8.25,8,8,0,0,0,8.53-8V80a32,32,0,0,1,32-32h64A8,8,0,0,1,240,56Z">
+                    </path>
+                </svg> Project Management</a>
+            <a href="../research paper/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path
+                        d="M232,216a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H181.25A72,72,0,0,0,144,80.46V136a16,16,0,0,1-16,16H80a16,16,0,0,1-16-16V32A16,16,0,0,1,80,16h48a16,16,0,0,1,16,16V64.37A88.05,88.05,0,0,1,203.94,208H224A8,8,0,0,1,232,216Zm-96-32a8,8,0,0,0,0-16H72a8,8,0,0,0,0,16Z">
+                    </path>
+                </svg> Research paper</a>
+            <a href="../exam and test/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path
+                        d="M200,32H163.74a47.92,47.92,0,0,0-71.48,0H56A16,16,0,0,0,40,48V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm-72,0a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm32,128H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z">
+                    </path>
+                </svg> Exam & Tests</a>
+            <a href="../AI mentor/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path
+                        d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.34,40.65l24.71,7.27a16,16,0,0,0,19.87-19.86Zm-16.25,1.47L224,216l-27.76-8.17a8,8,0,0,0-6,.63,64.05,64.05,0,0,1-85.87-24.88A79.93,79.93,0,0,0,174.7,89.71a64,64,0,0,1,41.75,92.48A8,8,0,0,0,215.82,188.23Z">
+                    </path>
+                </svg> AI Mentor</a>
+            <a href="../Study Materials/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path
+                        d="M226.53,56.41l-96-32a8,8,0,0,0-5.06,0l-96,32A8,8,0,0,0,24,64v80a8,8,0,0,0,16,0V75.1L73.59,86.29a64,64,0,0,0,20.65,88.05c-18,7.06-33.56,19.83-44.94,37.29a8,8,0,1,0,13.4,8.74C77.77,197.25,101.57,184,128,184s50.23,13.25,65.3,36.37a8,8,0,0,0,13.4-8.74c-11.38-17.46-27-30.23-44.94-37.29a64,64,0,0,0,20.65-88l44.12-14.7a8,8,0,0,0,0-15.18ZM176,120A48,48,0,1,1,89.35,91.55l36.12,12a8,8,0,0,0,5.06,0l36.12-12A47.89,47.89,0,0,1,176,120Z">
+                    </path>
+                </svg> Study Materials</a>
+
+            <div class="section-label">Support</div>
+            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path
+                        d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z">
+                    </path>
+                </svg> Notification</div>
+            <div class="nav-item active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path
+                        d="M232,128v80a40,40,0,0,1-40,40H136a8,8,0,0,1,0-16h56a24,24,0,0,0,24-24H192a24,24,0,0,1-24-24V144a24,24,0,0,1,24-24h23.65A88,88,0,0,0,66,65.54A87.29,87.29,0,0,0,40.36,120H64a24,24,0,0,1,24,24v40a24,24,0,0,1-24,24H48a24,24,0,0,1-24-24V128A104.11,104.11,0,0,1,201.89,54.66A103.41,103.41,0,0,1,232,128Z">
+                    </path>
+                </svg> Help & Support</div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="user-profile">
+                <img src="./logos/female avatar.svg" alt="">
+                <div class="user-details">
+                    <div class="user-name">Suman</div>
+                    <div class="user-plan">Free Plan</div>
+                </div>
+                <div class="settings-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#abaaaa"
+                        viewBox="0 0 256 256">
+                        <path
+                            d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm109.94-52.79a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A112.1,112.1,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.62a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21Zm-15,34.91-28.57,16.25a8,8,0,0,0-3,3c-.58,1-1.19,2.06-1.81,3.06a7.94,7.94,0,0,0-1.22,4.21l-.15,32.25a95.89,95.89,0,0,1-25.37,14.3L134,199.13a8,8,0,0,0-3.91-1h-.19c-1.21,0-2.43,0-3.64,0a8.08,8.08,0,0,0-4.1,1l-28.84,16.1A96,96,0,0,1,67.88,201l-.11-32.2a8,8,0,0,0-1.22-4.22c-.62-1-1.23-2-1.8-3.06a8.09,8.09,0,0,0-3-3.06l-28.6-16.29a90.49,90.49,0,0,1,0-28.26L61.67,97.63a8,8,0,0,0,3-3c.58-1,1.19-2.06,1.81-3.06a7.94,7.94,0,0,0,1.22-4.21l.15-32.25a95.89,95.89,0,0,1,25.37-14.3L122,56.87a8,8,0,0,0,4.1,1c1.21,0,2.43,0,3.64,0a8.08,8.08,0,0,0,4.1-1l28.84-16.1A96,96,0,0,1,188.12,55l.11,32.2a8,8,0,0,0,1.22,4.22c.62,1,1.23,2,1.8,3.06a8.09,8.09,0,0,0,3,3.06l28.6,16.29A90.49,90.49,0,0,1,222.9,142.12Z">
+                        </path>
+                    </svg> </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <!-- Main Content -->
+    <main class="main-content flex-1 overflow-y-auto h-full relative transition-all duration-300"
+        style="margin-left: 280px; width: calc(100% - 280px);" id="main-content">
+        <!-- Mobile Header -->
+        <div class="md:hidden flex items-center justify-between p-4 bg-white border-b sticky top-0 z-30">
+            <div class="flex items-center gap-3">
+                <button type="button" class="menu-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+                    <img src="./logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+                </button>
+
+
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu"
+            class="hidden md:hidden absolute top-16 left-0 w-full bg-white border-b shadow-lg z-40 p-4">
+            <!-- Replicating menu for mobile roughly -->
+            <nav class="space-y-2">
+                <a href="#" class="block px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded">Dashboard</a>
+                <a href="#" class="block px-3 py-2 text-sm font-medium text-gray-900 bg-active-nav rounded">Student
+                    Management</a>
+                <!-- More items... -->
+            </nav>
+        </div>
+
+        <div class="p-4 md:p-6 lg:p-8 max-w-[1400px] mx-auto">
+            <!-- Page Title -->
+            <div class="mb-6">
+                <h1 class="text-2xl font-semibold text-gray-900">Help & Support</h1>
+            </div>
+
+            <!-- Support Cards -->
+            <div class="mb-6">
+                <div class="flex gap-7 flex-wrap">
+                    <!-- Create Ticket -->
+                    <div class="w-64 bg-white border border-gray-200 rounded-2xl p-4 flex items-center gap-5 cursor-pointer transition-all duration-200 hover:shadow-lg">
+                        <div class="w-13 h-13 rounded-full bg-green-50 flex items-center justify-center">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7a7d3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9a3 3 0 0 1 0-6h18a3 3 0 0 1 0 6"></path>
+                                <path d="M3 15a3 3 0 0 0 0 6h18a3 3 0 0 0 0-6"></path>
+                                <path d="M3 12h18"></path>
+                            </svg>
+                        </div>
+                        <div class="text-base font-semibold text-gray-900">Create Ticket</div>
+                    </div>
+
+                    <!-- Report Issue -->
+                    <div class="w-64 bg-white border border-gray-200 rounded-2xl p-4 flex items-center gap-5 cursor-pointer transition-all duration-200 hover:shadow-lg">
+                        <div class="w-13 h-13 rounded-full bg-orange-50 flex items-center justify-center">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b15527" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M8 2v2M16 2v2"></path>
+                                <path d="M3 9h18"></path>
+                                <path d="M12 14v6"></path>
+                                <path d="M4 12v2a8 8 0 1 0 16 0v-2"></path>
+                                <path d="M20 12a8 8 0 1 0-16 0"></path>
+                            </svg>
+                        </div>
+                        <div class="text-base font-semibold text-gray-900">Report Issue</div>
+                    </div>
+
+                    <!-- Schedule Callback -->
+                    <div class="w-64 bg-white border border-gray-200 rounded-2xl p-4 flex items-center gap-5 cursor-pointer transition-all duration-200 hover:shadow-lg">
+                        <div class="w-13 h-13 rounded-full bg-green-100 flex items-center justify-center">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2a7a5b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.1 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.81.37 1.6.73 2.34a2 2 0 0 1-.45 2.33l-1.27 1.27a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.33-.45 8.6 8.6 0 0 1 2.34.73A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                        </div>
+                        <div class="text-base font-semibold text-gray-900">Schedule a<br>Callback</div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- Help Section Header -->
+            <div class="flex items-center gap-4 mb-4">
+                <div>
+                    <div class="text-lg font-bold text-black-700 mb-1" >Help & Categories</div>
+                    <div class="text-xs text-gray-500">Get to know about your dashboard</div>
+                </div>
+            </div>
+
+            <!-- Help Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Getting Started Guide -->
+                <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-11 h-11 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                <path d="M2 22s1-4 6-9 9-6 9-6s0 4-3 8-8 7-12 7z" fill="#e7e9ea"></path>
+                            </svg>
+                        </div>
+                        <div class="text-base font-semibold text-gray-900">Getting Started Guide</div>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its core features.</div>
+                    <div class="flex items-center justify-between">
+                        <a href="#" class="text-sm font-semibold text-orange-600 hover:text-orange-700">Learn more</a>
+                        <span class="text-xs font-semibold px-2 py-1 bg-green-50 text-green-700 rounded-full">Recommended</span>
+                    </div>
+                </div>
+
+                <!-- Managing Student -->
+                <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-11 h-11 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="#eef0f0"></path>
+                            </svg>
+                        </div>
+                        <div class="text-base font-semibold text-gray-900">Managing Student</div>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its core features.</div>
+                    <div class="flex items-center justify-between">
+                        <a href="#" class="text-sm font-semibold text-orange-600 hover:text-orange-700">Learn more</a>
+                    </div>
+                </div>
+
+                <!-- Test & Assignment tool -->
+                <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-11 h-11 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                <rect x="6" y="2" width="12" height="20" rx="2" fill="#f6f3f1"></rect>
+                            </svg>
+                        </div>
+                        <div class="text-base font-semibold text-gray-900">Test & Assignment tool</div>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its core features.</div>
+                    <div class="flex items-center justify-between">
+                        <a href="#" class="text-sm font-semibold text-orange-600 hover:text-orange-700">Learn more</a>
+                        <span class="text-xs font-semibold px-2 py-1 bg-yellow-50 text-yellow-700 rounded-full">Popular</span>
+                    </div>
+                </div>
+
+                <!-- Research Paper -->
+                <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-11 h-11 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                <path d="M11 2a9 9 0 1 0 7.07 3.93A9 9 0 0 0 11 2z" fill="#f3f3f3"></path>
+                            </svg>
+                        </div>
+                        <div class="text-base font-semibold text-gray-900">Research Paper</div>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its core features.</div>
+                    <div class="flex items-center justify-between">
+                        <a href="#" class="text-sm font-semibold text-orange-600 hover:text-orange-700">Learn more</a>
+                    </div>
+                </div>
+
+                <!-- AI Features -->
+                <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-11 h-11 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z" fill="#f3f3f3"></path>
+                            </svg>
+                        </div>
+                        <div class="text-base font-semibold text-gray-900">AI Features</div>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its core features.</div>
+                    <div class="flex items-center justify-between">
+                        <a href="#" class="text-sm font-semibold text-orange-600 hover:text-orange-700">Learn more</a>
+                    </div>
+                </div>
+
+                <!-- Project Management help -->
+                <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="w-11 h-11 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                <path d="M3 7h5l2 3h11v9H3z" fill="#f3f3f3"></path>
+                            </svg>
+                        </div>
+                        <div class="text-base font-semibold text-gray-900">Project Management help</div>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its core features.</div>
+                    <div class="flex items-center justify-between">
+                        <a href="#" class="text-sm font-semibold text-orange-600 hover:text-orange-700">Learn more</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat with Support Button -->
+            <div class="flex justify-end mt-6">
+                <div class="flex items-center gap-4 bg-white px-8 py-2 rounded-full border border-gray-200 cursor-pointer transition-all duration-200 hover:shadow-lg" style="box-shadow: 0px 4px 12px rgba(0,0,0,0.06), 0px 2px 40px rgba(0,0,0,0.12);">
+                    <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3f3a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <span class="text-base font-medium text-gray-900">Chat with Support</span>
+                </div>
+            </div>
+
+            <style>
+                @media (max-width: 1100px) {
+                    .grid {
+                        grid-template-columns: repeat(3, 1fr) !important;
+                    }
+                }
+
+                @media (max-width: 800px) {
+                    .grid {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+                }
+
+                @media (max-width: 500px) {
+                    .grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+            </style>
+        </div>
+    </main>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('sidebar-open');
+                overlay.classList.toggle('active');
+            }
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            sidebar.classList.remove('sidebar-open');
+            overlay.classList.remove('active');
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function () {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('sidebar-open');
+                overlay.classList.remove('active');
+            }
+        });
+        
+        // Tab switching functionality
+        function switchTab(clickedTab, tabType) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.style.background = 'rgba(255,255,255,0.4)';
+                tab.style.color = 'rgba(0,0,0,0.6)';
+                tab.style.border = '1px solid rgba(0,0,0,0.12)';
+                tab.style.fontWeight = '500';
+            });
+            
+            // Add active class to clicked tab
+            clickedTab.classList.add('active');
+            clickedTab.style.background = '#ffffff';
+            clickedTab.style.color = '#000000';
+            clickedTab.style.border = '1px solid transparent';
+            clickedTab.style.fontWeight = '600';
+        }
+    </script>
+</body>
+
+</html>
