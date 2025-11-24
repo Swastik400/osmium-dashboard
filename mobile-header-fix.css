@@ -1,0 +1,70 @@
+/* Mobile Header Fix */
+@media (max-width: 768px) {
+  .flex.items-center.justify-between.h-12.sm\:h-14.md\:h-16 {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 12px;
+    min-height: 48px;
+    height: auto;
+  }
+  
+  /* Left section adjustments */
+  .flex.items-center.space-x-2.sm\:space-x-3.md\:space-x-4.min-w-0.flex-1 {
+    flex: 1;
+    min-width: 0;
+    gap: 8px;
+  }
+  
+  /* Right section adjustments */
+  .flex.items-center.space-x-1.sm\:space-x-2.md\:space-x-3 {
+    flex-shrink: 0;
+    gap: 4px;
+  }
+  
+  /* Subject selector mobile */
+  .inline-flex.items-center.justify-between.px-2.sm\:px-3.py-1.sm\:py-1\.5 {
+    padding: 6px 8px;
+    min-width: 60px;
+    font-size: 11px;
+  }
+  
+  /* Action buttons mobile */
+  .inline-flex.items-center.px-2.sm\:px-3.md\:px-4.py-1\.5.sm\:py-2 {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  
+  /* Show reset button on mobile */
+  .hidden.md\:inline-flex {
+    display: inline-flex !important;
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+  
+  /* Paper title mobile */
+  .min-w-0.flex-1.hidden.md\:block {
+    display: block !important;
+    flex: 1;
+  }
+  
+  .text-sm.md\:text-base.lg\:text-lg {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Stack elements vertically on very small screens */
+  .flex.items-center.justify-between.h-12.sm\:h-14.md\:h-16 {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    height: auto;
+    padding: 12px;
+  }
+  
+  .flex.items-center.space-x-2.sm\:space-x-3.md\:space-x-4.min-w-0.flex-1,
+  .flex.items-center.space-x-1.sm\:space-x-2.md\:space-x-3 {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

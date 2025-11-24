@@ -7,7 +7,10 @@
     <title>Osmium - AI Mentor</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../shared-sidebar.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,13 +19,25 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #faf8f6;
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            background: #F8F8F6;
             color: #2e2e2e;
             display: flex;
         }
 
-        /* ============ SIDEBAR FROM TEACHER DASHBOARD ============ */
+
+
+        /* ============ MAIN CONTENT ============ */
+        .main-content {
+            margin-left: 280px;
+            width: calc(100% - 280px);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* AI Mentor Sidebar Styles */
         .sidebar {
             width: 280px;
             background-color: #faf8f6;
@@ -34,17 +49,51 @@
             overflow-y: auto;
             height: 100vh;
             position: fixed;
+            z-index: 50;
+            transition: transform 0.3s ease;
+            left: 0;
+            top: 0;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.sidebar-open {
+                transform: translateX(0);
+            }
+        }
+
+        /* Mobile overlay */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            display: none;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Main content responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
         }
 
         .sidebar-top {
             flex: 1;
         }
 
-        .logo {
-            width: 80%;
-            margin-bottom: 32px;
-            padding: 0 20px;
-        }
+
 
         .section-label {
             font-size: 11px;
@@ -175,6 +224,12 @@
             margin-bottom: 32px;
         }
 
+        .logo {
+            width: auto;
+            height: 40px;
+            margin-bottom: 0;
+        }
+
         .menu-btn {
             width: 32px;
             height: 32px;
@@ -193,28 +248,12 @@
             border-color: #d4cfc8;
         }
 
-        .logo {
-            width: 70%;
-            margin-bottom: 0;
-            padding: 0;
-        }
-
-        /* ============ MAIN CONTENT ============ */
-        .main-content {
-            margin-left: 280px;
-            width: calc(100% - 280px);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
         :root {
             --page-bg: #faf8f6;
             --text-main: #141414;
             --muted: #9b9790;
             --pill-bg: #f4f2ef;
-            --pill-border: rgba(0,0,0,0.04);
+            --pill-border: rgba(0, 0, 0, 0.04);
 
         }
 
@@ -251,7 +290,7 @@
             border-radius: 8px;
             background: #F3F1EE;
             border: 1px solid var(--pill-border);
-           
+
             cursor: pointer;
             font-size: 13px;
             font-weight: 500;
@@ -263,7 +302,7 @@
             transform: translateY(1px);
         }
 
-        
+
 
         .history-btn {
             width: 36px;
@@ -273,12 +312,12 @@
             place-items: center;
             background: #F3F1EE;
             border: 1px solid var(--pill-border);
-           
+
             cursor: pointer;
             transition: transform .12s ease, box-shadow .12s ease;
         }
 
-        
+
 
         .history-btn svg {
             width: 16px;
@@ -449,10 +488,14 @@
         }
 
         @keyframes typing {
-            0%, 60%, 100% {
+
+            0%,
+            60%,
+            100% {
                 transform: translateY(0);
                 opacity: 0.4;
             }
+
             30% {
                 transform: translateY(-10px);
                 opacity: 1;
@@ -587,7 +630,7 @@
 
         .user-name-highlight {
             color: #1a1a1a;
-            
+
         }
 
         .chat-input-container {
@@ -699,7 +742,7 @@
             font-family: 'Geist', sans-serif;
         }
 
-        
+
 
         .pill-pink {
             background: #F6ECE9;
@@ -718,70 +761,91 @@
 
         /* ============ RESPONSIVE ============ */
         @media (max-width: 768px) {
-            .mobile-menu-btn { display: block; }
-            .sidebar { transform: translateX(-100%); position: fixed; z-index: 1000; transition: transform 0.3s ease; }
-            .sidebar.open { transform: translateX(0); }
-            .main-content { margin-left: 0; width: 100%; }
-            .header-bar { padding: 16px 20px; }
-            .welcome-text { font-size: 28px; }
-            
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 1000;
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .header-bar {
+                padding: 16px 20px;
+            }
+
+            .welcome-text {
+                font-size: 28px;
+            }
+
             /* Mobile Input Area - ChatGPT Style */
             .chat-input-container {
                 padding: 12px 16px 20px 16px;
             }
-            
+
             .chat-input-wrapper {
                 padding: 12px 16px;
             }
-            
+
             .chat-input {
                 font-size: 16px;
                 margin-bottom: 12px;
             }
-            
+
             .input-actions {
                 gap: 8px;
             }
-            
+
             .input-action-btn {
                 padding: 6px 8px;
                 font-size: 12px;
                 min-width: 60px;
                 flex: 0 0 auto;
             }
-            
+
             .input-action-btn svg {
                 width: 16px;
                 height: 16px;
             }
-            
+
             .submit-btn {
                 width: 36px;
                 height: 36px;
                 flex-shrink: 0;
             }
-            
+
             .submit-btn svg {
                 width: 18px;
                 height: 18px;
             }
-            
+
             .suggestion-pills {
                 flex-direction: column;
                 gap: 12px;
                 padding: 0 16px;
             }
-            
+
             .pill {
                 width: 100%;
                 text-align: center;
                 padding: 16px 24px;
             }
-            
+
             .chat-area {
                 padding: 20px 16px;
             }
-            
+
             .chat-messages {
                 padding: 16px;
             }
@@ -791,63 +855,63 @@
             .header-bar {
                 padding: 12px 16px;
             }
-            
+
             .header-title {
                 font-size: 16px;
             }
-            
+
             .new-chat-btn {
                 padding: 8px 16px;
                 font-size: 14px;
             }
-            
+
             .new-chat-btn svg {
                 width: 14px;
                 height: 14px;
             }
-            
+
             .history-btn {
                 width: 40px;
                 height: 40px;
             }
-            
+
             .chat-input-container {
                 padding: 8px 12px 16px 12px;
             }
-            
+
             .chat-input-wrapper {
                 padding: 10px 14px;
             }
-            
+
             .input-action-btn {
                 padding: 4px 6px;
                 font-size: 11px;
                 min-width: 50px;
             }
-            
+
             .input-action-btn svg {
                 width: 14px;
                 height: 14px;
             }
-            
+
             .submit-btn {
                 width: 32px;
                 height: 32px;
             }
-            
+
             .submit-btn svg {
                 width: 16px;
                 height: 16px;
             }
-            
+
             .welcome-text {
                 font-size: 24px;
             }
-            
+
             .chat-area {
                 padding: 16px 12px;
             }
-            
+
             .history-panel {
                 width: 100vw;
             }
@@ -856,16 +920,17 @@
 </head>
 
 <body>
-    <!-- Sidebar Overlay -->
-    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
-    
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-top">
             <div class="logo-container">
-                <img src="../logos/logo.svg" alt="" class="logo">
+                <img src="./logos/logo.svg" alt="" class="logo">
                 <button type="button" class="menu-btn" onclick="toggleSidebar()" title="Toggle sidebar">
-                    <img src="../logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#292929" viewBox="0 0 256 256">
+                        <path
+                            d="M93.31,70,28,128l65.27,58a8,8,0,1,1-10.62,12l-72-64a8,8,0,0,1,0-12l72-64A8,8,0,1,1,93.31,70Zm152,52-72-64a8,8,0,0,0-10.62,12L228,128l-65.27,58a8,8,0,1,0,10.62,12l72-64a8,8,0,0,0,0-12Z">
+                        </path>
+                    </svg>
                 </button>
             </div>
 
@@ -873,43 +938,111 @@
                 <input type="text" class="search-input" placeholder="Search">
                 <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
                     <path
-                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+                    </path>
                 </svg>
                 <div class="search-shortcut">Ctrl + F</div>
             </div>
 
             <div class="section-label">General</div>
-            <a href="../teacher dashboard/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M120,56v48a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V56A16,16,0,0,1,56,40h48A16,16,0,0,1,120,56Zm80-16H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-96,96H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Z"/></svg> Dashboard</a>
-            <a href="../student management/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M164.47,195.63a8,8,0,0,1-6.7,12.37H10.23a8,8,0,0,1-6.7-12.37,95.83,95.83,0,0,1,47.22-37.71,60,60,0,1,1,66.5,0A95.83,95.83,0,0,1,164.47,195.63Zm87.91-.15a95.87,95.87,0,0,0-47.13-37.56A60,60,0,0,0,144.7,54.59a4,4,0,0,0-1.33,6A75.83,75.83,0,0,1,147,150.53a4,4,0,0,0,1.07,5.53,112.32,112.32,0,0,1,29.85,30.83,23.92,23.92,0,0,1,3.65,16.47,4,4,0,0,0,3.95,4.64h60.3a8,8,0,0,0,7.73-5.93A8.22,8.22,0,0,0,252.38,195.48Z"/></svg> Student Management</a>
-            <a href="../project management/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M240,56V200a8,8,0,0,1-8,8H160a24,24,0,0,0-24,23.94,7.9,7.9,0,0,1-5.12,7.55A8,8,0,0,1,120,232a24,24,0,0,0-24-24H24a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H88a32,32,0,0,1,32,32v87.73a8.17,8.17,0,0,0,7.47,8.25,8,8,0,0,0,8.53-8V80a32,32,0,0,1,32-32h64A8,8,0,0,1,240,56Z"/></svg> Project Management</a>
-            <a href="../research paper/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232,216a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H181.25A72,72,0,0,0,144,80.46V136a16,16,0,0,1-16,16H80a16,16,0,0,1-16-16V32A16,16,0,0,1,80,16h48a16,16,0,0,1,16,16V64.37A88.05,88.05,0,0,1,203.94,208H224A8,8,0,0,1,232,216Zm-96-32a8,8,0,0,0,0-16H72a8,8,0,0,0,0,16Z"/></svg> Research paper</a>
-            <a href="../exam and test/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M200,32H163.74a47.92,47.92,0,0,0-71.48,0H56A16,16,0,0,0,40,48V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm-72,0a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm32,128H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z"/></svg> Exam & Tests</a>
-            <div class="nav-item active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.34,40.65l24.71,7.27a16,16,0,0,0,19.87-19.86Zm-16.25,1.47L224,216l-27.76-8.17a8,8,0,0,0-6,.63,64.05,64.05,0,0,1-85.87-24.88A79.93,79.93,0,0,0,174.7,89.71a64,64,0,0,1,41.75,92.48A8,8,0,0,0,215.82,188.23Z"/></svg> AI Mentor</div>
-            <a href="../Study Materials/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M226.53,56.41l-96-32a8,8,0,0,0-5.06,0l-96,32A8,8,0,0,0,24,64v80a8,8,0,0,0,16,0V75.1L73.59,86.29a64,64,0,0,0,20.65,88.05c-18,7.06-33.56,19.83-44.94,37.29a8,8,0,1,0,13.4,8.74C77.77,197.25,101.57,184,128,184s50.23,13.25,65.3,36.37a8,8,0,0,0,13.4-8.74c-11.38-17.46-27-30.23-44.94-37.29a64,64,0,0,0,20.65-88l44.12-14.7a8,8,0,0,0,0-15.18ZM176,120A48,48,0,1,1,89.35,91.55l36.12,12a8,8,0,0,0,5.06,0l36.12-12A47.89,47.89,0,0,1,176,120Z"/></svg> Study Materials</a>
+            <a href="teacher dashboard.html" class="nav-item" data-page="dashboard">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M120,56v48a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V56A16,16,0,0,1,56,40h48A16,16,0,0,1,120,56Zm80-16H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-96,96H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Z" />
+                </svg>
+                Dashboard
+            </a>
+            <a href="student.html" class="nav-item" data-page="student">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M164.47,195.63a8,8,0,0,1-6.7,12.37H10.23a8,8,0,0,1-6.7-12.37,95.83,95.83,0,0,1,47.22-37.71,60,60,0,1,1,66.5,0A95.83,95.83,0,0,1,164.47,195.63Zm87.91-.15a95.87,95.87,0,0,0-47.13-37.56A60,60,0,0,0,144.7,54.59a4,4,0,0,0-1.33,6A75.83,75.83,0,0,1,147,150.53a4,4,0,0,0,1.07,5.53,112.32,112.32,0,0,1,29.85,30.83,23.92,23.92,0,0,1,3.65,16.47,4,4,0,0,0,3.95,4.64h60.3a8,8,0,0,0,7.73-5.93A8.22,8.22,0,0,0,252.38,195.48Z" />
+                </svg>
+                Student Management
+            </a>
+            <a href="copy.html" class="nav-item" data-page="project">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M240,56V200a8,8,0,0,1-8,8H160a24,24,0,0,0-24,23.94,7.9,7.9,0,0,1-5.12,7.55A8,8,0,0,1,120,232a24,24,0,0,0-24-24H24a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H88a32,32,0,0,1,32,32v87.73a8.17,8.17,0,0,0,7.47,8.25,8,8,0,0,0,8.53-8V80a32,32,0,0,1,32-32h64A8,8,0,0,1,240,56Z" />
+                </svg>
+                Project Management
+            </a>
+            <a href="exam & test.html" class="nav-item" data-page="exam">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M200,32H163.74a47.92,47.92,0,0,0-71.48,0H56A16,16,0,0,0,40,48V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm-72,0a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm32,128H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z" />
+                </svg>
+                Exam & Tests
+            </a>
+            <a href="ai mentor.html" class="nav-item active" data-page="ai-mentor">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.34,40.65l24.71,7.27a16,16,0,0,0,19.87-19.86Zm-16.25,1.47L224,216l-27.76-8.17a8,8,0,0,0-6,.63,64.05,64.05,0,0,1-85.87-24.88A79.93,79.93,0,0,0,174.7,89.71a64,64,0,0,1,41.75,92.48A8,8,0,0,0,215.82,188.23Z" />
+                </svg>
+                AI Mentor
+            </a>
+            <a href="test analytics.html" class="nav-item" data-page="study">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M226.53,56.41l-96-32a8,8,0,0,0-5.06,0l-96,32A8,8,0,0,0,24,64v80a8,8,0,0,0,16,0V75.1L73.59,86.29a64,64,0,0,0,20.65,88.05c-18,7.06-33.56,19.83-44.94,37.29a8,8,0,1,0,13.4,8.74C77.77,197.25,101.57,184,128,184s50.23,13.25,65.3,36.37a8,8,0,0,0,13.4-8.74c-11.38-17.46-27-30.23-44.94-37.29a64,64,0,0,0,20.65-88l44.12-14.7a8,8,0,0,0,0-15.18ZM176,120A48,48,0,1,1,89.35,91.55l36.12,12a8,8,0,0,0,5.06,0l36.12-12A47.89,47.89,0,0,1,176,120Z" />
+                </svg>
+                Analytics 
+            </a>
 
             <div class="section-label">Support</div>
-            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg> Notification</div>
-            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232,128v80a40,40,0,0,1-40,40H136a8,8,0,0,1,0-16h56a24,24,0,0,0,24-24H192a24,24,0,0,1-24-24V144a24,24,0,0,1,24-24h23.65A88,88,0,0,0,66,65.54A87.29,87.29,0,0,0,40.36,120H64a24,24,0,0,1,24,24v40a24,24,0,0,1-24,24H48a24,24,0,0,1-24-24V128A104.11,104.11,0,0,1,201.89,54.66A103.41,103.41,0,0,1,232,128Z"/></svg> Help & Support</div>
+            <div class="nav-item" data-page="notification">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z" />
+                </svg>
+                Notification
+            </div>
+            <a href="./help.html" class="nav-item" data-page="help">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M232,128v80a40,40,0,0,1-40,40H136a8,8,0,0,1,0-16h56a24,24,0,0,0,24-24H192a24,24,0,0,1-24-24V144a24,24,0,0,1,24-24h23.65A88,88,0,0,0,66,65.54A87.29,87.29,0,0,0,40.36,120H64a24,24,0,0,1,24,24v40a24,24,0,0,1-24,24H48a24,24,0,0,1-24-24V128A104.11,104.11,0,0,1,201.89,54.66A103.41,103.41,0,0,1,232,128Z" />
+                </svg>
+                Help & Support
+            </a>
         </div>
 
         <div class="sidebar-bottom">
             <div class="user-profile">
-                <img src="../logos/female avatar.svg" alt="">
+                <img src="./logos/female avatar.svg" alt="">
                 <div class="user-details">
                     <div class="user-name">Suman</div>
-                    <div class="user-plan">Free Plan</div>
+                    <div class="user-plan"> </div>
                 </div>
-                <div class="settings-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#abaaaa" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm109.94-52.79a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A112.1,112.1,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.62a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21Zm-15,34.91-28.57,16.25a8,8,0,0,0-3,3c-.58,1-1.19,2.06-1.81,3.06a7.94,7.94,0,0,0-1.22,4.21l-.15,32.25a95.89,95.89,0,0,1-25.37,14.3L134,199.13a8,8,0,0,0-3.91-1h-.19c-1.21,0-2.43,0-3.64,0a8.08,8.08,0,0,0-4.1,1l-28.84,16.1A96,96,0,0,1,67.88,201l-.11-32.2a8,8,0,0,0-1.22-4.22c-.62-1-1.23-2-1.8-3.06a8.09,8.09,0,0,0-3-3.06l-28.6-16.29a90.49,90.49,0,0,1,0-28.26L61.67,97.63a8,8,0,0,0,3-3c.58-1,1.19-2.06,1.81-3.06a7.94,7.94,0,0,0,1.22-4.21l.15-32.25a95.89,95.89,0,0,1,25.37-14.3L122,56.87a8,8,0,0,0,4.1,1c1.21,0,2.43,0,3.64,0a8.08,8.08,0,0,0,4.1-1l28.84-16.1A96,96,0,0,1,188.12,55l.11,32.2a8,8,0,0,0,1.22,4.22c.62,1,1.23,2,1.8,3.06a8.09,8.09,0,0,0,3,3.06l28.6,16.29A90.49,90.49,0,0,1,222.9,142.12Z"></path></svg> </div>
+                <div class="settings-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#abaaaa"
+                        viewBox="0 0 256 256">
+                        <path
+                            d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm109.94-52.79a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A112.1,112.1,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.62a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21Zm-15,34.91-28.57,16.25a8,8,0,0,0-3,3c-.58,1-1.19,2.06-1.81,3.06a7.94,7.94,0,0,0-1.22,4.21l-.15,32.25a95.89,95.89,0,0,1-25.37,14.3L134,199.13a8,8,0,0,0-3.91-1h-.19c-1.21,0-2.43,0-3.64,0a8.08,8.08,0,0,0-4.1,1l-28.84,16.1A96,96,0,0,1,67.88,201l-.11-32.2a8,8,0,0,0-1.22-4.22c-.62-1-1.23-2-1.8-3.06a8.09,8.09,0,0,0-3-3.06l-28.6-16.29a90.49,90.49,0,0,1,0-28.26L61.67,97.63a8,8,0,0,0,3-3c.58-1,1.19-2.06,1.81-3.06a7.94,7.94,0,0,0,1.22-4.21l.15-32.25a95.89,95.89,0,0,1,25.37-14.3L122,56.87a8,8,0,0,0,4.1,1c1.21,0,2.43,0,3.64,0a8.08,8.08,0,0,0,4.1-1l28.84-16.1A96,96,0,0,1,188.12,55l.11,32.2a8,8,0,0,0,1.22,4.22c.62,1,1.23,2,1.8,3.06a8.09,8.09,0,0,0,3,3.06l28.6,16.29A90.49,90.49,0,0,1,222.9,142.12Z">
+                        </path>
+                    </svg> </div>
             </div>
         </div>
     </div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
     <!-- Main Content -->
     <main class="main-content">
         <div class="header-bar">
             <div class="header-left">
                 <button type="button" class="mobile-menu-btn" onclick="toggleSidebar()" title="Open menu">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#292929" viewBox="0 0 256 256"><path d="M93.31,70,28,128l65.27,58a8,8,0,1,1-10.62,12l-72-64a8,8,0,0,1,0-12l72-64A8,8,0,1,1,93.31,70Zm152,52-72-64a8,8,0,0,0-10.62,12L228,128l-65.27,58a8,8,0,1,0,10.62,12l72-64a8,8,0,0,0,0-12Z"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#292929" viewBox="0 0 256 256">
+                        <path
+                            d="M93.31,70,28,128l65.27,58a8,8,0,1,1-10.62,12l-72-64a8,8,0,0,1,0-12l72-64A8,8,0,1,1,93.31,70Zm152,52-72-64a8,8,0,0,0-10.62,12L228,128l-65.27,58a8,8,0,1,0,10.62,12l72-64a8,8,0,0,0,0-12Z">
+                        </path>
+                    </svg>
                 </button>
                 <div class="header-title">AI Mentor</div>
             </div>
@@ -917,12 +1050,14 @@
             <div class="header-actions">
                 <button class="new-chat-btn" type="button" aria-label="Start new chat">
                     <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 5v14M5 12h14" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <path d="M12 5v14M5 12h14" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" fill="none" />
                     </svg>
                     New Chat
                 </button>
 
-                <button class="history-btn" type="button" title="Chat history" aria-label="Open chat history" onclick="showHistory()">
+                <button class="history-btn" type="button" title="Chat history" aria-label="Open chat history"
+                    onclick="showHistory()">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 6 12 12 16 14"></polyline>
@@ -938,9 +1073,13 @@
                     <h1 class="welcome-text">Welcome back, <span class="user-name-highlight">Suman</span></h1>
                 </div>
                 <div class="suggestion-pills" id="suggestionPills">
-                    <button class="pill pill-pink" onclick="sendSuggestion('Review my weak areas in recent tests')">Review you weak areas</button>
-                    <button class="pill pill-green" onclick="sendSuggestion('Help me with challenging topics review')">Challenging topics review</button>
-                    <button class="pill pill-blue" onclick="sendSuggestion('Generate quiz on kinematics')">Generate quiz on kinematics</button>
+                    <button class="pill pill-pink"
+                        onclick="sendSuggestion('Review my weak areas in recent tests')">Review you weak areas</button>
+                    <button class="pill pill-green"
+                        onclick="sendSuggestion('Help me with challenging topics review')">Challenging topics
+                        review</button>
+                    <button class="pill pill-blue" onclick="sendSuggestion('Generate quiz on kinematics')">Generate quiz
+                        on kinematics</button>
                 </div>
             </div>
 
@@ -975,7 +1114,13 @@
                             Quiz
                         </button>
                         <button class="submit-btn" onclick="sendMessage()">
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" ><rect width="256" height="256" fill="none"/><line x1="128" y1="216" x2="128" y2="40" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><polyline points="56 112 128 40 200 112" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20">
+                                <rect width="256" height="256" fill="none" />
+                                <line x1="128" y1="216" x2="128" y2="40" fill="none" stroke="white"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+                                <polyline points="56 112 128 40 200 112" fill="none" stroke="white"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+                            </svg>
                         </button>
                     </div>
                 </div>
@@ -1002,18 +1147,33 @@
 
     <script>
         function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            const mobileBtn = document.querySelector('.mobile-menu-btn');
-            sidebar.classList.toggle('open');
-            
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
             if (window.innerWidth <= 768) {
-                if (sidebar.classList.contains('open')) {
-                    mobileBtn.style.display = 'none';
-                } else {
-                    mobileBtn.style.display = 'block';
-                }
+                sidebar.classList.toggle('sidebar-open');
+                overlay.classList.toggle('active');
             }
         }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            sidebar.classList.remove('sidebar-open');
+            overlay.classList.remove('active');
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function () {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('sidebar-open');
+                overlay.classList.remove('active');
+            }
+        });
 
         // AI Responses Database
         const aiResponses = {
@@ -1028,7 +1188,7 @@
                 "Quiz time! I can create multiple choice, short answer, or problem-solving questions. What type would you prefer and on which topic?"
             ],
             study: [
-                "I can help you create effective study materials! Would you like me to:\n\n• Summarize key concepts\n• Create flashcards\n• Make mind maps\n• Suggest study schedules\n\nWhat subject are you focusing on?",
+                "I can help you create effective Analtics ! Would you like me to:\n\n• Summarize key concepts\n• Create flashcards\n• Make mind maps\n• Suggest study schedules\n\nWhat subject are you focusing on?",
                 "Let's make studying more effective! I can help you break down complex topics, create practice problems, or suggest study techniques. What's your current challenge?",
                 "Study smart, not hard! I can assist with note-taking strategies, concept explanations, or practice questions. What would be most helpful right now?"
             ],
@@ -1059,14 +1219,14 @@
                     timestamp: new Date().toISOString(),
                     preview: currentChatMessages[0]?.content?.substring(0, 50) + '...' || 'Empty chat'
                 };
-                
+
                 const existingIndex = chatHistory.findIndex(chat => chat.id === chatSession.id);
                 if (existingIndex >= 0) {
                     chatHistory[existingIndex] = chatSession;
                 } else {
                     chatHistory.unshift(chatSession);
                 }
-                
+
                 // Keep only last 10 chats
                 chatHistory = chatHistory.slice(0, 10);
                 localStorage.setItem('aiMentorHistory', JSON.stringify(chatHistory));
@@ -1085,7 +1245,7 @@
             if (chat) {
                 currentChatId = chatId;
                 currentChatMessages = [...chat.messages];
-                
+
                 // Clear current chat display
                 const messagesContainer = document.getElementById('messagesContainer');
                 messagesContainer.innerHTML = `
@@ -1098,23 +1258,23 @@
                         </div>
                     </div>
                 `;
-                
+
                 // Show chat and hide welcome
                 document.getElementById('welcomeArea').style.display = 'none';
                 document.getElementById('chatMessages').style.display = 'flex';
-                
+
                 // Restore messages
                 chat.messages.forEach(msg => {
                     addMessageToDisplay(msg.content, msg.isUser);
                 });
-                
+
                 closeHistory();
             }
         }
 
         function showHistory() {
             const historyList = document.getElementById('historyList');
-            
+
             if (chatHistory.length === 0) {
                 historyList.innerHTML = '<div class="no-history">No chat history yet. Start a conversation to see it here!</div>';
             } else {
@@ -1126,7 +1286,7 @@
                     </div>
                 `).join('');
             }
-            
+
             document.getElementById('historyPanel').classList.add('open');
             document.getElementById('historyOverlay').classList.add('open');
         }
@@ -1143,7 +1303,7 @@
             const diffMins = Math.floor(diffMs / 60000);
             const diffHours = Math.floor(diffMs / 3600000);
             const diffDays = Math.floor(diffMs / 86400000);
-            
+
             if (diffMins < 1) return 'Just now';
             if (diffMins < 60) return `${diffMins}m ago`;
             if (diffHours < 24) return `${diffHours}h ago`;
@@ -1153,7 +1313,7 @@
 
         function getAIResponse(message) {
             const lowerMessage = message.toLowerCase();
-            
+
             if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
                 return aiResponses.greetings[Math.floor(Math.random() * aiResponses.greetings.length)];
             } else if (lowerMessage.includes('quiz') || lowerMessage.includes('test') || lowerMessage.includes('question')) {
@@ -1170,9 +1330,9 @@
         function addMessage(content, isUser = false) {
             // Add to current chat messages for history
             currentChatMessages.push({ content, isUser, timestamp: new Date().toISOString() });
-            
+
             addMessageToDisplay(content, isUser);
-            
+
             // Save to history after each message
             saveChatHistory();
         }
@@ -1181,21 +1341,21 @@
             const chatMessages = document.getElementById('chatMessages');
             const welcomeArea = document.getElementById('welcomeArea');
             const messagesContainer = document.getElementById('messagesContainer');
-            
+
             // Hide welcome section and show chat on first message
             if (chatMessages.style.display === 'none') {
                 welcomeArea.style.display = 'none';
                 chatMessages.style.display = 'flex';
             }
-            
+
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
-            
+
             messageDiv.innerHTML = `
                 <div class="message-avatar">${isUser ? 'S' : 'AI'}</div>
                 <div class="message-content">${content.replace(/\n/g, '<br>')}</div>
             `;
-            
+
             messagesContainer.insertBefore(messageDiv, document.getElementById('typingIndicator'));
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -1212,13 +1372,13 @@
         function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
-            
+
             if (message) {
                 addMessage(message, true);
                 input.value = '';
-                
+
                 showTyping();
-                
+
                 setTimeout(() => {
                     hideTyping();
                     const response = getAIResponse(message);
@@ -1229,9 +1389,9 @@
 
         function sendSuggestion(message) {
             addMessage(message, true);
-            
+
             showTyping();
-            
+
             setTimeout(() => {
                 hideTyping();
                 const response = getAIResponse(message);
@@ -1246,21 +1406,21 @@
         }
 
         // Enter key support
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+        document.getElementById('chatInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         });
 
         // New Chat functionality
-        document.querySelector('.new-chat-btn').addEventListener('click', function() {
+        document.querySelector('.new-chat-btn').addEventListener('click', function () {
             // Save current chat before starting new one
             saveChatHistory();
-            
+
             // Reset for new chat
             currentChatId = null;
             currentChatMessages = [];
-            
+
             document.getElementById('messagesContainer').innerHTML = `
                 <div class="typing-indicator" id="typingIndicator">
                     <div class="message-avatar">AI</div>
@@ -1277,16 +1437,15 @@
         });
 
         // Close panel when clicking overlay
-        document.getElementById('historyOverlay').addEventListener('click', function() {
+        document.getElementById('historyOverlay').addEventListener('click', function () {
             closeHistory();
         });
 
         // Save chat when page unloads
-        window.addEventListener('beforeunload', function() {
+        window.addEventListener('beforeunload', function () {
             saveChatHistory();
         });
     </script>
-    <script src="../shared-sidebar.js"></script>
 </body>
 
 </html>

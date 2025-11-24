@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Osmium - Study Materials</title>
+    <title>Osmium - Analtics </title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -269,7 +270,8 @@
             gap: 16px;
         }
 
-        .score-card, .accuracy-card {
+        .score-card,
+        .accuracy-card {
             border-radius: 12px;
             padding: 20px;
         }
@@ -446,7 +448,7 @@
             transition: all 0.2s ease;
         }
 
-        
+
 
         .tab.active {
             background: #ffffff;
@@ -860,6 +862,7 @@
             padding: 32px;
             width: 100%;
         }
+
         .score-card1 {
             background: #F1F4E9;
             border-radius: 16px;
@@ -1041,13 +1044,16 @@
             .content-wrapper {
                 flex-direction: column;
             }
+
             .test-summary-container {
                 order: 1;
             }
+
             .right-panel {
                 width: 100%;
                 order: 2;
             }
+
             .analysis-section {
                 order: 3;
             }
@@ -1057,9 +1063,11 @@
             .test-summary-container {
                 order: 1;
             }
+
             .right-panel {
                 order: 2;
             }
+
             .analysis-section {
                 order: 3;
             }
@@ -1069,109 +1077,109 @@
             .mobile-menu-btn {
                 display: block;
             }
-            
+
             .sidebar {
                 position: fixed;
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
                 z-index: 1000;
             }
-            
+
             .sidebar.open {
                 transform: translateX(0);
             }
-            
+
             .main-content {
                 margin-left: 0;
                 width: 100%;
                 padding: 16px;
             }
-            
+
             .menu-btn {
                 display: block;
             }
-            
+
             .content-wrapper {
                 flex-direction: column;
             }
-            
+
             .test-summary-container {
                 order: 1;
                 padding: 20px;
             }
-            
+
             .right-panel {
                 order: 2;
                 width: 100%;
             }
-            
+
             .analysis-section {
                 order: 3;
             }
-            
+
             .summary-cards {
                 grid-template-columns: 1fr;
                 gap: 16px;
             }
-            
+
             .summary-header {
                 flex-direction: column;
                 gap: 16px;
             }
-            
+
             .analysis-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 16px;
             }
-            
+
             .subject-buttons {
                 width: 100%;
                 justify-content: space-between;
             }
-            
+
             .subject-btn {
                 flex: 1;
                 text-align: center;
             }
-            
+
             .score-value {
                 font-size: 36px;
             }
-            
+
             .accuracy-value {
                 font-size: 28px;
             }
-            
+
             .accuracy-content {
                 flex-direction: column;
                 gap: 12px;
             }
-            
+
             .accuracy-stats {
                 width: 100%;
             }
-            
+
             .score-card {
                 padding: 20px;
             }
-            
+
             .chart-container {
                 width: 220px;
                 height: 220px;
             }
-            
+
             .stats-table th,
             .stats-table td {
                 font-size: 12px;
                 padding: 8px 4px;
             }
-            
+
             .subject-tabs {
                 width: 100%;
                 justify-content: space-between;
             }
-            
+
             .tab {
                 flex: 1;
                 text-align: center;
@@ -1181,6 +1189,7 @@
         }
     </style>
 </head>
+
 <body>
 
 
@@ -1188,9 +1197,9 @@
     <div class="sidebar">
         <div class="sidebar-top">
             <div class="logo-container">
-                <img src="../logos/logo.svg" alt="" class="logo">
+                <img src="./logos/logo.svg" alt="" class="logo">
                 <button type="button" class="menu-btn" onclick="toggleSidebar()" title="Toggle sidebar">
-                    <img src="../logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+                    <img src="./logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
                 </button>
             </div>
 
@@ -1204,27 +1213,72 @@
             </div>
 
             <div class="section-label">General</div>
-            <a href="../teacher dashboard/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M120,56v48a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V56A16,16,0,0,1,56,40h48A16,16,0,0,1,120,56Zm80-16H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-96,96H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Z"/></svg> Dashboard</a>
-            <a href="../student management/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M164.47,195.63a8,8,0,0,1-6.7,12.37H10.23a8,8,0,0,1-6.7-12.37,95.83,95.83,0,0,1,47.22-37.71,60,60,0,1,1,66.5,0A95.83,95.83,0,0,1,164.47,195.63Zm87.91-.15a95.87,95.87,0,0,0-47.13-37.56A60,60,0,0,0,144.7,54.59a4,4,0,0,0-1.33,6A75.83,75.83,0,0,1,147,150.53a4,4,0,0,0,1.07,5.53,112.32,112.32,0,0,1,29.85,30.83,23.92,23.92,0,0,1,3.65,16.47,4,4,0,0,0,3.95,4.64h60.3a8,8,0,0,0,7.73-5.93A8.22,8.22,0,0,0,252.38,195.48Z"/></svg> Student Management</a>
-            <a href="../project management/index.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M240,56V200a8,8,0,0,1-8,8H160a24,24,0,0,0-24,23.94,7.9,7.9,0,0,1-5.12,7.55A8,8,0,0,1,120,232a24,24,0,0,0-24-24H24a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H88a32,32,0,0,1,32,32v87.73a8.17,8.17,0,0,0,7.47,8.25,8,8,0,0,0,8.53-8V80a32,32,0,0,1,32-32h64A8,8,0,0,1,240,56Z"/></svg> Project Management</a>
-            <a href="../research paper/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232,216a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H181.25A72,72,0,0,0,144,80.46V136a16,16,0,0,1-16,16H80a16,16,0,0,1-16-16V32A16,16,0,0,1,80,16h48a16,16,0,0,1,16,16V64.37A88.05,88.05,0,0,1,203.94,208H224A8,8,0,0,1,232,216Zm-96-32a8,8,0,0,0,0-16H72a8,8,0,0,0,0,16Z"/></svg> Research paper</a>
-            <a href="../exam and test/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M200,32H163.74a47.92,47.92,0,0,0-71.48,0H56A16,16,0,0,0,40,48V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm-72,0a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm32,128H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z"/></svg> Exam & Tests</a>
-            <a href="../AI mentor/index.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.34,40.65l24.71,7.27a16,16,0,0,0,19.87-19.86Zm-16.25,1.47L224,216l-27.76-8.17a8,8,0,0,0-6,.63,64.05,64.05,0,0,1-85.87-24.88A79.93,79.93,0,0,0,174.7,89.71a64,64,0,0,1,41.75,92.48A8,8,0,0,0,215.82,188.23Z"/></svg>AI Mentor</a>
-            <div class="nav-item active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"  width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M226.53,56.41l-96-32a8,8,0,0,0-5.06,0l-96,32A8,8,0,0,0,24,64v80a8,8,0,0,0,16,0V75.1L73.59,86.29a64,64,0,0,0,20.65,88.05c-18,7.06-33.56,19.83-44.94,37.29a8,8,0,1,0,13.4,8.74C77.77,197.25,101.57,184,128,184s50.23,13.25,65.3,36.37a8,8,0,0,0,13.4-8.74c-11.38-17.46-27-30.23-44.94-37.29a64,64,0,0,0,20.65-88l44.12-14.7a8,8,0,0,0,0-15.18ZM176,120A48,48,0,1,1,89.35,91.55l36.12,12a8,8,0,0,0,5.06,0l36.12-12A47.89,47.89,0,0,1,176,120Z"/></svg> Study Materials</div>
+            <a href="teacher dashboard.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M120,56v48a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V56A16,16,0,0,1,56,40h48A16,16,0,0,1,120,56Zm80-16H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-96,96H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Z" />
+                </svg> Dashboard</a>
+            <a href="student.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M164.47,195.63a8,8,0,0,1-6.7,12.37H10.23a8,8,0,0,1-6.7-12.37,95.83,95.83,0,0,1,47.22-37.71,60,60,0,1,1,66.5,0A95.83,95.83,0,0,1,164.47,195.63Zm87.91-.15a95.87,95.87,0,0,0-47.13-37.56A60,60,0,0,0,144.7,54.59a4,4,0,0,0-1.33,6A75.83,75.83,0,0,1,147,150.53a4,4,0,0,0,1.07,5.53,112.32,112.32,0,0,1,29.85,30.83,23.92,23.92,0,0,1,3.65,16.47,4,4,0,0,0,3.95,4.64h60.3a8,8,0,0,0,7.73-5.93A8.22,8.22,0,0,0,252.38,195.48Z" />
+                </svg> Student Management</a>
+            <a href="copy.html" class="nav-item"> <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M240,56V200a8,8,0,0,1-8,8H160a24,24,0,0,0-24,23.94,7.9,7.9,0,0,1-5.12,7.55A8,8,0,0,1,120,232a24,24,0,0,0-24-24H24a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H88a32,32,0,0,1,32,32v87.73a8.17,8.17,0,0,0,7.47,8.25,8,8,0,0,0,8.53-8V80a32,32,0,0,1,32-32h64A8,8,0,0,1,240,56Z" />
+                </svg> Project Management</a>
+            
+            <a href="exam & test.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M200,32H163.74a47.92,47.92,0,0,0-71.48,0H56A16,16,0,0,0,40,48V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm-72,0a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm32,128H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z" />
+                </svg> Exam & Tests</a>
+            <a href="ai mentor.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M232.07,186.76a80,80,0,0,0-62.5-114.17A80,80,0,1,0,23.93,138.76l-7.27,24.71a16,16,0,0,0,19.87,19.87l24.71-7.27a80.39,80.39,0,0,0,25.18,7.35,80,80,0,0,0,108.34,40.65l24.71,7.27a16,16,0,0,0,19.87-19.86Zm-16.25,1.47L224,216l-27.76-8.17a8,8,0,0,0-6,.63,64.05,64.05,0,0,1-85.87-24.88A79.93,79.93,0,0,0,174.7,89.71a64,64,0,0,1,41.75,92.48A8,8,0,0,0,215.82,188.23Z" />
+                </svg>AI Mentor</a>
+            <div class="nav-item active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20"
+                    height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M226.53,56.41l-96-32a8,8,0,0,0-5.06,0l-96,32A8,8,0,0,0,24,64v80a8,8,0,0,0,16,0V75.1L73.59,86.29a64,64,0,0,0,20.65,88.05c-18,7.06-33.56,19.83-44.94,37.29a8,8,0,1,0,13.4,8.74C77.77,197.25,101.57,184,128,184s50.23,13.25,65.3,36.37a8,8,0,0,0,13.4-8.74c-11.38-17.46-27-30.23-44.94-37.29a64,64,0,0,0,20.65-88l44.12-14.7a8,8,0,0,0,0-15.18ZM176,120A48,48,0,1,1,89.35,91.55l36.12,12a8,8,0,0,0,5.06,0l36.12-12A47.89,47.89,0,0,1,176,120Z" />
+                </svg> Analytics </div>
 
             <div class="section-label">Support</div>
-            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z"/></svg> Notification</div>
-            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20"><rect width="256" height="256" fill="none"/><path d="M232,128v80a40,40,0,0,1-40,40H136a8,8,0,0,1,0-16h56a24,24,0,0,0,24-24H192a24,24,0,0,1-24-24V144a24,24,0,0,1,24-24h23.65A88,88,0,0,0,66,65.54A87.29,87.29,0,0,0,40.36,120H64a24,24,0,0,1,24,24v40a24,24,0,0,1-24,24H48a24,24,0,0,1-24-24V128A104.11,104.11,0,0,1,201.89,54.66A103.41,103.41,0,0,1,232,128Z"/></svg> Help & Support</div>
+            <div class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
+                    <rect width="256" height="256" fill="none" />
+                    <path
+                        d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216Z" />
+                </svg> Notification</div>
+            <a href="help.html" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"
+                    width="20" height="20">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path
+                        d="M232,128v80a40,40,0,0,1-40,40H136a8,8,0,0,1,0-16h56a24,24,0,0,0,24-24H192a24,24,0,0,1-24-24V144a24,24,0,0,1,24-24h23.65A88,88,0,0,0,66,65.54A87.29,87.29,0,0,0,40.36,120H64a24,24,0,0,1,24,24v40a24,24,0,0,1-24,24H48a24,24,0,0,1-24-24V128A104.11,104.11,0,0,1,201.89,54.66A103.41,103.41,0,0,1,232,128Z">
+                    </path>
+                </svg> Help & Support</a>
         </div>
 
         <div class="sidebar-bottom">
             <div class="user-profile">
-                <img src="../logos/female avatar.svg" alt="">
+                <img src="./logos/female avatar.svg" alt="">
                 <div class="user-details">
                     <div class="user-name">Suman</div>
-                    <div class="user-plan">Free Plan</div>
+                    <div class="user-plan"> </div>
                 </div>
-                <div class="settings-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#abaaaa" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm109.94-52.79a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A112.1,112.1,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.62a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21Zm-15,34.91-28.57,16.25a8,8,0,0,0-3,3c-.58,1-1.19,2.06-1.81,3.06a7.94,7.94,0,0,0-1.22,4.21l-.15,32.25a95.89,95.89,0,0,1-25.37,14.3L134,199.13a8,8,0,0,0-3.91-1h-.19c-1.21,0-2.43,0-3.64,0a8.08,8.08,0,0,0-4.1,1l-28.84,16.1A96,96,0,0,1,67.88,201l-.11-32.2a8,8,0,0,0-1.22-4.22c-.62-1-1.23-2-1.8-3.06a8.09,8.09,0,0,0-3-3.06l-28.6-16.29a90.49,90.49,0,0,1,0-28.26L61.67,97.63a8,8,0,0,0,3-3c.58-1,1.19-2.06,1.81-3.06a7.94,7.94,0,0,0,1.22-4.21l.15-32.25a95.89,95.89,0,0,1,25.37-14.3L122,56.87a8,8,0,0,0,4.1,1c1.21,0,2.43,0,3.64,0a8.08,8.08,0,0,0,4.1-1l28.84-16.1A96,96,0,0,1,188.12,55l.11,32.2a8,8,0,0,0,1.22,4.22c.62,1,1.23,2,1.8,3.06a8.09,8.09,0,0,0,3,3.06l28.6,16.29A90.49,90.49,0,0,1,222.9,142.12Z"></path></svg> </div>
+                <div class="settings-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#abaaaa"
+                        viewBox="0 0 256 256">
+                        <path
+                            d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm109.94-52.79a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A112.1,112.1,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.62a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21Zm-15,34.91-28.57,16.25a8,8,0,0,0-3,3c-.58,1-1.19,2.06-1.81,3.06a7.94,7.94,0,0,0-1.22,4.21l-.15,32.25a95.89,95.89,0,0,1-25.37,14.3L134,199.13a8,8,0,0,0-3.91-1h-.19c-1.21,0-2.43,0-3.64,0a8.08,8.08,0,0,0-4.1,1l-28.84,16.1A96,96,0,0,1,67.88,201l-.11-32.2a8,8,0,0,0-1.22-4.22c-.62-1-1.23-2-1.8-3.06a8.09,8.09,0,0,0-3-3.06l-28.6-16.29a90.49,90.49,0,0,1,0-28.26L61.67,97.63a8,8,0,0,0,3-3c.58-1,1.19-2.06,1.81-3.06a7.94,7.94,0,0,0,1.22-4.21l.15-32.25a95.89,95.89,0,0,1,25.37-14.3L122,56.87a8,8,0,0,0,4.1,1c1.21,0,2.43,0,3.64,0a8.08,8.08,0,0,0,4.1-1l28.84-16.1A96,96,0,0,1,188.12,55l.11,32.2a8,8,0,0,0,1.22,4.22c.62,1,1.23,2,1.8,3.06a8.09,8.09,0,0,0,3,3.06l28.6,16.29A90.49,90.49,0,0,1,222.9,142.12Z">
+                        </path>
+                    </svg> </div>
             </div>
         </div>
     </div>
@@ -1232,12 +1286,36 @@
     <!-- Main Content -->
     <main class="main-content">
         <button type="button" class="mobile-menu-btn" onclick="toggleSidebar()" title="Open menu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#292929" viewBox="0 0 256 256"><path d="M93.31,70,28,128l65.27,58a8,8,0,1,1-10.62,12l-72-64a8,8,0,0,1,0-12l72-64A8,8,0,1,1,93.31,70Zm152,52-72-64a8,8,0,0,0-10.62,12L228,128l-65.27,58a8,8,0,1,0,10.62,12l72-64a8,8,0,0,0,0-12Z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#292929" viewBox="0 0 256 256">
+                <path
+                    d="M93.31,70,28,128l65.27,58a8,8,0,1,1-10.62,12l-72-64a8,8,0,0,1,0-12l72-64A8,8,0,1,1,93.31,70Zm152,52-72-64a8,8,0,0,0-10.62,12L228,128l-65.27,58a8,8,0,1,0,10.62,12l72-64a8,8,0,0,0,0-12Z">
+                </path>
+            </svg>
         </button>
-        
+
         <!-- Breadcrumb Navigation -->
         <div class="breadcrumb">
-            <span>Exam &amp; Test <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg> B.Tech - Sem 4 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg> Varun Kumar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg> Python Advanced Test <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg> Result</span>
+            <span>Exam &amp; Test <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa"
+                    viewBox="0 0 256 256">
+                    <path
+                        d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
+                    </path>
+                </svg> B.Tech - Sem 4 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa"
+                    viewBox="0 0 256 256">
+                    <path
+                        d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
+                    </path>
+                </svg> Varun Kumar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa"
+                    viewBox="0 0 256 256">
+                    <path
+                        d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
+                    </path>
+                </svg> Python Advanced Test <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="#aaaaaa" viewBox="0 0 256 256">
+                    <path
+                        d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
+                    </path>
+                </svg> Result</span>
         </div>
         <div class="content-wrapper">
             <!-- Left Content -->
@@ -1297,14 +1375,14 @@
                             <h3>Detailed Question Analysis</h3>
                             <p>Detailed Analytics of Your Performance</p>
                         </div>
-                       <div class="subject-tabs">
-                        <button class="tab active" data-subject="physics">Physics</button>
-                        <button class="tab" data-subject="chemistry">Chemistry</button>
-                        <button class="tab" data-subject="mathematics">Mathematics</button>
-                    </div>
+                        <div class="subject-tabs">
+                            <button class="tab active" data-subject="physics">Physics</button>
+                            <button class="tab" data-subject="chemistry">Chemistry</button>
+                            <button class="tab" data-subject="mathematics">Mathematics</button>
+                        </div>
                     </div>
 
-                
+
 
                     <!-- Physics Questions -->
                     <div class="subject-questions active" data-subject="physics">
@@ -1315,7 +1393,9 @@
                                 Question 1
                             </div>
                             <div class="question-text">
-                                A 3 m long wire of radius 3 mm shows an extension of 0.1 mm when loaded vertically by a mass of 50 kg in an experiment to determine Young's modulus. The value of Young's modulus of the wire as per this experiment is Nm, where the value of is: (Take m/s)
+                                A 3 m long wire of radius 3 mm shows an extension of 0.1 mm when loaded vertically by a
+                                mass of 50 kg in an experiment to determine Young's modulus. The value of Young's
+                                modulus of the wire as per this experiment is Nm, where the value of is: (Take m/s)
                             </div>
                             <div class="question-meta">
                                 <div class="meta-item">
@@ -1372,7 +1452,9 @@
                                 Question 2
                             </div>
                             <div class="question-text">
-                                Water falls from a height of 200 m into a pool. Calculate the rise in temperature of the water assuming no heat dissipation from the water in the pool. (Take g = 10 m/s², specific heat of water = 4200 J/(kg K))
+                                Water falls from a height of 200 m into a pool. Calculate the rise in temperature of the
+                                water assuming no heat dissipation from the water in the pool. (Take g = 10 m/s²,
+                                specific heat of water = 4200 J/(kg K))
                             </div>
                             <div class="question-meta">
                                 <div class="meta-item">
@@ -1426,7 +1508,8 @@
                                 Question 1
                             </div>
                             <div class="question-text">
-                                Identify the IUPAC name of the compound with molecular formula C₄H₈O₂ that shows positive iodoform test.
+                                Identify the IUPAC name of the compound with molecular formula C₄H₈O₂ that shows
+                                positive iodoform test.
                             </div>
                             <div class="question-meta">
                                 <div class="meta-item">
@@ -1480,7 +1563,8 @@
                                 Question 2
                             </div>
                             <div class="question-text">
-                                For the reaction N₂ + 3H₂ ⇌ 2NH₃, if the equilibrium constant Kc = 0.5 at 400°C, what is the value of Kp?
+                                For the reaction N₂ + 3H₂ ⇌ 2NH₃, if the equilibrium constant Kc = 0.5 at 400°C, what is
+                                the value of Kp?
                             </div>
                             <div class="question-meta">
                                 <div class="meta-item">
@@ -1603,7 +1687,7 @@
                                     Expected Time: <span class="time-info">120s</span>
                                 </div>
                                 <button class="ask-mentor-btn">
-                                   <img src="../logos/Vector (3).svg" alt="">
+                                    <img src="../logos/Vector (3).svg" alt="">
                                     Ask Mentor
                                 </button>
                             </div>
@@ -1707,7 +1791,7 @@
             const sidebar = document.querySelector('.sidebar');
             const mobileBtn = document.querySelector('.mobile-menu-btn');
             sidebar.classList.toggle('open');
-            
+
             if (window.innerWidth <= 768) {
                 if (sidebar.classList.contains('open')) {
                     mobileBtn.style.display = 'none';
@@ -1754,7 +1838,7 @@
                         },
                         displayColors: true,
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 return context.label + ': ' + context.parsed + ' marks';
                             }
                         }
@@ -1766,23 +1850,23 @@
             },
             plugins: [{
                 id: 'doughnutLabels',
-                afterDatasetsDraw: function(chart) {
+                afterDatasetsDraw: function (chart) {
                     const ctx = chart.ctx;
-                    chart.data.datasets.forEach(function(dataset, i) {
+                    chart.data.datasets.forEach(function (dataset, i) {
                         const meta = chart.getDatasetMeta(i);
-                        meta.data.forEach(function(element, index) {
+                        meta.data.forEach(function (element, index) {
                             // Get position
                             const position = element.tooltipPosition();
-                            
+
                             // Set font
                             ctx.fillStyle = '#333';
                             ctx.font = 'bold 16px Inter';
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'middle';
-                            
+
                             // Get data
                             const data = dataset.data[index];
-                            
+
                             // Display value
                             ctx.fillText(data, position.x, position.y);
                         });
@@ -1867,7 +1951,7 @@
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 document.querySelectorAll('.subject-questions').forEach(s => s.classList.remove('active'));
-                
+
                 tab.classList.add('active');
                 const subject = tab.dataset.subject;
                 document.querySelector(`[data-subject="${subject}"].subject-questions`).classList.add('active');
@@ -1885,4 +1969,5 @@
         });
     </script>
 </body>
+
 </html>
