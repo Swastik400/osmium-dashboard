@@ -44,6 +44,8 @@ function getCurrentPageIdentifier() {
         return 'notification';
     } else if (filename.includes('project')) {
         return 'project';
+    } else if (filename.includes('analytics')) {
+        return 'analytics';
     }
     return 'dashboard'; // default
 }

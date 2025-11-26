@@ -3,6 +3,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Osmium Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'status-yellowBg': '#FFF7ED',
+                        'status-yellowText': '#C2410C',
+                        'status-greenBg': '#ECFDF5',
+                        'status-greenText': '#047857'
+                    }
+                }
+            }
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@500&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../shared-sidebar.css">
@@ -240,6 +255,7 @@
             margin-left: 280px;
             padding: 32px;
             width: calc(100% - 280px);
+            max-width: none;
         }
 
         .header {
@@ -2602,10 +2618,6 @@
                 transform: translateX(0);
             }
 
-            .sidebar.open+.main-content .mobile-menu-btn {
-                display: none;
-            }
-
             .main-content {
                 margin-left: 0;
                 width: 100%;
@@ -2674,6 +2686,19 @@
                 padding-left: 90px;
                 min-width: 350px;
             }
+
+            .bottom-section-container {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .quick-actions-card {
+                width: 100% !important;
+            }
+            
+            .activity-card {
+                width: 100% !important;
+            }
         }
 
         @media (max-width: 480px) {
@@ -2728,7 +2753,27 @@
             }
 
             .quick-actions-card {
-                padding: 16px;
+                padding: 16px !important;
+            }
+            
+            .quick-actions-card > div:first-child {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .quick-actions-card select {
+                width: 100%;
+                margin-top: 8px;
+            }
+            
+            .quick-actions-card table {
+                font-size: 12px;
+            }
+            
+            .quick-actions-card table th,
+            .quick-actions-card table td {
+                padding: 8px 4px;
             }
 
             .quick-header {
@@ -2826,6 +2871,44 @@
             }
         }
 
+        /* Students Onboard Section Styles */
+        .status-yellowBg {
+            background-color: #FFF7ED;
+        }
+        
+        .status-yellowText {
+            color: #C2410C;
+        }
+        
+        .status-greenBg {
+            background-color: #ECFDF5;
+        }
+        
+        .status-greenText {
+            color: #047857;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .table-responsive::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
         /* Additional Mobile Responsiveness */
         @media (max-width: 768px) {
             .bottom-section-container {
@@ -2858,6 +2941,30 @@
                 font-size: 12px;
                 padding: 6px 12px;
             }
+
+            /* Students Onboard Mobile Optimizations */
+            .bg-white.border.border-gray-200.rounded-xl .p-4.sm\:p-5 {
+                padding: 16px !important;
+            }
+
+            .bg-white.border.border-gray-200.rounded-xl .flex.flex-col.lg\:flex-row {
+                flex-direction: column !important;
+                gap: 12px !important;
+            }
+
+            .bg-white.border.border-gray-200.rounded-xl .flex.flex-col.sm\:flex-row {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+
+            .bg-white.border.border-gray-200.rounded-xl .flex.gap-2.sm\:gap-3 {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+
+            .bg-white.border.border-gray-200.rounded-xl select {
+                width: 100% !important;
+            }
         }
         
         @media (max-width: 480px) {
@@ -2883,6 +2990,29 @@
             .quick-actions-card table th,
             .quick-actions-card table td {
                 padding: 8px 4px;
+            }
+
+            /* Students Onboard Small Mobile */
+            .bg-white.border.border-gray-200.rounded-xl .text-base.sm\:text-lg {
+                font-size: 16px !important;
+            }
+
+            .bg-white.border.border-gray-200.rounded-xl .text-sm {
+                font-size: 12px !important;
+            }
+
+            .bg-white.border.border-gray-200.rounded-xl .p-3.sm\:p-4 {
+                padding: 12px !important;
+            }
+
+            .bg-white.border.border-gray-200.rounded-xl .w-6.h-6.sm\:w-8.sm\:h-8 {
+                width: 24px !important;
+                height: 24px !important;
+            }
+
+            .bg-white.border.border-gray-200.rounded-xl .w-4.h-4.sm\:w-5.sm\:h-5 {
+                width: 16px !important;
+                height: 16px !important;
             }
         }
 
@@ -3645,7 +3775,7 @@
             background: #f0f0f0;
         }
     </style>
-</head>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.absolute{position:absolute}.relative{position:relative}.left-3{left:0.75rem}.right-2{right:0.5rem}.top-1\/2{top:50%}.mb-1{margin-bottom:0.25rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-3{height:0.75rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-8{height:2rem}.w-10{width:2.5rem}.w-12{width:3rem}.w-3{width:0.75rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-full{width:100%}.min-w-\[800px\]{min-width:800px}.max-w-full{max-width:100%}.flex-1{flex:1 1 0%}.border-collapse{border-collapse:collapse}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.appearance-none{-webkit-appearance:none;appearance:none}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-gray-50 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(249 250 251 / var(--tw-divide-opacity, 1))}.overflow-x-auto{overflow-x:auto}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-gray-100{--tw-border-opacity:1;border-color:rgb(243 244 246 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-status-greenBg{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-status-yellowBg{--tw-bg-opacity:1;background-color:rgb(255 247 237 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.object-cover{object-fit:cover}.p-1{padding:0.25rem}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.pl-10{padding-left:2.5rem}.pl-3{padding-left:0.75rem}.pr-4{padding-right:1rem}.pr-8{padding-right:2rem}.text-left{text-align:left}.text-right{text-align:right}.text-base{font-size:1rem;line-height:1.5rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-2xl{font-size:1.5rem;line-height:2rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.text-status-greenText{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-status-yellowText{--tw-text-opacity:1;color:rgb(194 65 12 / var(--tw-text-opacity, 1))}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.hover\:text-gray-600:hover{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.hover\:text-gray-900:hover{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.focus\:border-gray-400:focus{--tw-border-opacity:1;border-color:rgb(156 163 175 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.disabled\:opacity-50:disabled{opacity:0.5}@media (min-width: 640px){.sm\:right-3{right:0.75rem}.sm\:mb-6{margin-bottom:1.5rem}.sm\:ml-auto{margin-left:auto}.sm\:block{display:block}.sm\:inline{display:inline}.sm\:table-cell{display:table-cell}.sm\:hidden{display:none}.sm\:h-5{height:1.25rem}.sm\:h-8{height:2rem}.sm\:w-16{width:4rem}.sm\:w-5{width:1.25rem}.sm\:w-8{width:2rem}.sm\:max-w-md{max-width:28rem}.sm\:flex-none{flex:none}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:gap-2{gap:0.5rem}.sm\:gap-3{gap:0.75rem}.sm\:gap-6{gap:1.5rem}.sm\:p-4{padding:1rem}.sm\:p-5{padding:1.25rem}.sm\:px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.sm\:px-4{padding-left:1rem;padding-right:1rem}.sm\:pl-4{padding-left:1rem}.sm\:pr-10{padding-right:2.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}}@media (min-width: 768px){.md\:block{display:block}.md\:table-cell{display:table-cell}.md\:hidden{display:none}}@media (min-width: 1024px){.lg\:mb-8{margin-bottom:2rem}.lg\:table-cell{display:table-cell}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:flex-row{flex-direction:row}.lg\:items-center{align-items:center}}</style></head>
 
 <body>
     <!-- Sidebar Overlay -->
@@ -3670,7 +3800,7 @@
             </div>
 
             <div class="section-label">General</div>
-            <a href="teacher dashboard.html" class="nav-item active" data-page="dashboard">
+            <a href="teacher dashboard.html" class="nav-item" data-page="dashboard">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
                     <rect width="256" height="256" fill="none"></rect>
                     <path d="M120,56v48a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V56A16,16,0,0,1,56,40h48A16,16,0,0,1,120,56Zm80-16H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-96,96H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Z"></path>
@@ -3706,7 +3836,7 @@
                 </svg>
                 AI Mentor
             </a>
-            <a href=" Analytics1.html" class="nav-item" data-page="study">
+            <a href="Analytics1.html" class="nav-item active" data-page="analytics">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20" height="20">
                     <rect width="256" height="256" fill="none"></rect>
                     <path d="M226.53,56.41l-96-32a8,8,0,0,0-5.06,0l-96,32A8,8,0,0,0,24,64v80a8,8,0,0,0,16,0V75.1L73.59,86.29a64,64,0,0,0,20.65,88.05c-18,7.06-33.56,19.83-44.94,37.29a8,8,0,1,0,13.4,8.74C77.77,197.25,101.57,184,128,184s50.23,13.25,65.3,36.37a8,8,0,0,0,13.4-8.74c-11.38-17.46-27-30.23-44.94-37.29a64,64,0,0,0,20.65-88l44.12-14.7a8,8,0,0,0,0-15.18ZM176,120A48,48,0,1,1,89.35,91.55l36.12,12a8,8,0,0,0,5.06,0l36.12-12A47.89,47.89,0,0,1,176,120Z"></path>
@@ -3754,67 +3884,58 @@
                 <button type="button" class="mobile-menu-btn" onclick="toggleSidebar()" title="Open menu">
                     <img src="./logos/toogel.svg" alt="Menu" class="mobile-menu-img">
                 </button>
-                <h1>Dashboard</h1>
+                <h1>Class 12-0B</h1>
+                
             </div>
             <div class="header-actions">
-                <button class="btn" onclick="toggleNotifications()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M168,224a8,8,0,0,1-8,8H96a8,8,0,1,1,0-16h64A8,8,0,0,1,168,224Zm53.85-32A15.8,15.8,0,0,1,208,200H48a16,16,0,0,1-13.8-24.06C39.75,166.38,48,139.34,48,104a80,80,0,1,1,160,0c0,35.33,8.26,62.38,13.81,71.94A15.89,15.89,0,0,1,221.84,192ZM208,184c-7.73-13.27-16-43.95-16-80a64,64,0,1,0-128,0c0,36.06-8.28,66.74-16,80Z"></path></svg></button>
-                <button class="btn" onclick="openDateRangePicker()">Monthly <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
-                <button class="btn" onclick="openExportModal()"><img src="../logos/download.svg" alt=""> Export</button>
+                <button class="btn" onclick="openExportModal()"><img src="../logos/download.svg" alt=""> Class Report</button>
             </div>
         </div>
 
-        <div class="stats">
-            <!-- Student Enrolled -->
-            <div class="stat-item">
-                <div class="stat-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="40" height="40">
-                        <circle cx="128" cy="128" r="120" fill="#ECE1D1"></circle>
-                        <polyline points="48 128 72 128 96 64 160 192 184 128 208 128" fill="none" stroke="#8B7355" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></polyline>
-                    </svg>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-title">Student Enrolled</div>
-                    <div class="stat-value">546 <span class="stat-extra stat-extra-green">256 active students
-                            today</span></div>
-                </div>
-            </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 lg:mb-8">
+                    <!-- Card 1 -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-2 text-gray-500">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#74797e" viewBox="0 0 256 256"><path d="M164.47,195.63a8,8,0,0,1-6.7,12.37H10.23a8,8,0,0,1-6.7-12.37,95.83,95.83,0,0,1,47.22-37.71,60,60,0,1,1,66.5,0A95.83,95.83,0,0,1,164.47,195.63Zm87.91-.15a95.87,95.87,0,0,0-47.13-37.56A60,60,0,0,0,144.7,54.59a4,4,0,0,0-1.33,6A75.83,75.83,0,0,1,147,150.53a4,4,0,0,0,1.07,5.53,112.32,112.32,0,0,1,29.85,30.83,23.92,23.92,0,0,1,3.65,16.47,4,4,0,0,0,3.95,4.64h60.3a8,8,0,0,0,7.73-5.93A8.22,8.22,0,0,0,252.38,195.48Z"></path></svg>                                <span class="text-sm font-medium">Total Student</span>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-2xl sm:text-3xl font-semibold text-gray-900">60</span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-status-greenBg text-status-greenText">36 Active Students</span>
+                        </div>
+                    </div>
 
-            <!-- Divider -->
-            <div class="stat-divider"></div>
+                    <!-- Card 2 -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-2 text-gray-500">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#74797e" viewBox="0 0 256 256"><path d="M176,207.24a119,119,0,0,0,16-7.73V240a8,8,0,0,1-16,0Zm11.76-88.43-56-29.87a8,8,0,0,0-7.52,14.12L171,128l17-9.06Zm64-29.87-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V130.67L171,128l-43,22.93L43.83,106l0,0L25,96,128,41.07,231,96l-18.78,10-.06,0L188,118.94a8,8,0,0,1,4,6.93v73.64a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12Z"></path></svg>                                <span class="text-sm font-medium">Scheduled Upcoming Tests</span>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-2xl sm:text-3xl font-semibold text-gray-900">5</span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-status-greenBg text-status-greenText">
+                                +2 This Week
+                            </span>
+                        </div>
+                    </div>
 
-            <!-- Active Today -->
-            <div class="stat-item">
-                <div class="stat-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="40" height="40">
-                        <circle cx="128" cy="128" r="120" fill="#E8E7D5"></circle>
-                        <g transform="translate(128,128) scale(0.7) translate(-128,-128)"><path d="M200,75.64V40a16,16,0,0,0-16-16H72A16,16,0,0,0,56,40V76a16.07,16.07,0,0,0,6.4,12.8L114.67,128,62.4,167.2A16.07,16.07,0,0,0,56,180v36a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V180.36a16.08,16.08,0,0,0-6.35-12.76L141.27,128l52.38-39.6A16.05,16.05,0,0,0,200,75.64ZM178.23,176H77.33L128,138ZM72,216V192H184v24ZM184,75.64,128,118,72,76V40H184Z" fill="#434027"></path></g>
-                    </svg>
+                    <!-- Card 3 -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-2 text-gray-500">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#74797e" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm-4,48a12,12,0,1,1-12,12A12,12,0,0,1,124,72Zm12,112a16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40a8,8,0,0,1,0,16Z"></path></svg>                                <span class="text-sm font-medium">Pending review</span>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-2xl sm:text-3xl font-semibold text-gray-900">6</span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-status-redBg text-status-RedText" style="background-color: #FEE2E2; color: #B91C1C;">
+                                View Review
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-content">
-                    <div class="stat-title"> Average class performance</div>
-                    <div class="stat-value">88.5% <span class="stat-extra stat-extra-green">+5.8% improvement this
-                            month</span></div>
-                </div>
-            </div>
-
-            <!-- Divider -->
-            <div class="stat-divider"></div>
-
-            <!-- Test Conducted -->
-            <div class="stat-item">
-                <div class="stat-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="40" height="40">
-                        <circle cx="128" cy="128" r="120" fill="#CFE8E2"></circle>
-                        <g transform="translate(128,128) scale(0.7) translate(-128,-128)"><path d="M232,136.66A104.12,104.12,0,1,1,119.34,24,8,8,0,0,1,120.66,40,88.12,88.12,0,1,0,216,135.34,8,8,0,0,1,232,136.66ZM120,72v56a8,8,0,0,0,8,8h56a8,8,0,0,0,0-16H136V72a8,8,0,0,0-16,0Zm40-24a12,12,0,1,0-12-12A12,12,0,0,0,160,48Zm36,24a12,12,0,1,0-12-12A12,12,0,0,0,196,72Zm24,36a12,12,0,1,0-12-12A12,12,0,0,0,220,108Z" fill="#242929"></path></g>
-                    </svg>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-title">Test Conducted</div>
-                    <div class="stat-value">3 <span class="stat-extra stat-extra-orange">5 Schedules Tests this
-                            month</span></div>
-                </div>
-            </div>
-        </div>
 
         <div class="sections">
             <div class="card">
@@ -3907,65 +4028,8 @@
             <div class="card">
                 <div class="header">
                     <div>
-                        <h2 class="card-title">Scheduled Tests</h2>
-                        <p class="card-subtitle">All Schedules upcoming test</p>
-                    </div>
-                    <button class="add-btn" onclick="openTestModal()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg> Add Tests</button>
-                </div>
-
-                <!-- Upcoming Test -->
-                <div class="test-card">
-                    <div class="test-header">
-                        <div>
-                            <span class="test-date">Tue, 12 June</span>
-                            <span class="status-badge status-upcoming">Upcoming</span>
-                        </div>
-                        <div class="test-actions">
-                            <button class="action-btn">View Paper</button>
-                            <button class="action-btn">Modify</button>
-                            <button class="more-btn">⋮</button>
-                        </div>
-                    </div>
-
-                    <h2 class="test-title">Python Advanced</h2>
-
-                    <div class="test-details">
-                        <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#936e33" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm56,112H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48a8,8,0,0,1,0,16Z"></path></svg> 10:30 AM</span>
-                        <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#5f7438" viewBox="0 0 256 256"><path d="M176,207.24a119,119,0,0,0,16-7.73V240a8,8,0,0,1-16,0Zm11.76-88.43-56-29.87a8,8,0,0,0-7.52,14.12L171,128l17-9.06Zm64-29.87-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V130.67L171,128l-43,22.93L43.83,106l0,0L25,96,128,41.07,231,96l-18.78,10-.06,0L188,118.94a8,8,0,0,1,4,6.93v73.64a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12Z"></path></svg> 12th section B</span>
-                        <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#498183" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,184H64a8,8,0,0,1,0-16h8a8,8,0,0,1,0,16Zm0-48H64a8,8,0,0,1,0-16h8a8,8,0,0,1,0,16Zm0-48H64a8,8,0,0,1,0-16h8a8,8,0,0,1,0,16Zm120,96H104a8,8,0,0,1,0-16h88a8,8,0,0,1,0,16Zm0-48H104a8,8,0,0,1,0-16h88a8,8,0,0,1,0,16Zm0-48H104a8,8,0,0,1,0-16h88a8,8,0,0,1,0,16Z"></path></svg> 25 Questions</span>
-                    </div>
-                </div>
-
-                <!-- Completed Test -->
-                <div class="test-card">
-                    <div class="test-header">
-                        <div>
-                            <span class="test-date">Tue, 12 June</span>
-                            <span class="status-badge status-completed">Completed</span>
-                        </div>
-                        <div class="test-actions">
-                            <button class="action-btn">View Analytics</button>
-                            <button class="more-btn">⋮</button>
-                        </div>
-                    </div>
-
-                    <h2 class="test-title completed">JAVA Core</h2>
-
-                    <div class="test-details">
-                        <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#936e33" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm56,112H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48a8,8,0,0,1,0,16Z"></path></svg> 2:30 PM</span>
-                        <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#5f7438" viewBox="0 0 256 256"><path d="M176,207.24a119,119,0,0,0,16-7.73V240a8,8,0,0,1-16,0Zm11.76-88.43-56-29.87a8,8,0,0,0-7.52,14.12L171,128l17-9.06Zm64-29.87-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V130.67L171,128l-43,22.93L43.83,106l0,0L25,96,128,41.07,231,96l-18.78,10-.06,0L188,118.94a8,8,0,0,1,4,6.93v73.64a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12Z"></path></svg> 12th section B</span>
-                        <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#498183" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,184H64a8,8,0,0,1,0-16h8a8,8,0,0,1,0,16Zm0-48H64a8,8,0,0,1,0-16h8a8,8,0,0,1,0,16Zm0-48H64a8,8,0,0,1,0-16h8a8,8,0,0,1,0,16Zm120,96H104a8,8,0,0,1,0-16h88a8,8,0,0,1,0,16Zm0-48H104a8,8,0,0,1,0-16h88a8,8,0,0,1,0,16Zm0-48H104a8,8,0,0,1,0-16h88a8,8,0,0,1,0,16Z"></path></svg> 25 Questions</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bottom-section-container">
-            <div class="quick-actions-card" style="width: 780px; background: #fff; border-radius: 18px; border: 1px solid #eceae6; padding: 28px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div style="font-size: 20px; font-weight: 600; color: #1a1a1a;">Class Performances</div>
-                        <div style="font-size: 14px; color: #999; margin-top: 4px;">View the Performances of classes</div>
+                        <h2 class="card-title">Class Performances</h2>
+                        <p class="card-subtitle">View the Performances of classes</p>
                     </div>
                     <select style="border: 1px solid #ddd; padding: 8px 16px; font-size: 14px; border-radius: 10px; background: #fafafa; cursor: pointer;">
                         <option>B.Tech [Sem-3]</option>
@@ -4002,112 +4066,597 @@
                     </tbody>
                 </table>
             </div>
-            
+        </div>
 
-
-            <div class="activity-card">
-                <div class="activity-header">
+        <!-- Students Onboard Section -->
+        <div class="bg-white border border-gray-200 rounded-xl">
+            <!-- Table Header -->
+            <div class="p-4 sm:p-5 border-b border-gray-200">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4 sm:mb-6">
                     <div>
-                        <h2 class="activity-title">Recent Activity</h2>
-                        <p class="activity-subtitle">Check activity of students</p>
-                    </div>
-                    <div class="menu-dropdown">
-                        <button class="menu-btn" onclick="toggleDropdown()">⋮</button>
-                        <div id="myDropdown" class="dropdown-content">
-                            <a href="#">View All</a>
-                            <a href="#">Filter</a>
-                            <a href="#">Export</a>
-                            <a href="#">Settings</a>
+                        <div class="flex items-center gap-2 mb-1">
+                            <h2 class="text-base sm:text-lg font-semibold text-gray-900">Students Onboard</h2>
+                            <span class="text-gray-500 text-base sm:text-lg">(473)</span>
                         </div>
+                        <p class="text-sm text-gray-500">Check your projects submissions of your students</p>
                     </div>
+                    <button class="text-gray-400 hover:text-gray-600" aria-label="More options">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-vertical" class="lucide lucide-more-vertical w-5 h-5">
+                            <circle cx="12" cy="12" r="1"></circle>
+                            <circle cx="12" cy="5" r="1"></circle>
+                            <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
+                    </button>
                 </div>
 
-                <div class="timeline">
-                    <div class="date-row">
-                        <div class="date-icon" onclick="toggleCalendar()" style="cursor: pointer;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20">
-                                <rect width="256" height="256" fill="none"></rect>
-                                <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,48H48V48H72v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24Z"></path>
+                <!-- Filters -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="relative flex-1 max-w-full sm:max-w-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" class="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400">
+                            <path d="m21 21-4.34-4.34"></path>
+                            <circle cx="11" cy="11" r="8"></circle>
+                        </svg>
+                        <input type="text" placeholder="Filter by name" class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold/20 focus:border-brand-gold">
+                    </div>
+                    <div class="flex gap-2 sm:gap-3 sm:ml-auto">
+                        <div class="relative flex-1 sm:flex-none">
+                            <select class="appearance-none bg-white border border-gray-200 text-gray-700 py-2 pl-3 sm:pl-4 pr-8 sm:pr-10 rounded-lg text-sm focus:outline-none focus:border-gray-400 cursor-pointer w-full" aria-label="Filter by class">
+                                <option>All Class</option>
+                                <option>Class A</option>
+                                <option>Class B</option>
+                            </select>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" class="lucide lucide-chevron-down absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none">
+                                <path d="m6 9 6 6 6-6"></path>
                             </svg>
                         </div>
-                        <div class="date-badge">Today</div>
-                    </div>
-
-                    <div id="calendarModal" class="calendar-modal" style="display: none;">
-                        <div class="calendar-content">
-                            <div class="calendar-header">
-                                <button onclick="prevMonth()">&lt;</button>
-                                <span id="monthYear"></span>
-                                <button onclick="nextMonth()">&gt;</button>
-                            </div>
-                            <div class="calendar-grid" id="calendarGrid"></div>
-                            <button onclick="toggleCalendar()" class="close-calendar">Close</button>
-                        </div>
-                    </div>
-
-                    <div class="activity">
-                        <div class="activity-icon i-yellow">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20">
-                                <rect width="20" height="20" fill="none"></rect>
-                                <path fill="#443821" d="M212,76V72a44,44,0,0,0-74.86-31.31,3.93,3.93,0,0,0-1.14,2.8v88.72a4,4,0,0,0,6.2,3.33A47.67,47.67,0,0,1,167.68,128a8.18,8.18,0,0,1,8.31,7.58,8,8,0,0,1-8,8.42,32,32,0,0,0-32,32v33.88a4,4,0,0,0,1.49,3.12,47.92,47.92,0,0,0,74.21-17.16,4,4,0,0,0-4.49-5.56A68.06,68.06,0,0,1,192,192h-7.73a8.18,8.18,0,0,1-8.25-7.47,8,8,0,0,1,8-8.53h8a51.6,51.6,0,0,0,24-5.88v0A52,52,0,0,0,212,76Zm-12,36h-4a36,36,0,0,1-36-36V72a8,8,0,0,1,16,0v4a20,20,0,0,0,20,20h4a8,8,0,0,1,0,16ZM88,28A44.05,44.05,0,0,0,44,72v4a52,52,0,0,0-4,94.12h0A51.6,51.6,0,0,0,64,176h7.73A8.18,8.18,0,0,1,80,183.47A8,8,0,0,1,72,192H64a67.48,67.48,0,0,1-15.21-1.73,4,4,0,0,0-4.5,5.55A47.93,47.93,0,0,0,118.51,213a4,4,0,0,0,1.49-3.12V176a32,32,0,0,0-32-32,8,8,0,0,1-8-8.42A8.18,8.18,0,0,1,88.32,128a47.67,47.67,0,0,1,25.48,7.54,4,4,0,0,0,6.2-3.33V43.49a4,4,0,0,0-1.14-2.81A43.85,43.85,0,0,0,88,28Zm8,48a36,36,0,0,1-36,36H56a8,8,0,0,1,0-16h4A20,20,0,0,0,80,76V72a8,8,0,0,1,16,0Z"></path>
+                        <button class="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap">
+                            <span class="hidden sm:inline">Sort</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up-down" class="lucide lucide-arrow-up-down w-3 h-3">
+                                <path d="m21 16-4 4-4-4"></path>
+                                <path d="M17 20V4"></path>
+                                <path d="m3 8 4-4 4 4"></path>
+                                <path d="M7 4v16"></path>
                             </svg>
-                        </div>
-                        <div class="activity-text">
-                            <span class="student-name">Aarav Sharma</span> completed the Physics – Chapter 5 Test with a
-                            score of 78%
-                            · <span class="activity-time">9:20 AM</span>
-                        </div>
-                        <div class="quiz-tag">Inheritance Quiz</div>
-                    </div>
-
-                    <div class="activity">
-                        <div class="activity-icon i-green">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20">
-                                <rect width="20" height="20" fill="none"></rect>
-                                <path fill="#344421" d="M212,76V72a44,44,0,0,0-74.86-31.31,3.93,3.93,0,0,0-1.14,2.8v88.72a4,4,0,0,0,6.2,3.33A47.67,47.67,0,0,1,167.68,128a8.18,8.18,0,0,1,8.31,7.58,8,8,0,0,1-8,8.42,32,32,0,0,0-32,32v33.88a4,4,0,0,0,1.49,3.12,47.92,47.92,0,0,0,74.21-17.16,4,4,0,0,0-4.49-5.56A68.06,68.06,0,0,1,192,192h-7.73a8.18,8.18,0,0,1-8.25-7.47,8,8,0,0,1,8-8.53h8a51.6,51.6,0,0,0,24-5.88v0A52,52,0,0,0,212,76Zm-12,36h-4a36,36,0,0,1-36-36V72a8,8,0,0,1,16,0v4a20,20,0,0,0,20,20h4a8,8,0,0,1,0,16ZM88,28A44.05,44.05,0,0,0,44,72v4a52,52,0,0,0-4,94.12h0A51.6,51.6,0,0,0,64,176h7.73A8.18,8.18,0,0,1,80,183.47A8,8,0,0,1,72,192H64a67.48,67.48,0,0,1-15.21-1.73,4,4,0,0,0-4.5,5.55A47.93,47.93,0,0,0,118.51,213a4,4,0,0,0,1.49-3.12V176a32,32,0,0,0-32-32,8,8,0,0,1-8-8.42A8.18,8.18,0,0,1,88.32,128a47.67,47.67,0,0,1,25.48,7.54,4,4,0,0,0,6.2-3.33V43.49a4,4,0,0,0-1.14-2.81A43.85,43.85,0,0,0,88,28Zm8,48a36,36,0,0,1-36,36H56a8,8,0,0,1,0-16h4A20,20,0,0,0,80,76V72a8,8,0,0,1,16,0Z"></path>
-                            </svg>
-                        </div>
-                        <div class="activity-text">
-                            <span class="student-name">Aarav Sharma</span> completed the Physics – Chapter 5 Test with a
-                            score of 78%
-                            · <span class="activity-time">9:20 AM</span>
-                        </div>
-                        <div class="quiz-tag">Inheritance Quiz</div>
-                    </div>
-
-                    <div class="activity">
-                        <div class="activity-icon i-teal">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20">
-                                <rect width="20" height="20" fill="none"></rect>
-                                <path fill="#214442" d="M212,76V72a44,44,0,0,0-74.86-31.31,3.93,3.93,0,0,0-1.14,2.8v88.72a4,4,0,0,0,6.2,3.33A47.67,47.67,0,0,1,167.68,128a8.18,8.18,0,0,1,8.31,7.58,8,8,0,0,1-8,8.42,32,32,0,0,0-32,32v33.88a4,4,0,0,0,1.49,3.12,47.92,47.92,0,0,0,74.21-17.16,4,4,0,0,0-4.49-5.56A68.06,68.06,0,0,1,192,192h-7.73a8.18,8.18,0,0,1-8.25-7.47,8,8,0,0,1,8-8.53h8a51.6,51.6,0,0,0,24-5.88v0A52,52,0,0,0,212,76Zm-12,36h-4a36,36,0,0,1-36-36V72a8,8,0,0,1,16,0v4a20,20,0,0,0,20,20h4a8,8,0,0,1,0,16ZM88,28A44.05,44.05,0,0,0,44,72v4a52,52,0,0,0-4,94.12h0A51.6,51.6,0,0,0,64,176h7.73A8.18,8.18,0,0,1,80,183.47A8,8,0,0,1,72,192H64a67.48,67.48,0,0,1-15.21-1.73,4,4,0,0,0-4.5,5.55A47.93,47.93,0,0,0,118.51,213a4,4,0,0,0,1.49-3.12V176a32,32,0,0,0-32-32,8,8,0,0,1-8-8.42A8.18,8.18,0,0,1,88.32,128a47.67,47.67,0,0,1,25.48,7.54,4,4,0,0,0,6.2-3.33V43.49a4,4,0,0,0-1.14-2.81A43.85,43.85,0,0,0,88,28Zm8,48a36,36,0,0,1-36,36H56a8,8,0,0,1,0-16h4A20,20,0,0,0,80,76V72a8,8,0,0,1,16,0Z"></path>
-                            </svg>
-                        </div>
-                        <div class="activity-text">
-                            <span class="student-name">Suman yadav</span> completed the Physics – Chapter 5 Test with a
-                            score of 78%
-                            · <span class="activity-time">9:20 AM</span>
-                        </div>
-                        <div class="quiz-tag">Inheritance Quiz</div>
-                    </div>
-
-                    <div class="activity">
-                        <div class="activity-icon i-red">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="20">
-                                <rect width="20" height="20" fill="none"></rect>
-                                <path fill="#442121" d="M212,76V72a44,44,0,0,0-74.86-31.31,3.93,3.93,0,0,0-1.14,2.8v88.72a4,4,0,0,0,6.2,3.33A47.67,47.67,0,0,1,167.68,128a8.18,8.18,0,0,1,8.31,7.58,8,8,0,0,1-8,8.42,32,32,0,0,0-32,32v33.88a4,4,0,0,0,1.49,3.12,47.92,47.92,0,0,0,74.21-17.16,4,4,0,0,0-4.49-5.56A68.06,68.06,0,0,1,192,192h-7.73a8.18,8.18,0,0,1-8.25-7.47,8,8,0,0,1,8-8.53h8a51.6,51.6,0,0,0,24-5.88v0A52,52,0,0,0,212,76Zm-12,36h-4a36,36,0,0,1-36-36V72a8,8,0,0,1,16,0v4a20,20,0,0,0,20,20h4a8,8,0,0,1,0,16ZM88,28A44.05,44.05,0,0,0,44,72v4a52,52,0,0,0-4,94.12h0A51.6,51.6,0,0,0,64,176h7.73A8.18,8.18,0,0,1,80,183.47A8,8,0,0,1,72,192H64a67.48,67.48,0,0,1-15.21-1.73,4,4,0,0,0-4.5,5.55A47.93,47.93,0,0,0,118.51,213a4,4,0,0,0,1.49-3.12V176a32,32,0,0,0-32-32,8,8,0,0,1-8-8.42A8.18,8.18,0,0,1,88.32,128a47.67,47.67,0,0,1,25.48,7.54,4,4,0,0,0,6.2-3.33V43.49a4,4,0,0,0-1.14-2.81A43.85,43.85,0,0,0,88,28Zm8,48a36,36,0,0,1-36,36H56a8,8,0,0,1,0-16h4A20,20,0,0,0,80,76V72a8,8,0,0,1,16,0Z"></path>
-                            </svg>
-                        </div>
-                        <div class="activity-text">
-                            <span class="student-name">Aarav Sharma</span> completed the Physics – Chapter 5 Test with a
-                            score of 78%
-                            · <span class="activity-time">9:20 AM</span>
-                        </div>
-                        <div class="quiz-tag">Inheritance Quiz</div>
+                        </button>
                     </div>
                 </div>
             </div>
-            
-    </div>
+
+            <!-- Mobile Card View -->
+            <div class="block md:hidden space-y-4 p-4">
+                <!-- Student Card 1 -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition-colors" onclick="window.location.href='test analytics.html'">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <img src="https://i.pravatar.cc/150?u=dhraval" alt="Dhraval" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h3 class="font-medium text-gray-900">Dhraval Soni</h3>
+                                <p class="text-sm text-gray-500">24BTCSE045</p>
+                            </div>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600 p-1" onclick="event.stopPropagation()" aria-label="More options">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-5 h-5">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                            <p class="text-gray-900 font-medium">B.Tech Sem 3</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                            <p class="text-gray-900 font-medium">98638253</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                            <p class="text-gray-900 font-medium">9:39 PM</p>
+                            <p class="text-xs text-gray-500">6 DEC, 2005</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                6 Pending
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Card 2 -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition-colors" onclick="window.location.href='test analytics.html'">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <img src="https://i.pravatar.cc/150?u=dhraval2" alt="Dhraval" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h3 class="font-medium text-gray-900">Dhraval Soni</h3>
+                                <p class="text-sm text-gray-500">24BTCSE045</p>
+                            </div>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600 p-1" aria-label="More options">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-5 h-5">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                            <p class="text-gray-900 font-medium">B.Tech Sem 3</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                            <p class="text-gray-900 font-medium">98638253</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                            <p class="text-gray-900 font-medium">9:39 PM</p>
+                            <p class="text-xs text-gray-500">6 DEC, 2005</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                6 Pending
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Card 3 -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition-colors" onclick="window.location.href='test analytics.html'">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <img src="https://i.pravatar.cc/150?u=arjun" alt="Arjun" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h3 class="font-medium text-gray-900">Arjun Kale</h3>
+                                <p class="text-sm text-gray-500">24BTCSE046</p>
+                            </div>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600 p-1" aria-label="More options">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-5 h-5">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                            <p class="text-gray-900 font-medium">B.Tech Sem 3</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                            <p class="text-gray-900 font-medium">98765432</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                            <p class="text-gray-900 font-medium">11:15 AM</p>
+                            <p class="text-xs text-gray-500">8 DEC, 2005</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-greenBg text-status-greenText">
+                                Completed
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Card 4 -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition-colors" onclick="window.location.href='test analytics.html'">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <img src="https://i.pravatar.cc/150?u=priya" alt="Priya" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h3 class="font-medium text-gray-900">Priya Sharma</h3>
+                                <p class="text-sm text-gray-500">24BTCSE047</p>
+                            </div>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600 p-1" aria-label="More options">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-5 h-5">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                            <p class="text-gray-900 font-medium">B.Tech Sem 3</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                            <p class="text-gray-900 font-medium">98123456</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                            <p class="text-gray-900 font-medium">2:45 PM</p>
+                            <p class="text-xs text-gray-500">7 DEC, 2005</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                3 Pending
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Card 5 -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition-colors" onclick="window.location.href='test analytics.html'">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <img src="https://i.pravatar.cc/150?u=rahul" alt="Rahul" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h3 class="font-medium text-gray-900">Rahul Verma</h3>
+                                <p class="text-sm text-gray-500">24BTCSE048</p>
+                            </div>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600 p-1" aria-label="More options">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-5 h-5">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                            <p class="text-gray-900 font-medium">B.Tech Sem 4</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                            <p class="text-gray-900 font-medium">98987654</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                            <p class="text-gray-900 font-medium">4:20 PM</p>
+                            <p class="text-xs text-gray-500">7 DEC, 2005</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-greenBg text-status-greenText">
+                                Completed
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Card 6 -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition-colors" onclick="window.location.href='test analytics.html'">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <img src="https://i.pravatar.cc/150?u=anita" alt="Anita" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h3 class="font-medium text-gray-900">Anita Patel</h3>
+                                <p class="text-sm text-gray-500">24BTCSE049</p>
+                            </div>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600 p-1" aria-label="More options">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-5 h-5">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Class</p>
+                            <p class="text-gray-900 font-medium">B.Tech Sem 4</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Contact</p>
+                            <p class="text-gray-900 font-medium">98456789</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Last Active</p>
+                            <p class="text-gray-900 font-medium">6:30 PM</p>
+                            <p class="text-xs text-gray-500">6 DEC, 2005</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wide mb-1">Status</p>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                2 Pending
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desktop Table -->
+            <div class="hidden md:block overflow-x-auto table-responsive">
+                <table class="w-full text-left border-collapse min-w-[800px]">
+                    <thead>
+                        <tr class="border-b border-gray-100">
+                            <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider w-12 sm:w-16">
+                                No</th>
+                            <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Full Name</th>
+                            <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
+                                UID</th>
+                            <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
+                                Class</th>
+                            <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
+                                Contact</th>
+                            <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
+                                Last Active</th>
+                            <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Submissions</th>
+                            <th class="p-2 sm:p-4 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">
+                                Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        <!-- Row 1 -->
+                        <tr class="hover:bg-gray-50 transition-colors group cursor-pointer" onclick="window.location.href='test analytics.html'">
+                            <td class="p-2 sm:p-4 text-sm text-gray-500">1</td>
+                            <td class="p-2 sm:p-4">
+                                <div class="flex items-center gap-2 sm:gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=dhraval" alt="Dhraval" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover">
+                                    <div class="flex flex-col sm:block">
+                                        <span class="text-sm font-medium text-gray-900">Dhraval Soni</span>
+                                        <span class="text-xs text-gray-500 sm:hidden">24BTCSE045</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-2 sm:p-4 text-sm text-gray-500 hidden sm:table-cell">24BTCSE045</td>
+                            <td class="p-2 sm:p-4 text-sm text-gray-500 hidden md:table-cell">B.Tech Sem 3</td>
+                            <td class="p-2 sm:p-4 hidden lg:table-cell">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">98638253</span>
+                                    <span class="text-xs text-gray-500">random@email.com</span>
+                                </div>
+                            </td>
+                            <td class="p-2 sm:p-4 hidden lg:table-cell">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">9:39 PM</span>
+                                    <span class="text-xs text-gray-500">6 DEC, 2005</span>
+                                </div>
+                            </td>
+                            <td class="p-2 sm:p-4">
+                                <span class="inline-flex items-center px-2 sm:px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                    <span class="hidden sm:inline">6 </span>Pending
+                                </span>
+                            </td>
+                            <td class="p-2 sm:p-4 text-right">
+                                <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-4 h-4 sm:w-5 sm:h-5">
+                                        <circle cx="12" cy="12" r="1"></circle>
+                                        <circle cx="19" cy="12" r="1"></circle>
+                                        <circle cx="5" cy="12" r="1"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Row 2 -->
+                        <tr class="hover:bg-gray-50 transition-colors group cursor-pointer" onclick="window.location.href='test analytics.html'">
+                            <td class="p-4 text-sm text-gray-500">2</td>
+                            <td class="p-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=dhraval2" alt="Dhraval" class="w-8 h-8 rounded-full object-cover">
+                                    <span class="text-sm font-medium text-gray-900">Dhraval Soni</span>
+                                </div>
+                            </td>
+                            <td class="p-4 text-sm text-gray-500">24BTCSE045</td>
+                            <td class="p-4 text-sm text-gray-500">B.Tech Sem 3</td>
+                            <td class="p-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">98638253</span>
+                                    <span class="text-xs text-gray-500">random@email.com</span>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">9:39 PM</span>
+                                    <span class="text-xs text-gray-500">6 DEC, 2005</span>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                    6 Pending
+                                </span>
+                            </td>
+                            <td class="p-4 text-right">
+                                <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100" aria-label="More options">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-5 h-5">
+                                        <circle cx="12" cy="12" r="1"></circle>
+                                        <circle cx="19" cy="12" r="1"></circle>
+                                        <circle cx="5" cy="12" r="1"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Row 3 -->
+                        <tr class="hover:bg-gray-50 transition-colors group cursor-pointer" onclick="window.location.href='test analytics.html'">
+                            <td class="p-4 text-sm text-gray-500">3</td>
+                            <td class="p-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=arjun" alt="Arjun" class="w-8 h-8 rounded-full object-cover">
+                                    <span class="text-sm font-medium text-gray-900">Arjun Kale</span>
+                                </div>
+                            </td>
+                            <td class="p-4 text-sm text-gray-500">24BTCSE046</td>
+                            <td class="p-4 text-sm text-gray-500">B.Tech Sem 3</td>
+                            <td class="p-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">98765432</span>
+                                    <span class="text-xs text-gray-500">arjun@email.com</span>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">11:15 AM</span>
+                                    <span class="text-xs text-gray-500">8 DEC, 2005</span>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-greenBg text-status-greenText">
+                                    Completed
+                                </span>
+                            </td>
+                            <td class="p-4 text-right">
+                                <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100" aria-label="More options">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-5 h-5">
+                                        <circle cx="12" cy="12" r="1"></circle>
+                                        <circle cx="19" cy="12" r="1"></circle>
+                                        <circle cx="5" cy="12" r="1"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Row 4 -->
+                        <tr class="hover:bg-gray-50 transition-colors group cursor-pointer" onclick="window.location.href='test analytics.html'">
+                            <td class="p-4 text-sm text-gray-500">4</td>
+                            <td class="p-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=priya" alt="Priya" class="w-8 h-8 rounded-full object-cover">
+                                    <span class="text-sm font-medium text-gray-900">Priya Sharma</span>
+                                </div>
+                            </td>
+                            <td class="p-4 text-sm text-gray-500">24BTCSE047</td>
+                            <td class="p-4 text-sm text-gray-500">B.Tech Sem 3</td>
+                            <td class="p-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">98123456</span>
+                                    <span class="text-xs text-gray-500">priya@email.com</span>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">2:45 PM</span>
+                                    <span class="text-xs text-gray-500">7 DEC, 2005</span>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                    3 Pending
+                                </span>
+                            </td>
+                            <td class="p-4 text-right">
+                                <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100" aria-label="More options">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-5 h-5">
+                                        <circle cx="12" cy="12" r="1"></circle>
+                                        <circle cx="19" cy="12" r="1"></circle>
+                                        <circle cx="5" cy="12" r="1"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Row 5 -->
+                        <tr class="hover:bg-gray-50 transition-colors group cursor-pointer" onclick="window.location.href='test analytics.html'">
+                            <td class="p-4 text-sm text-gray-500">5</td>
+                            <td class="p-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=rahul" alt="Rahul" class="w-8 h-8 rounded-full object-cover">
+                                    <span class="text-sm font-medium text-gray-900">Rahul Verma</span>
+                                </div>
+                            </td>
+                            <td class="p-4 text-sm text-gray-500">24BTCSE048</td>
+                            <td class="p-4 text-sm text-gray-500">B.Tech Sem 4</td>
+                            <td class="p-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">98987654</span>
+                                    <span class="text-xs text-gray-500">rahul@email.com</span>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">4:20 PM</span>
+                                    <span class="text-xs text-gray-500">7 DEC, 2005</span>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-greenBg text-status-greenText">
+                                    Completed
+                                </span>
+                            </td>
+                            <td class="p-4 text-right">
+                                <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100" aria-label="More options">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-5 h-5">
+                                        <circle cx="12" cy="12" r="1"></circle>
+                                        <circle cx="19" cy="12" r="1"></circle>
+                                        <circle cx="5" cy="12" r="1"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Row 6 -->
+                        <tr class="hover:bg-gray-50 transition-colors group cursor-pointer" onclick="window.location.href='test analytics.html'">
+                            <td class="p-4 text-sm text-gray-500">6</td>
+                            <td class="p-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://i.pravatar.cc/150?u=anita" alt="Anita" class="w-8 h-8 rounded-full object-cover">
+                                    <span class="text-sm font-medium text-gray-900">Anita Patel</span>
+                                </div>
+                            </td>
+                            <td class="p-4 text-sm text-gray-500">24BTCSE049</td>
+                            <td class="p-4 text-sm text-gray-500">B.Tech Sem 4</td>
+                            <td class="p-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">98456789</span>
+                                    <span class="text-xs text-gray-500">anita@email.com</span>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-gray-900">6:30 PM</span>
+                                    <span class="text-xs text-gray-500">6 DEC, 2005</span>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-status-yellowBg text-status-yellowText">
+                                    2 Pending
+                                </span>
+                            </td>
+                            <td class="p-4 text-right">
+                                <button class="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100" aria-label="More options">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="more-horizontal" class="lucide lucide-more-horizontal w-5 h-5">
+                                        <circle cx="12" cy="12" r="1"></circle>
+                                        <circle cx="19" cy="12" r="1"></circle>
+                                        <circle cx="5" cy="12" r="1"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="p-3 sm:p-4 border-t border-gray-200 flex items-center justify-between">
+                <span class="text-xs sm:text-sm text-gray-500"><span class="font-medium text-gray-900">6</span> <span class="hidden sm:inline">Students</span></span>
+                <div class="flex items-center gap-2">
+                    <button class="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 disabled:opacity-50" aria-label="Previous page">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-left" class="lucide lucide-chevron-left w-5 h-5">
+                            <path d="m15 18-6-6 6-6"></path>
+                        </svg>
+                    </button>
+                    <div class="flex items-center gap-1 text-sm text-gray-600">
+                        <span class="bg-gray-100 px-2 py-1 rounded text-gray-900 font-medium">1</span>
+                        <span>of</span>
+                        <span>3</span>
+                    </div>
+                    <button class="p-1 rounded hover:bg-gray-100 text-gray-600 hover:text-gray-900" aria-label="Next page">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-right" class="lucide lucide-chevron-right w-5 h-5">
+                            <path d="m9 18 6-6-6-6"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
 
     </main>
 
@@ -5152,4 +5701,42 @@
 </script>
 
 
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body></html>
