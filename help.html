@@ -96,6 +96,10 @@
             top: 0;
         }
 
+        .sidebar.collapsed {
+            transform: translateX(-280px);
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -291,6 +295,33 @@
             width: 70%;
             margin-bottom: 0;
             padding: 0;
+        }
+
+        .reopen-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border: 1px solid #ebe8e2;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .reopen-btn:hover {
+            background: #f5f3f0;
+            border-color: #d4cfc8;
+        }
+
+        .reopen-btn.show {
+            display: flex;
         }
 
         /* Previous Exam Test Performances Styles */
@@ -753,7 +784,7 @@
         <div class="sidebar-top">
             <div class="logo-container">
                 <img src="./logos/logo.svg" alt="" class="logo">
-                <button type="button" class="menu-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+                <button type="button" class="menu-btn" onclick="collapseSidebar()" title="Toggle sidebar">
                     <img src="./logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
                 </button>
             </div>
@@ -846,6 +877,11 @@
         </div>
     </div>
 
+    <!-- Reopen Button -->
+    <button type="button" class="reopen-btn" onclick="collapseSidebar()" title="Open sidebar">
+        <img src="./logos/toogel.svg" alt="Open menu" style="width: 16px; height: 16px;">
+    </button>
+
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
@@ -875,239 +911,270 @@
             </nav>
         </div>
 
-        <div class="p-4 md:p-6 lg:p-8 max-w-[1400px] mx-auto">
-            <!-- Page Title -->
-            <div class="mb-6">
-                <h1 class="text-2xl font-semibold text-gray-900">Help & Support</h1>
-            </div>
+        <!-- Main Content Area -->
+        <div class="flex-1 w-full max-w-4xl mx-auto px-6 py-12 text-gray-600 font-sans antialiased selection:bg-gray-200 selection:text-gray-900">
+            
+            <!-- HOME SECTION -->
+            <div id="view-home">
+                <!-- Professional Header -->
+                <div class="mb-10 pb-8 border-b border-gray-100">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Teacher Support</h1>
+                    <p class="text-gray-500 text-lg">Documentation and tools for academic management.</p>
+                </div>
 
-            <!-- Support Cards -->
-            <div class="mb-6">
-                <div class="flex gap-7 flex-wrap">
-                    <!-- Create Ticket -->
-                    <div
-                        class="w-64 bg-white border border-gray-200 rounded-2xl p-4 flex items-center gap-5 cursor-pointer">
-                        <div class="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center"
-                            style="background-color: #F4F4E6;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#6c6c14"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M232,108a12,12,0,0,0,12-12V64a20,20,0,0,0-20-20H32A20,20,0,0,0,12,64V96a12,12,0,0,0,12,12,20,20,0,0,1,0,40,12,12,0,0,0-12,12v32a20,20,0,0,0,20,20H224a20,20,0,0,0,20-20V160a12,12,0,0,0-12-12,20,20,0,0,1,0-40ZM36,170.34a44,44,0,0,0,0-84.68V68H88V188H36Zm184,0V188H112V68H220V85.66a44,44,0,0,0,0,84.68Z">
-                                </path>
-                            </svg>
-                        </div>
-                        <div class="text-base font-semibold text-gray-900">Create Ticket</div>
+                <!-- Search Bar -->
+                <div class="relative mb-12 group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i data-lucide="search" class="w-5 h-5 text-gray-400 group-focus-within:text-gray-600"></i>
                     </div>
+                    <input type="text" class="block w-full pl-11 pr-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-400" placeholder="Search documentation...">
+                </div>
 
-                    <!-- Report Issue -->
-                    <div
-                        class="w-64 bg-white border border-gray-200 rounded-2xl p-4 flex items-center gap-5 cursor-pointer">
-                        <div class="w-16 h-16 rounded-full bg-orange-50 flex items-center justify-center"
-                            style="background-color: #FAF2ED;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#9b471b"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M140,88a16,16,0,1,1,16,16A16,16,0,0,1,140,88ZM100,72a16,16,0,1,0,16,16A16,16,0,0,0,100,72Zm120,72a91.84,91.84,0,0,1-2.34,20.64L236.81,173a12,12,0,0,1-9.62,22l-18-7.85a92,92,0,0,1-162.46,0l-18,7.85a12,12,0,1,1-9.62-22l19.15-8.36A91.84,91.84,0,0,1,36,144v-4H16a12,12,0,0,1,0-24H36v-4a91.84,91.84,0,0,1,2.34-20.64L19.19,83a12,12,0,0,1,9.62-22l18,7.85a92,92,0,0,1,162.46,0l18-7.85a12,12,0,1,1,9.62,22l-19.15,8.36A91.84,91.84,0,0,1,220,112v4h20a12,12,0,0,1,0,24H220ZM60,116H196v-4a68,68,0,0,0-136,0Zm56,94.92V140H60v4A68.1,68.1,0,0,0,116,210.92ZM196,144v-4H140v70.92A68.1,68.1,0,0,0,196,144Z">
-                                </path>
-                            </svg>
+                <!-- Quick Access Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                    <button onclick="router('faq')" class="flex flex-col p-6 bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:bg-gray-50 text-left group">
+                        <div class="w-10 h-10 bg-gray-100 rounded-md flex items-center justify-center text-gray-700 mb-4 group-hover:bg-white group-hover:border group-hover:border-gray-200">
+                            <i data-lucide="help-circle" class="w-5 h-5"></i>
                         </div>
-                        <div class="text-base font-semibold text-gray-900">Report Issue</div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:underline decoration-gray-300 underline-offset-4">Educator FAQs</h3>
+                        <p class="text-sm text-gray-500 mb-6 leading-relaxed">Answers to common questions about project assignment, grading, and reports.</p>
+                        <div class="mt-auto flex items-center text-gray-700 font-semibold text-sm">
+                            <span>View Questions</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </button>
+
+                    <button onclick="router('guides')" class="flex flex-col p-6 bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:bg-gray-50 text-left group">
+                        <div class="w-10 h-10 bg-gray-100 rounded-md flex items-center justify-center text-gray-700 mb-4 group-hover:bg-white group-hover:border group-hover:border-gray-200">
+                            <i data-lucide="file-text" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:underline decoration-gray-300 underline-offset-4">Feature Guides</h3>
+                        <p class="text-sm text-gray-500 mb-6 leading-relaxed">Detailed walkthroughs for analytics, research modules, test scheduling, and reporting.</p>
+                        <div class="mt-auto flex items-center text-gray-700 font-semibold text-sm">
+                            <span>Browse Guides</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Contact Support (Professional) -->
+                <div class="border-t border-gray-200 pt-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider">Internal Support</h3>
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-700 px-2.5 py-1 rounded border border-gray-200">Status: Online</span>
                     </div>
-
-                    <!-- Schedule Callback -->
-                    <div
-                        class="w-64 bg-white border border-gray-200 rounded-2xl p-4 flex items-center gap-5 cursor-pointer">
-                        <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center"
-                            style="background-color: #EAF8F4;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#165442"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M216,162.8l-47.09-21.1-.18-.08a19.89,19.89,0,0,0-19,1.74,13.08,13.08,0,0,0-1.12.84l-22.31,19c-13-7.05-26.43-20.37-33.49-33.21l19.06-22.66a11.76,11.76,0,0,0,.85-1.15,20,20,0,0,0,1.66-18.83,1.42,1.42,0,0,1-.08-.18L93.2,40A20.06,20.06,0,0,0,72.42,28.15,60.27,60.27,0,0,0,20,88c0,81.61,66.39,148,148,148a60.27,60.27,0,0,0,59.85-52.42A20.06,20.06,0,0,0,216,162.8ZM168,212A124.15,124.15,0,0,1,44,88,36.29,36.29,0,0,1,72.48,52.46l18.82,42L72.14,117.28a12,12,0,0,0-.86,1.16A20,20,0,0,0,70,138.08c9.42,19.28,28.83,38.56,48.31,48A20,20,0,0,0,138,184.63a11.63,11.63,0,0,0,1.11-.85l22.43-19.07,42,18.81A36.29,36.29,0,0,1,168,212ZM140,104V64a12,12,0,0,1,24,0V75l27.52-27.52a12,12,0,0,1,17,17L181,92h11a12,12,0,0,1,0,24H152A12,12,0,0,1,140,104Z">
-                                </path>
-                            </svg>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-lg bg-white border border-gray-200 hover:border-gray-300 flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-md bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-600">
+                                <i data-lucide="server" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-gray-500 uppercase tracking-wide">IT Administrator</p>
+                                <p class="text-sm font-bold text-gray-900">Mr. David Admin</p>
+                                <p class="text-xs text-gray-500">Ext: 4022</p>
+                            </div>
                         </div>
-                        <div class="text-base font-semibold text-gray-900">Schedule a<br>Callback</div>
+                        <div class="p-4 rounded-lg bg-white border border-gray-200 hover:border-gray-300 flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-md bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-600">
+                                <i data-lucide="building-2" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-gray-500 uppercase tracking-wide">Department Head</p>
+                                <p class="text-sm font-bold text-gray-900">Dr. Emily Chen</p>
+                                <p class="text-xs text-gray-500">Science Dept</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- FAQ SECTION -->
+            <div id="view-faq" class="hidden">
+                <button onclick="router('home')" class="mb-8 flex items-center text-sm font-semibold text-gray-500 hover:text-gray-900 border border-gray-200 rounded-md px-3 py-1.5 bg-white w-fit">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Back
+                </button>
+                
+                <div class="mb-10">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-2">Frequently Asked Questions</h1>
+                    <p class="text-gray-500">Administrative guidelines and solutions.</p>
+                </div>
 
-            <!-- Help Section Header -->
-            <div class="flex items-center gap-4 mb-4">
-                <div>
-                    <div class="text-lg font-bold text-black-700 mb-1">Help & Categories</div>
-                    <div class="text-xs text-gray-500">Get to know about your dashboard</div>
+                <div class="space-y-4 max-w-3xl">
+                    <!-- FAQ Item 1 -->
+                    <details class="group bg-white rounded-lg border border-gray-200 open:ring-1 open:ring-gray-200">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer list-none text-gray-900 font-semibold hover:bg-gray-50">
+                            <span>How do I assign a new project to a class?</span>
+                            <span class="text-gray-400 group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                            </span>
+                        </summary>
+                        <div class="px-5 pb-5 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                            Go to the "Projects" module and click "Create New". You must select the specific Class (e.g., Grade 10-A) and Subject (e.g., Physics). Set the deadline and attach guidelines before publishing.
+                        </div>
+                    </details>
+
+                    <!-- FAQ Item 2 -->
+                    <details class="group bg-white rounded-lg border border-gray-200 open:ring-1 open:ring-gray-200">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer list-none text-gray-900 font-semibold hover:bg-gray-50">
+                            <span>Where can I view and grade student submissions?</span>
+                            <span class="text-gray-400 group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                            </span>
+                        </summary>
+                        <div class="px-5 pb-5 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                            Click on the specific Project card to open the dashboard. Navigate to the "Submissions" tab. Here you can view uploaded files, verify timestamp (On Time/Late), and enter marks/remarks directly.
+                        </div>
+                    </details>
+
+                    <!-- FAQ Item 3 -->
+                    <details class="group bg-white rounded-lg border border-gray-200 open:ring-1 open:ring-gray-200">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer list-none text-gray-900 font-semibold hover:bg-gray-50">
+                            <span>How can I edit a published test schedule?</span>
+                            <span class="text-gray-400 group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                            </span>
+                        </summary>
+                        <div class="px-5 pb-5 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                            In the "Examination" module, find the test in the "Upcoming" list. Click the "Edit" icon. Note that you cannot change the schedule if the test start time is within 1 hour.
+                        </div>
+                    </details>
+                    
+                     <!-- FAQ Item 4 -->
+                     <details class="group bg-white rounded-lg border border-gray-200 open:ring-1 open:ring-gray-200">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer list-none text-gray-900 font-semibold hover:bg-gray-50">
+                            <span>How do I download monthly attendance reports?</span>
+                            <span class="text-gray-400 group-open:rotate-180">
+                                <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                            </span>
+                        </summary>
+                        <div class="px-5 pb-5 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                            Navigate to "Analytics" > "Class Reports". Select the Class and Month. Click the "Export as PDF" or "Export as CSV" button at the top right corner.
+                        </div>
+                    </details>
                 </div>
             </div>
 
-            <!-- Help Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Getting Started Guide -->
-                <div class="bg-white border border-gray-200 rounded-xl p-5   transition-shadow">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div class="w-11 h-11 bg-gray-50 border rounded-lg flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#8f8f8f"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M227.85,46.89a20,20,0,0,0-18.74-18.74c-13.13-.77-46.65.42-74.48,28.24L131,60H74.36a19.83,19.83,0,0,0-14.14,5.86L25.87,100.19a20,20,0,0,0,11.35,33.95l37.14,5.18,42.32,42.32,5.19,37.18A19.88,19.88,0,0,0,135.34,235a20.13,20.13,0,0,0,6.37,1,19.9,19.9,0,0,0,14.1-5.87l34.34-34.35A19.85,19.85,0,0,0,196,181.64V125l3.6-3.59C227.43,93.54,228.62,60,227.85,46.89ZM76,84h31L75.75,115.28l-27.23-3.8ZM151.6,73.37A72.27,72.27,0,0,1,204,52a72.17,72.17,0,0,1-21.38,52.41L128,159,97,128ZM172,180l-27.49,27.49-3.8-27.23L172,149Zm-72,22c-8.71,11.85-26.19,26-60,26a12,12,0,0,1-12-12c0-33.84,14.12-51.32,26-60A12,12,0,1,1,68.18,175.3C62.3,179.63,55.51,187.8,53,203c15.21-2.51,23.37-9.3,27.7-15.18A12,12,0,1,1,100,202Z">
-                                </path>
-                            </svg>
-                        </div>
-                        <div class="text-base font-semibold text-gray-900">Getting Started Guide</div>
-                    </div>
-                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its
-                        core features.</div>
-                    <div class="flex items-center gap-2">
-                        <a href="#" class="text-sm" style="color: #834E19;">Learn more</a>
-                        <span class="text-xs font-semibold px-2 py-1 rounded-full"
-                            style="background-color: #EAF9E6; color: #26411f;">Recommended</span>
-                    </div>
+            <!-- GUIDES SECTION -->
+            <div id="view-guides" class="hidden">
+                <button onclick="router('home')" class="mb-8 flex items-center text-sm font-semibold text-gray-500 hover:text-gray-900 border border-gray-200 rounded-md px-3 py-1.5 bg-white w-fit">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Back
+                </button>
+
+                <div class="mb-10 pb-6 border-b border-gray-100">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-2">Guides & Tutorials</h1>
+                    <p class="text-gray-500">Step-by-step documentation for platform features.</p>
                 </div>
 
-                <!-- Managing Student -->
-                <div class="bg-white border border-gray-200 rounded-xl p-5  transition-shadow">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div
-                            class="w-11 h-11 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#8f8f8f"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M169.57,46.11a12,12,0,0,1,15.12-7.7L188,39.48V36a12,12,0,0,1,24,0v3.48l3.31-1.07a12,12,0,1,1,7.42,22.82l-3.31,1.08,2,2.82a12,12,0,1,1-19.41,14.1L200,76.42,198,79.23a12,12,0,1,1-19.41-14.1l2-2.82-3.31-1.08A12,12,0,0,1,169.57,46.11ZM236,128A108,108,0,1,1,128,20a109.19,109.19,0,0,1,18,1.49,12,12,0,0,1-4,23.67A85,85,0,0,0,128,44,83.94,83.94,0,0,0,62.05,179.94a83.48,83.48,0,0,1,29-23.42,52,52,0,1,1,74,0,83.48,83.48,0,0,1,29,23.42A83.57,83.57,0,0,0,212,128a85.2,85.2,0,0,0-1.16-14,12,12,0,0,1,23.67-4A109,109,0,0,1,236,128ZM128,148a28,28,0,1,0-28-28A28,28,0,0,0,128,148Zm0,64a83.53,83.53,0,0,0,48.43-15.43,60,60,0,0,0-96.86,0A83.53,83.53,0,0,0,128,212Z">
-                                </path>
-                            </svg>
+                <!-- Guides Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    
+                    <!-- Guide 1: Managing Students -->
+                    <div onclick="openGuide('students')" class="cursor-pointer group block bg-white rounded-lg border border-gray-200 hover:border-gray-400 p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-10 h-10 bg-gray-50 text-gray-700 rounded-md flex items-center justify-center border border-gray-100 group-hover:bg-white group-hover:border-gray-200">
+                                <i data-lucide="users" class="w-5 h-5"></i>
+                            </div>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-300 group-hover:text-gray-600"></i>
                         </div>
-                        <div class="text-base font-semibold text-gray-900">Managing Student</div>
+                        <h3 class="text-base font-bold text-gray-900 mb-2">Managing Students</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">View student activity logs, check performance analytics, and monitor progress.</p>
                     </div>
-                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its
-                        core features.</div>
-                    <div class="flex items-center justify-between">
-                        <a href="#" class="text-sm" style="color: #834E19;">Learn more</a>
-                    </div>
-                </div>
 
-                <!-- Test & Assignment tool -->
-                <div class="bg-white border border-gray-200 rounded-xl p-5  transition-shadow">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div
-                            class="w-11 h-11 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#8f8f8f"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M172,164a12,12,0,0,1-12,12H96a12,12,0,0,1,0-24h64A12,12,0,0,1,172,164Zm-12-52H96a12,12,0,0,0,0,24h64a12,12,0,0,0,0-24Zm60-64V216a20,20,0,0,1-20,20H56a20,20,0,0,1-20-20V48A20,20,0,0,1,56,28H90.53a51.88,51.88,0,0,1,74.94,0H200A20,20,0,0,1,220,48ZM100.29,60h55.42a28,28,0,0,0-55.42,0ZM196,52H178.59A52.13,52.13,0,0,1,180,64v8a12,12,0,0,1-12,12H88A12,12,0,0,1,76,72V64a52.13,52.13,0,0,1,1.41-12H60V212H196Z">
-                                </path>
-                            </svg>
+                    <!-- Guide 2: Schedule Tests -->
+                    <div onclick="openGuide('tests')" class="cursor-pointer group block bg-white rounded-lg border border-gray-200 hover:border-gray-400 p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-10 h-10 bg-gray-50 text-gray-700 rounded-md flex items-center justify-center border border-gray-100 group-hover:bg-white group-hover:border-gray-200">
+                                <i data-lucide="calendar-clock" class="w-5 h-5"></i>
+                            </div>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-300 group-hover:text-gray-600"></i>
                         </div>
-                        <div class="text-base font-semibold text-gray-900">Test & Assignment tool</div>
+                        <h3 class="text-base font-bold text-gray-900 mb-2">Schedule Tests</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">Set subject-specific tests, choose exam dates, and assign to classes.</p>
                     </div>
-                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its
-                        core features.</div>
-                    <div class="flex items-center gap-2">
-                        <a href="#" class="text-sm" style="color: #834E19;">Learn more</a>
-                        <span class="text-xs font-semibold px-2 py-1 rounded-full"
-                            style="background-color: #F8F3E2; color: #625D15;">Popular</span>
-                    </div>
-                </div>
 
-                <!-- Research Paper -->
-                <div class="bg-white border border-gray-200 rounded-xl p-5  transition-shadow">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div
-                            class="w-11 h-11 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#8f8f8f"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M224,204H212A92.1,92.1,0,0,0,148,60.78V32a20,20,0,0,0-20-20H80A20,20,0,0,0,60,32v96a20,20,0,0,0,20,20h48a20,20,0,0,0,20-20V85.08A68.1,68.1,0,0,1,204,152a67.39,67.39,0,0,1-24.18,52H32a12,12,0,0,0,0,24H224a12,12,0,0,0,0-24ZM124,124H84V36h40ZM72,188a12,12,0,0,1,0-24h64a12,12,0,0,1,0,24Z">
-                                </path>
-                            </svg>
+                    <!-- Guide 3: Research Paper -->
+                    <div onclick="openGuide('research')" class="cursor-pointer group block bg-white rounded-lg border border-gray-200 hover:border-gray-400 p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-10 h-10 bg-gray-50 text-gray-700 rounded-md flex items-center justify-center border border-gray-100 group-hover:bg-white group-hover:border-gray-200">
+                                <i data-lucide="file-search" class="w-5 h-5"></i>
+                            </div>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-300 group-hover:text-gray-600"></i>
                         </div>
-                        <div class="text-base font-semibold text-gray-900">Research Paper</div>
+                        <h3 class="text-base font-bold text-gray-900 mb-2">Research & Papers</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">Start research on specific topics with assistance from an AI mentor.</p>
                     </div>
-                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its
-                        core features.</div>
-                    <div class="flex items-center justify-between">
-                        <a href="#" class="text-sm" style="color: #834E19;">Learn more</a>
-                    </div>
-                </div>
 
-                <!-- AI Features -->
-                <div class="bg-white border border-gray-200 rounded-xl p-5 transition-shadow">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div
-                            class="w-11 h-11 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#8f8f8f"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M199,125.31l-49.88-18.39L130.69,57a19.92,19.92,0,0,0-37.38,0L74.92,106.92,25,125.31a19.92,19.92,0,0,0,0,37.38l49.88,18.39L93.31,231a19.92,19.92,0,0,0,37.38,0l18.39-49.88L199,162.69a19.92,19.92,0,0,0,0-37.38Zm-63.38,35.16a12,12,0,0,0-7.11,7.11L112,212.28l-16.47-44.7a12,12,0,0,0-7.11-7.11L43.72,144l44.7-16.47a12,12,0,0,0,7.11-7.11L112,75.72l16.47,44.7a12,12,0,0,0,7.11,7.11L180.28,144ZM140,40a12,12,0,0,1,12-12h12V16a12,12,0,0,1,24,0V28h12a12,12,0,0,1,0,24H188V64a12,12,0,0,1-24,0V52H152A12,12,0,0,1,140,40ZM252,88a12,12,0,0,1-12,12h-4v4a12,12,0,0,1-24,0v-4h-4a12,12,0,0,1,0-24h4V72a12,12,0,0,1,24,0v4h4A12,12,0,0,1,252,88Z">
-                                </path>
-                            </svg>
+                    <!-- Guide 4: Analytics -->
+                    <div onclick="openGuide('analytics')" class="cursor-pointer group block bg-white rounded-lg border border-gray-200 hover:border-gray-400 p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-10 h-10 bg-gray-50 text-gray-700 rounded-md flex items-center justify-center border border-gray-100 group-hover:bg-white group-hover:border-gray-200">
+                                <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                            </div>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-300 group-hover:text-gray-600"></i>
                         </div>
-                        <div class="text-base font-semibold text-gray-900">AI Features</div>
+                        <h3 class="text-base font-bold text-gray-900 mb-2">Analytics</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">View detailed subject analytics, class performance, and student statistics.</p>
                     </div>
-                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its
-                        core features.</div>
-                    <div class="flex items-center justify-between">
-                        <a href="#" class="text-sm" style="color: #834E19;">Learn more</a>
-                    </div>
-                </div>
 
-                <!-- Project Management help -->
-                <div class="bg-white border border-gray-200 rounded-xl p-5  transition-shadow">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div
-                            class="w-11 h-11 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#8f8f8f"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M216,68H133.39l-26-29.29a20,20,0,0,0-15-6.71H40A20,20,0,0,0,20,52V200.62A19.41,19.41,0,0,0,39.38,220H216.89A19.13,19.13,0,0,0,236,200.89V88A20,20,0,0,0,216,68ZM90.61,56l10.67,12H44V56ZM212,196H44V92H212Zm-72-76v12h12a12,12,0,0,1,0,24H140v12a12,12,0,0,1-24,0V156H104a12,12,0,0,1,0-24h12V120a12,12,0,0,1,24,0Z">
-                                </path>
-                            </svg>
+                    <!-- Guide 5: Project Management -->
+                    <div onclick="openGuide('projects')" class="cursor-pointer group block bg-white rounded-lg border border-gray-200 hover:border-gray-400 p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-10 h-10 bg-gray-50 text-gray-700 rounded-md flex items-center justify-center border border-gray-100 group-hover:bg-white group-hover:border-gray-200">
+                                <i data-lucide="kanban-square" class="w-5 h-5"></i>
+                            </div>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-300 group-hover:text-gray-600"></i>
                         </div>
-                        <div class="text-base font-semibold text-gray-900">Project Management help</div>
+                        <h3 class="text-base font-bold text-gray-900 mb-2">Project Management</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">Assign projects to classes/subjects and view student submissions.</p>
                     </div>
-                    <div class="text-sm text-gray-600 mb-4">Your first steps to mastering the Osmium dashboard and its
-                        core features.</div>
-                    <div class="flex items-center justify-between">
-                        <a href="#" class="text-sm" style="color: #834E19;">Learn more</a>
-                    </div>
+
                 </div>
             </div>
 
-            <!-- Chat with Support Button -->
-            <div class="flex justify-end mt-6">
-                <div class="flex items-center gap-4 bg-white px-8 py-2 rounded-full cursor-pointer transition-all duration-200"
-                    style="border: 2px solid #FCE09E;  ">
-                    <div class="w-10 h-10 rounded-full bg-black-100 flex items-center justify-center"
-                        style="background-color: #1d1d1d;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#ffffff"
-                            viewBox="0 0 256 256">
-                            <path
-                                d="M216,76H188V48a20,20,0,0,0-20-20H40A20,20,0,0,0,20,48V176a12,12,0,0,0,19.54,9.33l28.46-23V184a20,20,0,0,0,20,20h92.17l36.29,29.33A12,12,0,0,0,236,224V96A20,20,0,0,0,216,76ZM44,150.87V52H164v80H71.58A12,12,0,0,0,64,134.67Zm168,48-20-16.2a12,12,0,0,0-7.54-2.67H92V156h76a20,20,0,0,0,20-20V100h24Z">
-                            </path>
-                        </svg>
+        </div>
+
+        <!-- GUIDE POPUP MODAL -->
+        <div id="guide-modal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-gray-900/40" onclick="closeModal()"></div>
+            
+            <!-- Panel -->
+            <div class="fixed inset-0 z-10 overflow-y-auto">
+                <div class="flex min-h-full items-center justify-center p-4 text-center">
+                    <div class="relative bg-white text-left border border-gray-200 w-full max-w-lg rounded-lg">
+                        <!-- Modal Header -->
+                        <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                            <h3 class="text-lg font-bold text-gray-900" id="modal-title">Guide Title</h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-900 p-1 rounded hover:bg-gray-100">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Modal Content -->
+                        <div class="px-6 py-8">
+                            <div class="flex gap-5">
+                                <div class="shrink-0">
+                                    <div class="w-10 h-10 rounded-md bg-gray-100 text-gray-700 flex items-center justify-center">
+                                        <i data-lucide="info" class="w-5 h-5"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-4">Procedure</h4>
+                                    <ul id="modal-content" class="space-y-4 text-gray-700 text-sm">
+                                        <!-- Content injected via JS -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="bg-gray-50 px-6 py-4 flex flex-row-reverse border-t border-gray-100 rounded-b-lg">
+                            <button type="button" onclick="closeModal()" class="inline-flex w-full justify-center rounded-md bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 sm:w-auto">Close</button>
+                        </div>
                     </div>
-                    <span class="text-base font-medium text-gray-900">Chat with Support</span>
                 </div>
             </div>
-
-            <style>
-                @media (max-width: 1100px) {
-                    .grid {
-                        grid-template-columns: repeat(3, 1fr) !important;
-                    }
-                }
-
-                @media (max-width: 800px) {
-                    .grid {
-                        grid-template-columns: repeat(2, 1fr) !important;
-                    }
-                }
-
-                @media (max-width: 500px) {
-                    .grid {
-                        grid-template-columns: 1fr !important;
-                    }
-                }
-            </style>
         </div>
     </main>
 
@@ -1122,6 +1189,24 @@
             if (window.innerWidth <= 768) {
                 sidebar.classList.toggle('sidebar-open');
                 overlay.classList.toggle('active');
+            }
+        }
+
+        function collapseSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const reopenBtn = document.querySelector('.reopen-btn');
+            
+            sidebar.classList.toggle('collapsed');
+            
+            if (sidebar.classList.contains('collapsed')) {
+                mainContent.style.marginLeft = '0';
+                mainContent.style.width = '100%';
+                reopenBtn.classList.add('show');
+            } else {
+                mainContent.style.marginLeft = '280px';
+                mainContent.style.width = 'calc(100% - 280px)';
+                reopenBtn.classList.remove('show');
             }
         }
 
@@ -1143,6 +1228,92 @@
                 overlay.classList.remove('active');
             }
         });
+
+        // Guide Content Data
+        const guideData = {
+            'students': {
+                title: 'Managing Students',
+                steps: [
+                    'Navigate to the Student List to view profiles.',
+                    'View detailed student activity logs.',
+                    'Check performance analytics for grades.',
+                    'Monitor overall student progress.'
+                ]
+            },
+            'tests': {
+                title: 'Schedule Tests & Exams',
+                steps: [
+                    'Select your specific subject for the test.',
+                    'Choose the exam date and time.',
+                    'Assign the test to the respective batch.',
+                    'Confirm scheduling details.'
+                ]
+            },
+            'research': {
+                title: 'Research & Papers',
+                steps: [
+                    'Start a new research topic.',
+                    'Use the AI Mentor for guidance.',
+                    'Collaborate on paper drafts.',
+                    'Submit for review.'
+                ]
+            },
+            'analytics': {
+                title: 'Analytics Dashboard',
+                steps: [
+                    'View performance data for your specific subjects.',
+                    'Analyze comparative class-level statistics.',
+                    'Drill down into individual student analytics.',
+                    'Export reports for administrative review.'
+                ]
+            },
+            'projects': {
+                title: 'Project & Assignment Management',
+                steps: [
+                    'Navigate to "Projects" module and click "Create New".',
+                    'Select the specific Class and Subject from the dropdown.',
+                    'Enter assignment details and submission deadline.',
+                    'Click "Submissions" on the project card to view and grade student work.'
+                ]
+            }
+        };
+
+        function openGuide(guideId) {
+            const data = guideData[guideId];
+            if (!data) return;
+
+            document.getElementById('modal-title').innerText = data.title;
+            const list = document.getElementById('modal-content');
+            list.innerHTML = data.steps.map((step, index) => `
+                <li class="flex gap-3 items-start">
+                    <span class="font-bold text-gray-400 text-xs mt-0.5 min-w-[1.25rem] select-none">${index + 1}.</span>
+                    <span class="leading-relaxed text-gray-700">${step}</span>
+                </li>
+            `).join('');
+            
+            document.getElementById('guide-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('guide-modal').classList.add('hidden');
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+
+        function router(viewName) {
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-faq').classList.add('hidden');
+            document.getElementById('view-guides').classList.add('hidden');
+
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            lucide.createIcons();
+            window.scrollTo(0, 0);
+        }
 
         // Tab switching functionality
         function switchTab(clickedTab, tabType) {

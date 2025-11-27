@@ -130,6 +130,48 @@
             }
         }
 
+        /* Desktop sidebar toggle styles */
+        @media (min-width: 769px) {
+            .sidebar.collapsed {
+                transform: translateX(-100%);
+            }
+
+            .main-content.expanded {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        /* Toggle button styles */
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 60;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        @media (min-width: 769px) {
+            .main-content.expanded .toggle-btn {
+                display: flex;
+            }
+        }
+
         .sidebar-top {
             flex: 1;
         }
@@ -650,97 +692,191 @@
             color: #929292;
         }
 
-        /* Weak Topics Styles */
-        .weak-topics-card {
+        /* Learning Strengths & Weaknesses Styles */
+        .learning-card {
+            width: 100%;
             background: #fff;
+            padding: 32px;
             border-radius: 22px;
-            border: 1px solid #e7e7e7;
-            padding: 26px 28px;
+            border: 1px solid #e8e6e2;
         }
-
-        .header-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .weak-title {
-            font-size: 20px;
+        /* Header */
+        .title {
+            font-size: 22px;
             font-weight: 600;
-            color: #222;
+            color: #1a1a1a;
         }
-
-        .weak-subtitle {
-            margin-top: 4px;
+        .subtitle {
             font-size: 14px;
             color: #999;
+            margin-top: 4px;
+        }
+        /* Dropdown */
+        .dropdown {
+            float: right;
+            margin-top: -40px;
+            background: #f4f2ee;
+            border: 1px solid #ddd;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #333;
+        }
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin-top: 40px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            gap: 40px;
+        }
+        .tab {
+            font-size: 15px;
+            color: #666;
+            padding-bottom: 6px;
+            cursor: pointer;
+        }
+        .active {
+            font-weight: 600;
+            color: #1a1a1a;
+           
+        }
+        /* Topic List */
+        .topic-list {
+            margin-top: 26px;
+        }
+        .topic-row {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            align-items: center;
+            padding: 14px 0;
+            column-gap: 10px;
+        }
+        /* Bullet */
+        .dot-red {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #DC3636;
+            border: 2px solid #FAE2E2;
+            margin-right: 6px;
+        }
+        .topic-name {
+            font-size: 15px;
+            color: #222;
+        }
+        /* Right Values */
+        .value {
+            font-size: 15px;
+            text-align: right;
+            color: #333;
+            width: 70px;
+        }
+        .trend-red {
+            font-size: 14px;
+            color: #DC3636;
+            margin-left: 8px;
+        }
+        .trend-green {
+            font-size: 14px;
+            color: #2ecc71;
+            margin-left: 8px;
         }
 
-        .weak-sort-btn {
-            background: #f3efe9;
-            border-radius: 10px;
-            padding: 8px 14px;
-            border: none;
+        .download-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding: 80px 40px 40px 40px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .download-modal .download-card {
+            pointer-events: auto;
+        }
+
+        .download-card {
+            width: 320px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .download-subtitle {
             font-size: 14px;
+            color: #666;
+            margin-bottom: 0;
+        }
+
+        .download-divider {
+            margin: 16px 0;
+            height: 1px;
+            background: #f0f0f0;
+        }
+
+        .download-toggle-container {
+            display: flex;
+            gap: 12px;
+        }
+
+        .download-toggle-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            background: #f8f9fa;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
-            color: #444;
-        }
-
-        .weak-table {
-            margin-top: 22px;
-            width: 100%;
-        }
-
-        .weak-table-header {
-            display: grid;
-            grid-template-columns: 1.6fr 1fr 1fr;
-            padding-bottom: 12px;
+            justify-content: center;
+            gap: 8px;
             font-size: 14px;
-            color: #777;
-            border-bottom: 1px solid #f0f0f0;
-            margin-bottom: 10px;
-        }
-
-        .weak-row {
-            display: grid;
-            grid-template-columns: 1.6fr 1fr 1fr;
-            padding: 14px 0;
-            font-size: 15px;
-            color: #333;
-            align-items: center;
-        }
-
-        .topic-cell {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .weak-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: #ff6b6b;
-        }
-
-        .weak-accuracy {
-            text-align: right;
             font-weight: 500;
+            color: #666;
+            transition: all 0.2s ease;
         }
 
-        .red {
-            color: #e25b5b;
-            margin-left: 6px;
-            font-size: 14px;
+        .download-toggle-btn.active {
+            background: #f0ede8;
+            border-color: #c79647;
+            color: #c79647;
+            font-weight: 600;
         }
 
-        .green {
-            color: #2da860;
-            margin-left: 6px;
+        .download-btn {
+            width: 100%;
+            background: #c79647;
+            border: none;
+            color: white;
+            padding: 10px 0;
             font-size: 14px;
+            font-weight: 500;
+            border-radius: 12px;
+            margin-top: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .download-btn:hover {
+            background: #b58840;
         }
     </style>
 </head>
@@ -851,6 +987,15 @@
     <!-- Main Content -->
     <main class="main-content flex-1 overflow-y-auto h-full relative transition-all duration-300"
         style="margin-left: 280px; width: calc(100% - 280px);" id="main-content">
+        <!-- Toggle Button (Desktop) -->
+        <button type="button" class="toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+            <img src="./logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+        </button>
+        <!-- Toggle Button (Desktop) -->
+        <button type="button" class="toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+            <img src="./logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+        </button>
+
         <!-- Mobile Header -->
         <div class="md:hidden flex items-center justify-between p-4 bg-white border-b sticky top-0 z-30">
             <div class="flex items-center gap-3">
@@ -902,15 +1047,12 @@
 
                     <!-- Buttons -->
                     <div class="flex flex-wrap gap-2 md:gap-3">
-                        <button
+                        <button onclick="openDownloadModal()"
                             class="px-3 md:px-4 py-2 text-sm border border-gray-300 rounded-lg bg-white text-gray-700 flex items-center gap-2">
                             <i data-lucide="download" class="w-4 h-4"></i> <span class="hidden sm:inline">Download
                                 Report</span>
                         </button>
-                        <button
-                            class="px-3 md:px-4 py-2 text-sm border border-gray-300 rounded-lg bg-white text-gray-700 flex items-center gap-2">
-                            <i data-lucide="pencil" class="w-4 h-4"></i> <span class="hidden sm:inline">Edit</span>
-                        </button>
+                        
                         <button
                             class="px-3 md:px-4 py-2 text-sm border border-white-200 rounded-lg bg-white text-red-600">
                             Remove
@@ -1037,7 +1179,7 @@
                             <span><b>JEE Mains</b> - 2 Sep 2025</span>
                         </div>
                         <div style="display:flex; align-items:center; gap:12px;">
-                            <button class="exam-view-btn">View Result</button>
+                            <button class="exam-view-btn" onclick="window.location.href='test analytics.html'">View Result</button>
                             <div class="exam-score">120/300</div>
                         </div>
                     </div>
@@ -1049,7 +1191,7 @@
                             <span><b>JEE Mains</b> - 28 Aug 2025</span>
                         </div>
                         <div style="display:flex; align-items:center; gap:12px;">
-                            <button class="exam-view-btn">View Result</button>
+                            <button class="exam-view-btn" onclick="window.location.href='test analytics.html'">View Result</button>
                             <div class="exam-score">102/300</div>
                         </div>
                     </div>
@@ -1061,7 +1203,7 @@
                             <span><b>JEE Mains</b> - 18 Aug 2025</span>
                         </div>
                         <div style="display:flex; align-items:center; gap:12px;">
-                            <button class="exam-view-btn">View Result</button>
+                            <button class="exam-view-btn" onclick="window.location.href='test analytics.html'">View Result</button>
                             <div class="exam-score">85/300</div>
                         </div>
                     </div>
@@ -1073,7 +1215,7 @@
                             <span><b>JEE Mains</b> - 15 Aug 2025</span>
                         </div>
                         <div style="display:flex; align-items:center; gap:12px;">
-                            <button class="exam-view-btn">View Result</button>
+                            <button class="exam-view-btn" onclick="window.location.href='test analytics.html'">View Result</button>
                             <div class="exam-score">59/300</div>
                         </div>
                     </div>
@@ -1252,75 +1394,113 @@
                     </div>
                 </div>
 
-                <!-- Weak Topics -->
-                <div class="lg:col-span-3 weak-topics-card">
-                    <div class="header-area">
-                        <div>
-                            <div class="weak-title">Weak Topics</div>
-                            <div class="weak-subtitle">Areas where the student needs more practice</div>
+                <!-- Learning Strengths & Weaknesses -->
+                <div class="lg:col-span-3">
+                    <div class="learning-card">
+                        <div class="title">Learning Strengths & Weaknesses</div>
+                        <div class="subtitle">Highlights strong topics and weak spots.</div>
+                        <div class="dropdown">DSA ▼</div>
+                        <!-- Tabs -->
+                        <div class="tabs">
+                            <div class="tab active" onclick="showTab('weak', this)">Weak topics</div>
+                            <div class="tab" onclick="showTab('strong', this)">Strong topics</div>
+                            <div class="tab" onclick="showTab('suggestions', this)">Suggestions</div>
                         </div>
-
-                        <button class="weak-sort-btn">Sort
-                            <svg width="16" height="16" fill="none" stroke="#444" stroke-width="2">
-                                <polyline points="4 6 8 10 12 6"></polyline>
-                            </svg>
-                        </button>
-                    </div>
-
-                    <!-- Table -->
-                    <div class="weak-table">
-                        <div class="weak-table-header">
-                            <div>Topics</div>
-                            <div>Subject</div>
-                            <div style="text-align:right;">Accuracy</div>
-                        </div>
-
-                        <div class="weak-row">
-                            <div class="topic-cell">
-                                <div class="weak-dot"></div>Graphs
+                        <!-- Weak Topics Section -->
+                        <div id="weak-content" class="topic-list">
+                            <div class="topic-row">
+                                <div class="dot-red"></div>
+                                <div class="topic-name">Graphs</div>
+                                <div class="value">25.5%</div>
+                                <div class="trend-red">+5.3%</div>
                             </div>
-                            <div>DBMS</div>
-                            <div class="weak-accuracy">25.5% <span class="red">+5.3%</span></div>
-                        </div>
-
-                        <div class="weak-row">
-                            <div class="topic-cell">
-                                <div class="weak-dot"></div>Dynamic Programming
+                            <div class="topic-row">
+                                <div class="dot-red"></div>
+                                <div class="topic-name">Dynamic Programming</div>
+                                <div class="value">32.23%</div>
+                                <div class="trend-green">-12.1%</div>
                             </div>
-                            <div>DaFSuC</div>
-                            <div class="weak-accuracy">32.23% <span class="green">-12.1%</span></div>
-                        </div>
-
-                        <div class="weak-row">
-                            <div class="topic-cell">
-                                <div class="weak-dot"></div>Paging
+                            <div class="topic-row">
+                                <div class="dot-red"></div>
+                                <div class="topic-name">Paging</div>
+                                <div class="value">38.9%</div>
+                                <div class="trend-red">+5.3%</div>
                             </div>
-                            <div>OS</div>
-                            <div class="weak-accuracy">38.9% <span class="red">+5.3%</span></div>
-                        </div>
-
-                        <div class="weak-row">
-                            <div class="topic-cell">
-                                <div class="weak-dot"></div>Bit Manipulation
+                            <div class="topic-row">
+                                <div class="dot-red"></div>
+                                <div class="topic-name">Bit Manipulation</div>
+                                <div class="value">45.3%</div>
+                                <div class="trend-red">+5.3%</div>
                             </div>
-                            <div>OS</div>
-                            <div class="weak-accuracy">45.3% <span class="red">+5.3%</span></div>
-                        </div>
-
-                        <div class="weak-row">
-                            <div class="topic-cell">
-                                <div class="weak-dot"></div>Normalization
+                            <div class="topic-row">
+                                <div class="dot-red"></div>
+                                <div class="topic-name">Normalization</div>
+                                <div class="value">48.4%</div>
+                                <div class="trend-green">-12.1%</div>
                             </div>
-                            <div>OOP with C++</div>
-                            <div class="weak-accuracy">48.4% <span class="green">-12.1%</span></div>
-                        </div>
-
-                        <div class="weak-row">
-                            <div class="topic-cell">
-                                <div class="weak-dot"></div>Dynamic Programming
+                            <div class="topic-row">
+                                <div class="dot-red"></div>
+                                <div class="topic-name">Dynamic Programming</div>
+                                <div class="value">32.23%</div>
+                                <div class="trend-red">+5.3%</div>
                             </div>
-                            <div>DaFSuC</div>
-                            <div class="weak-accuracy">52.26% <span class="red">+5.3%</span></div>
+                        </div>
+                        <!-- Strong Topics Section -->
+                        <div id="strong-content" class="topic-list" style="display:none;">
+                            <div class="topic-row">
+                                <div style="width: 10px; height: 10px; border-radius: 50%; background: #36DC3B; border: 3px solid #E2F3E1;"></div>
+                                <div class="topic-name">Graphs</div>
+                                <div class="value">95.5%</div>
+                                <div class="trend-red">+5.3%</div>
+                            </div>
+                            <div class="topic-row">
+                                <div style="width: 10px; height: 10px; border-radius: 50%; background: #36DC3B; border: 3px solid #E2F3E1;"></div>
+                                <div class="topic-name">Dynamic Programming</div>
+                                <div class="value">92.23%</div>
+                                <div class="trend-green">-12.1%</div>
+                            </div>
+                            <div class="topic-row">
+                                <div style="width: 10px; height: 10px; border-radius: 50%; background: #36DC3B; border: 3px solid #E2F3E1;"></div>
+                                <div class="topic-name">Paging</div>
+                                <div class="value">88.9%</div>
+                                <div class="trend-red">+5.3%</div>
+                            </div>
+                            <div class="topic-row">
+                                <div style="width: 10px; height: 10px; border-radius: 50%; background: #36DC3B; border: 3px solid #E2F3E1;"></div>
+                                <div class="topic-name">Bit Manipulation</div>
+                                <div class="value">85.3%</div>
+                                <div class="trend-red">+5.3%</div>
+                            </div>
+                            <div class="topic-row">
+                                <div style="width: 10px; height: 10px; border-radius: 50%; background: #36DC3B; border: 3px solid #E2F3E1;"></div>
+                                <div class="topic-name">Normalization</div>
+                                <div class="value">82.42%</div>
+                                <div class="trend-green">-12.1%</div>
+                            </div>
+                            <div class="topic-row">
+                                <div style="width: 10px; height: 10px; border-radius: 50%; background: #36DC3B; border: 3px solid #E2F3E1;"></div>
+                                <div class="topic-name">Dynamic Programming</div>
+                                <div class="value">77.23%</div>
+                                <div class="trend-green">-12.1%</div>
+                            </div>
+                        </div>
+                        <!-- Suggestions Section -->
+                        <div id="suggestions-content" style="display:none;">
+                            <div style="font-size: 18px; font-weight: 600; color: #222; margin-bottom: 18px;">Arrays</div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <div style="width: 9px; height: 9px; border-radius: 50%; background: #ffb86c;"></div>
+                                <div style="font-size: 15px; color: #333;">Practice two-pointer & sliding window patterns</div>
+                            </div>
+                            <div style="display: inline-block; background: #f0eaff; color: #7e5aff; padding: 4px 10px; font-size: 13px; border-radius: 6px; margin-bottom: 8px; font-weight: 500;">Suggestion</div>
+                            <div style="font-size: 14px; color: #555; line-height: 1.55; margin-bottom: 26px;">Solve 5–7 medium problems to strengthen pattern recognition</div>
+                            <div style="height: 1px; width: 100%; background: #eee; margin: 24px 0;"></div>
+                            <div style="font-size: 18px; font-weight: 600; color: #222; margin-bottom: 18px;">Strings</div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <div style="width: 9px; height: 9px; border-radius: 50%; background: #7cd4e8;"></div>
+                                <div style="font-size: 15px; color: #333;">Practice hashing & frequency-based problems</div>
+                            </div>
+                            <div style="display: inline-block; background: #f0eaff; color: #7e5aff; padding: 4px 10px; font-size: 13px; border-radius: 6px; margin-bottom: 8px; font-weight: 500;">Suggestion</div>
+                            <div style="font-size: 14px; color: #555; line-height: 1.55; margin-bottom: 26px;">Revisit problems using HashMap & sliding window</div>
                         </div>
                     </div>
                 </div>
@@ -1329,6 +1509,29 @@
         </div>
     </main>
 
+    <!-- Download Modal -->
+    <div id="downloadModal" class="download-modal" style="display: none;">
+        <div class="download-card">
+            <div class="download-title">Download Report</div>
+            <div class="download-subtitle">Select Format</div>
+
+            <div class="download-divider"></div>
+
+            <div class="download-toggle-container">
+                <div class="download-toggle-btn active" id="excelBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256"><path d="M156,208a8,8,0,0,1-8,8H120a8,8,0,0,1-8-8V152a8,8,0,0,1,16,0v48h20A8,8,0,0,1,156,208ZM92.65,145.49a8,8,0,0,0-11.16,1.86L68,166.24,54.51,147.35a8,8,0,1,0-13,9.3L58.17,180,41.49,203.35a8,8,0,0,0,13,9.3L68,193.76l13.49,18.89a8,8,0,0,0,13-9.3L77.83,180l16.68-23.35A8,8,0,0,0,92.65,145.49Zm98.94,25.82c-4-1.16-8.14-2.35-10.45-3.84-1.25-.82-1.23-1-1.12-1.9a4.54,4.54,0,0,1,2-3.67c4.6-3.12,15.34-1.72,19.82-.56a8,8,0,0,0,4.07-15.48c-2.11-.55-21-5.22-32.83,2.76a20.58,20.58,0,0,0-8.95,14.95c-2,15.88,13.65,20.41,23,23.11,12.06,3.49,13.12,4.92,12.78,7.59-.31,2.41-1.26,3.33-2.15,3.93-4.6,3.06-15.16,1.55-19.54.35A8,8,0,0,0,173.93,214a60.63,60.63,0,0,0,15.19,2c5.82,0,12.3-1,17.49-4.46a20.81,20.81,0,0,0,9.18-15.23C218,179,201.48,174.17,191.59,171.31ZM40,112V40A16,16,0,0,1,56,24h96a8,8,0,0,1,5.66,2.34l56,56A8,8,0,0,1,216,88v24a8,8,0,1,1-16,0V96H152a8,8,0,0,1-8-8V40H56v72a8,8,0,0,1-16,0ZM160,80h28.68L160,51.31Z"></path></svg>
+                    Excel
+                </div>
+                <div class="download-toggle-btn" id="pdfBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256"><path d="M224,152a8,8,0,0,1-8,8H192v16h16a8,8,0,0,1,0,16H192v16a8,8,0,0,1-16,0V152a8,8,0,0,1,8-8h32A8,8,0,0,1,224,152ZM92,172a28,28,0,0,1-28,28H56v8a8,8,0,0,1-16,0V152a8,8,0,0,1,8-8H64A28,28,0,0,1,92,172Zm-16,0a12,12,0,0,0-12-12H56v24h8A12,12,0,0,0,76,172Zm88,8a36,36,0,0,1-36,36H112a8,8,0,0,1-8-8V152a8,8,0,0,1,8-8h16A36,36,0,0,1,164,180Zm-16,0a20,20,0,0,0-20-20h-8v40h8A20,20,0,0,0,148,180ZM40,112V40A16,16,0,0,1,56,24h96a8,8,0,0,1,5.66,2.34l56,56A8,8,0,0,1,216,88v24a8,8,0,0,1-16,0V96H152a8,8,0,0,1-8-8V40H56v72a8,8,0,0,1-16,0ZM160,80h28.69L160,51.31Z"></path></svg>
+                    PDF
+                </div>
+            </div>
+
+            <button class="download-btn" onclick="downloadReport()">Download</button>
+        </div>
+    </div>
+
     <!-- Initialize Icons -->
     <script>
         lucide.createIcons();
@@ -1336,19 +1539,31 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.getElementById('main-content');
 
             if (window.innerWidth <= 768) {
+                // Mobile behavior
                 sidebar.classList.toggle('sidebar-open');
                 overlay.classList.toggle('active');
+            } else {
+                // Desktop behavior
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
             }
         }
 
         function closeSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.getElementById('main-content');
 
-            sidebar.classList.remove('sidebar-open');
-            overlay.classList.remove('active');
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('sidebar-open');
+                overlay.classList.remove('active');
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+            }
         }
 
         // Handle window resize
@@ -1361,6 +1576,70 @@
                 overlay.classList.remove('active');
             }
         });
+
+        // Download Modal Functions
+        function openDownloadModal() {
+            const modal = document.getElementById('downloadModal');
+            modal.style.display = 'flex';
+        }
+
+        function closeDownloadModal() {
+            document.getElementById('downloadModal').style.display = 'none';
+        }
+
+        function downloadReport() {
+            const excelActive = document.getElementById('excelBtn').classList.contains('active');
+            const format = excelActive ? 'Excel' : 'PDF';
+            
+            alert(`Downloading ${format} report`);
+            closeDownloadModal();
+        }
+
+        // Toggle between Excel and PDF
+        document.addEventListener('DOMContentLoaded', function() {
+            const excelBtn = document.getElementById('excelBtn');
+            const pdfBtn = document.getElementById('pdfBtn');
+
+            if (excelBtn && pdfBtn) {
+                excelBtn.onclick = () => {
+                    excelBtn.classList.add('active');
+                    pdfBtn.classList.remove('active');
+                };
+
+                pdfBtn.onclick = () => {
+                    pdfBtn.classList.add('active');
+                    excelBtn.classList.remove('active');
+                };
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            const downloadModal = document.getElementById('downloadModal');
+            const downloadCard = document.querySelector('.download-card');
+            if (downloadModal && downloadModal.style.display === 'flex' && 
+                !downloadCard.contains(event.target) && 
+                !event.target.closest('button[onclick="openDownloadModal()"]')) {
+                closeDownloadModal();
+            }
+        }
+
+        // Learning Strengths & Weaknesses Tab Function
+        function showTab(tabName, element) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            
+            // Hide all content sections
+            document.getElementById('weak-content').style.display = 'none';
+            document.getElementById('strong-content').style.display = 'none';
+            document.getElementById('suggestions-content').style.display = 'none';
+            
+            // Add active class to clicked tab
+            element.classList.add('active');
+            
+            // Show selected content
+            document.getElementById(tabName + '-content').style.display = 'block';
+        }
     </script>
 </body>
 

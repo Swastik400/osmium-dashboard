@@ -89,6 +89,48 @@
             }
         }
 
+        /* Desktop sidebar toggle styles */
+        @media (min-width: 769px) {
+            .sidebar.collapsed {
+                transform: translateX(-100%);
+            }
+
+            .main-content.expanded {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        /* Toggle button styles */
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 60;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        @media (min-width: 769px) {
+            .main-content.expanded .toggle-btn {
+                display: flex;
+            }
+        }
+
         .sidebar-top {
             flex: 1;
         }
@@ -1035,6 +1077,10 @@
 
     <!-- Main Content -->
     <main class="main-content">
+        <!-- Toggle Button (Desktop) -->
+        <button type="button" class="toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+            <img src="./logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+        </button>
         <div class="header-bar">
             <div class="header-left">
                 <button type="button" class="mobile-menu-btn" onclick="toggleSidebar()" title="Open menu">
@@ -1149,19 +1195,31 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.querySelector('.main-content');
 
             if (window.innerWidth <= 768) {
+                // Mobile behavior
                 sidebar.classList.toggle('sidebar-open');
                 overlay.classList.toggle('active');
+            } else {
+                // Desktop behavior
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
             }
         }
 
         function closeSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.querySelector('.main-content');
 
-            sidebar.classList.remove('sidebar-open');
-            overlay.classList.remove('active');
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('sidebar-open');
+                overlay.classList.remove('active');
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+            }
         }
 
         // Handle window resize

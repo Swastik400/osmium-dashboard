@@ -1,12 +1,18 @@
 // Shared Sidebar JavaScript Functions
 function toggleSidebar() {
     const sidebar = document.querySelector('.sidebar');
-    sidebar.classList.toggle('open');
+    const mainContent = document.querySelector('.main-content');
+    
+    sidebar.classList.toggle('collapsed');
+    mainContent.classList.toggle('expanded');
 }
 
 function closeSidebar() {
     const sidebar = document.querySelector('.sidebar');
-    sidebar.classList.remove('open');
+    const mainContent = document.querySelector('.main-content');
+    
+    sidebar.classList.remove('collapsed');
+    mainContent.classList.remove('expanded');
 }
 
 // Set active navigation item based on current page

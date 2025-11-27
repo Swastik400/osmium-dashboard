@@ -368,6 +368,50 @@
       .mobile-menu-btn {
         display: none;
       }
+
+      /* Desktop sidebar toggle styles */
+      .sidebar.collapsed {
+        transform: translateX(-100%);
+      }
+
+      .main-content.expanded {
+        margin-left: 0 !important;
+        width: 100% !important;
+      }
+
+      .header-bar.expanded {
+        left: 0 !important;
+      }
+    }
+
+    /* Toggle button styles */
+    .toggle-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 60;
+      width: 40px;
+      height: 40px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+
+    .toggle-btn:hover {
+      background: #f9fafb;
+      border-color: #d1d5db;
+    }
+
+    @media (min-width: 769px) {
+      .main-content.expanded .toggle-btn {
+        display: flex;
+      }
     }
 
     @media (max-width: 768px) {
@@ -451,6 +495,10 @@
 
     <!-- Main content -->
     <main class="main-content flex-1 flex flex-col overflow-hidden">
+      <!-- Toggle Button (Desktop) -->
+      <button type="button" class="toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+        <img src="logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
+      </button>
       <!-- Top Navigation Bar -->
       <header class="bg-[#FEFCF8]/80 backdrop-blur-md border-b border-[#E8DCC6]/50 shadow-sm fixed top-0 z-20 right-0 transition-all duration-300 ease-in-out header-bar">
         <div class="max-w-full mx-auto px-2 sm:px-3 md:px-4 lg:px-6 xl:px-8">
@@ -532,120 +580,12 @@
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
             <div class="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-4">
-              <span class="text-xs sm:text-sm font-medium text-[#6B5D4F]">Questions: <span id="questionCount">1</span></span>
-              <span class="text-xs sm:text-sm font-medium text-[#6B5D4F]">Total Points: <span id="totalMarks">1</span></span>
+              <span class="text-xs sm:text-sm font-medium text-[#6B5D4F]">Questions: <span id="questionCount">0</span></span>
+              <span class="text-xs sm:text-sm font-medium text-[#6B5D4F]">Total Points: <span id="totalMarks">0</span></span>
             </div>
           </div>
         </div>
         <div class="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pb-4 sm:pb-6 space-y-3 sm:space-y-4" id="questionList">
-          <!-- Question 1 -->
-          <div class="question-card bg-white rounded-2xl border border-[#E0D2BD] shadow-sm hover:shadow-md transition-shadow" data-question-id="1">
-            <div class="p-4 sm:p-5 lg:p-6">
-              <!-- Question Header -->
-              <div class="flex flex-col gap-3 mb-4">
-                <div class="flex items-start gap-2 sm:gap-3">
-                  <button class="drag-handle mt-2 p-1 text-[#C1B09B] hover:text-[#A18C6B] cursor-grab hidden sm:block flex-shrink-0" title="Drag to reorder">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                      <circle cx="9" cy="5" r="1"></circle>
-                      <circle cx="15" cy="5" r="1"></circle>
-                      <circle cx="9" cy="12" r="1"></circle>
-                      <circle cx="15" cy="12" r="1"></circle>
-                      <circle cx="9" cy="19" r="1"></circle>
-                      <circle cx="15" cy="19" r="1"></circle>
-                    </svg>
-                  </button>
-                  <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                    <span class="question-number text-sm font-semibold text-[#8E806D] flex-shrink-0">Q.1</span>
-                    <textarea placeholder="Untitled Question" class="flex-1 text-sm sm:text-base font-medium border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B3F31] resize-none overflow-hidden min-w-0" rows="1" style="min-height: 1.5rem; height: 36px;">What is the capital of France?</textarea>
-                  </div>
-                  <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                    <select class="question-type text-xs sm:text-sm border border-[#D9C8B1] rounded px-1 sm:px-2 md:px-3 py-1 sm:py-1.5 bg-white text-[#5D4C37]" title="Question type">
-                      <option value="multiple-choice">MCQ</option>
-                      <option value="short-answer">Short</option>
-                      <option value="paragraph">Long</option>
-                    </select>
-                    <button class="delete-question p-1 sm:p-1.5 md:p-2 text-[#B2A28E] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded flex-shrink-0" title="Delete question">
-                      <svg width="12" height="12" sm:width="14" sm:height="14" md:width="16" md:height="16" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Options Container -->
-              <div class="options-container ml-0 sm:ml-7 space-y-2 sm:space-y-3">
-                <div class="option-item flex items-center gap-2 sm:gap-3 group">
-                  <input type="radio" name="q1" class="w-4 h-4 text-[#C58F39] flex-shrink-0" title="Select as correct answer">
-                  <input type="text" placeholder="Option 1" class="flex-1 text-sm border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B4134] min-w-0" value="Paris">
-                  <button class="remove-option p-1 text-[#C0AE99] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded opacity-0 group-hover:opacity-100 flex-shrink-0" title="Remove option">
-                    <svg width="12" height="12" sm:width="14" sm:height="14" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
-                    </svg>
-                  </button>
-                </div>
-                <div class="option-item flex items-center gap-2 sm:gap-3 group">
-                  <input type="radio" name="q1" class="w-4 h-4 text-[#C58F39] flex-shrink-0" title="Select as correct answer">
-                  <input type="text" placeholder="Option 2" class="flex-1 text-sm border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B4134] min-w-0" value="London">
-                  <button class="remove-option p-1 text-[#C0AE99] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded opacity-0 group-hover:opacity-100 flex-shrink-0" title="Remove option">
-                    <svg width="12" height="12" sm:width="14" sm:height="14" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
-                    </svg>
-                  </button>
-                </div>
-                <div class="option-item flex items-center gap-2 sm:gap-3 group">
-                  <input type="radio" name="q1" class="w-4 h-4 text-[#C58F39] flex-shrink-0" title="Select as correct answer">
-                  <input type="text" placeholder="Option 3" class="flex-1 text-sm border-none outline-none bg-transparent focus:bg-[#F9F6F0] p-2 rounded text-[#4B4134] min-w-0" value="Berlin">
-                  <button class="remove-option p-1 text-[#C0AE99] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded opacity-0 group-hover:opacity-100 flex-shrink-0" title="Remove option">
-                    <svg width="12" height="12" sm:width="14" sm:height="14" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
-                    </svg>
-                  </button>
-                </div>
-                <button class="add-option flex items-center gap-2 text-[#A18C6B] hover:text-[#8D7F6B] p-2 text-sm">
-                  <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
-                  </svg>
-                  Add option
-                </button>
-              </div>
-
-              <!-- Question Footer -->
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-3 sm:mt-4 md:mt-6 pt-3 sm:pt-4 border-t border-[#E8DCC6] gap-2 sm:gap-3">
-                <div class="flex flex-col xs:flex-row xs:items-center gap-2 sm:gap-3 md:gap-6">
-                  <label class="flex items-center gap-2 text-xs sm:text-sm text-[#6B5D4F]">
-                    <input type="checkbox" class="w-4 h-4 text-[#C58F39] flex-shrink-0">
-                    <span class="whitespace-nowrap">Required</span>
-                  </label>
-                  <div class="flex items-center gap-2 text-xs sm:text-sm text-[#6B5D4F]">
-                    <span class="whitespace-nowrap">Points:</span>
-                    <input type="number" value="1" min="0" max="100" class="points-input w-10 sm:w-12 md:w-14 lg:w-16 border border-[#D9C8B1] rounded px-1 sm:px-2 py-1 text-center text-xs sm:text-sm bg-white flex-shrink-0" title="Points for this question">
-                  </div>
-                  <div class="correct-answer-section relative">
-                    <button class="correct-toggle flex items-center gap-2 text-xs sm:text-sm text-[#6B5D4F] border border-[#D9C8B1] rounded px-2 py-1 bg-white hover:bg-[#F9F6F0]">
-                      <span>Correct:</span>
-                      <span class="correct-label">Option 1</span>
-                      <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M7 10l5 5 5-5z"></path>
-                      </svg>
-                    </button>
-                    <div class="correct-menu hidden absolute top-full left-0 mt-1 bg-white border border-[#E8DCC6] rounded-lg shadow-lg z-10 min-w-[100px]">
-                      <button data-correct="Option 1" class="block w-full px-3 py-2 text-xs text-left hover:bg-[#F9F6F0]">Option 1</button>
-                      <button data-correct="Option 2" class="block w-full px-3 py-2 text-xs text-left hover:bg-[#F9F6F0]">Option 2</button>
-                      <button data-correct="Option 3" class="block w-full px-3 py-2 text-xs text-left hover:bg-[#F9F6F0]">Option 3</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2 justify-end">
-                  <button class="duplicate-question p-1 sm:p-1.5 md:p-2 text-[#B2A28E] hover:text-[#A38F77] hover:bg-[#F2E5D3] rounded flex-shrink-0" title="Duplicate">
-                    <svg width="12" height="12" sm:width="14" sm:height="14" md:width="16" md:height="16" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <!-- Add Question Button -->
           <button id="addQuestionBtn" class="w-full border-2 border-dashed border-[#D9C8B1] rounded-xl sm:rounded-2xl py-6 sm:py-8 text-sm sm:text-base text-[#A18C6B] hover:text-[#8D7F6B] hover:border-[#C58F39] hover:bg-[#F9F2E7] transition-colors flex items-center justify-center gap-2">
@@ -665,16 +605,23 @@
       const sidebar = document.querySelector('.sidebar');
       const overlay = document.querySelector('.sidebar-overlay');
       const mobileBtn = document.querySelector('.mobile-menu-btn');
-      
-      sidebar.classList.toggle('open');
-      overlay.classList.toggle('show');
+      const mainContent = document.querySelector('.main-content');
+      const headerBar = document.querySelector('.header-bar');
       
       if (window.innerWidth <= 768) {
+        // Mobile behavior
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('show');
         if (sidebar.classList.contains('open')) {
           mobileBtn.style.display = 'none';
         } else {
           mobileBtn.style.display = 'block';
         }
+      } else {
+        // Desktop behavior
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+        if (headerBar) headerBar.classList.toggle('expanded');
       }
     }
 
@@ -682,12 +629,17 @@
       const sidebar = document.querySelector('.sidebar');
       const overlay = document.querySelector('.sidebar-overlay');
       const mobileBtn = document.querySelector('.mobile-menu-btn');
-      
-      sidebar.classList.remove('open');
-      overlay.classList.remove('show');
+      const mainContent = document.querySelector('.main-content');
+      const headerBar = document.querySelector('.header-bar');
       
       if (window.innerWidth <= 768) {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
         mobileBtn.style.display = 'block';
+      } else {
+        sidebar.classList.remove('collapsed');
+        mainContent.classList.remove('expanded');
+        if (headerBar) headerBar.classList.remove('expanded');
       }
     }
 
@@ -1246,6 +1198,88 @@
       textarea.style.height = 'auto';
       textarea.style.height = textarea.scrollHeight + 'px';
     });
+
+    // Check URL parameters and pre-populate questions if in modify mode
+    function checkModifyMode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const mode = urlParams.get('mode');
+      
+      if (mode === 'modify') {
+        // Pre-populate 3 sample questions
+        const sampleQuestions = [
+          {
+            text: "What is the acceleration due to gravity on Earth?",
+            type: "multiple-choice",
+            options: ["9.8 m/s²", "10 m/s²", "8.9 m/s²", "11 m/s²"],
+            correct: "9.8 m/s²",
+            points: 2
+          },
+          {
+            text: "Explain Newton's first law of motion.",
+            type: "short-answer",
+            points: 3
+          },
+          {
+            text: "Which of the following is a vector quantity?",
+            type: "multiple-choice",
+            options: ["Speed", "Velocity", "Distance", "Time"],
+            correct: "Velocity",
+            points: 1
+          }
+        ];
+
+        // Create and add the sample questions
+        sampleQuestions.forEach((question, index) => {
+          const questionCard = createQuestionCard(index + 1, question.text, question.type);
+          
+          // Set points
+          const pointsInput = questionCard.querySelector('.points-input');
+          if (pointsInput) pointsInput.value = question.points;
+          
+          // For multiple choice questions, set options and correct answer
+          if (question.type === 'multiple-choice' && question.options) {
+            const optionInputs = questionCard.querySelectorAll('.option-item input[type="text"]');
+            
+            // Set first two options
+            question.options.forEach((optionText, optIndex) => {
+              if (optIndex < 2 && optionInputs[optIndex]) {
+                optionInputs[optIndex].value = optionText;
+              } else if (optIndex >= 2) {
+                // Add additional options
+                const addBtn = questionCard.querySelector('.add-option');
+                if (addBtn) {
+                  addBtn.click();
+                  const newOptions = questionCard.querySelectorAll('.option-item input[type="text"]');
+                  if (newOptions[optIndex]) {
+                    newOptions[optIndex].value = optionText;
+                  }
+                }
+              }
+            });
+            
+            // Set correct answer
+            const correctLabel = questionCard.querySelector('.correct-label');
+            if (correctLabel) correctLabel.textContent = question.correct;
+            
+            // Update correct answer dropdown
+            updateCorrectAnswerDropdown(questionCard);
+          }
+          
+          // Add to question list
+          const addQuestionBtn = document.getElementById('addQuestionBtn');
+          if (addQuestionBtn) {
+            addQuestionBtn.before(questionCard);
+            addDragListeners(questionCard);
+          }
+        });
+        
+        updateQuestionCount();
+        renumberQuestions();
+      }
+    }
+
+    // Call checkModifyMode after DOM is loaded
+    checkModifyMode();
 
     function addDragListeners(card) {
       const dragHandle = card.querySelector('.drag-handle');

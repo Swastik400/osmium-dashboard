@@ -262,9 +262,6 @@
     .main-content.expanded {
         margin-left: 0;
         width: 100%;
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 40px;
     }
 
     /* ============ RESPONSIVE ============ */
@@ -1178,15 +1175,31 @@
       <div class="px-6 lg:px-8 py-5">
         <!-- Header -->
         <header class="flex items-center justify-between mb-8">
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-6">
             <button class="md:hidden w-8 h-8 bg-white border border-[#ebe8e2] rounded-lg flex items-center justify-center text-gray-600 hover:bg-[#f5f3f0] hover:border-[#d4cfc8] transition-all" onclick="toggleSidebar()">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#292929" viewBox="0 0 256 256"><path d="M93.31,70,28,128l65.27,58a8,8,0,1,1-10.62,12l-72-64a8,8,0,0,1,0-12l72-64A8,8,0,1,1,93.31,70Zm152,52-72-64a8,8,0,0,0-10.62,12L228,128l-65.27,58a8,8,0,1,0,10.62,12l72-64a8,8,0,0,0,0-12Z"></path></svg>
             </button>
+            <script>
+            function toggleSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                const mobileBtn = document.querySelector('.mobile-menu-btn');
+                sidebar.classList.toggle('open');
+
+                // Only handle mobile button visibility on mobile devices
+                if (window.innerWidth <= 768) {
+                    if (sidebar.classList.contains('open')) {
+                        mobileBtn.style.display = 'none';
+                    } else {
+                        mobileBtn.style.display = 'block';
+                    }
+                }
+            }
+            </script>
             <h1 class="text-xl md:text-2xl font-bold text-gray-900">Exam & Tests</h1>
           </div>
           
           <div class="flex items-center gap-3">
-            <button class="bg-[#000000] text-white px-3 md:px-5 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium flex items-center gap-2" onclick="window.location.href='../create_test.html'">
+            <button class="bg-[#000000] text-white px-3 md:px-5 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium flex items-center gap-2" onclick="window.location.href='create_test.html'">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" viewBox="0 0 256 256"><path d="M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z"></path></svg>
               <span class="hidden sm:inline">Create Test</span>
               <span class="sm:hidden">Create</span>
@@ -1293,7 +1306,7 @@
                   <button type="button" class="bg-[#FFFFFF] border border-[#E4E5EB] px-3 py-1.5 rounded text-xs text-[#70737F]">
                     View
                   </button>
-                  <button type="button" class="bg-[#FFFFFF] border border-[#E4E5EB] px-3 py-1.5 rounded text-xs text-[#70737F]">
+                  <button type="button" class="bg-[#FFFFFF] border border-[#E4E5EB] px-3 py-1.5 rounded text-xs text-[#70737F]" onclick="editScheduledTest()">
                     Edit
                   </button>
                   <button type="button" class="text-base text-[#9aa0a6] px-1">⋮</button>
@@ -1378,6 +1391,7 @@
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
+                  <button class="px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors" onclick="window.location.href='create_test.html?mode=modify'">Modify</button>
                   <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">View paper</button>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8f8f8f" viewBox="0 0 256 256" class="cursor-pointer hover:fill-gray-600 transition-colors"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
                 </div>
@@ -1401,6 +1415,7 @@
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
+                  <button class="px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors" onclick="window.location.href='create_test.html?mode=modify'">Modify</button>
                   <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">View paper</button>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8f8f8f" viewBox="0 0 256 256" class="cursor-pointer hover:fill-gray-600 transition-colors"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
                 </div>
@@ -1424,6 +1439,7 @@
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
+                  <button class="px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors" onclick="window.location.href='create_test.html?mode=modify'">Modify</button>
                   <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">View paper</button>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8f8f8f" viewBox="0 0 256 256" class="cursor-pointer hover:fill-gray-600 transition-colors"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
                 </div>
@@ -1447,6 +1463,7 @@
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
+                  <button class="px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors" onclick="window.location.href='create_test.html?mode=modify'">Modify</button>
                   <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">View paper</button>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8f8f8f" viewBox="0 0 256 256" class="cursor-pointer hover:fill-gray-600 transition-colors"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40A8,8,0,0,0,168,96H136V32a8,8,0,0,0-16,0V96H88a8,8,0,0,0-5.66,13.66Z"/></svg>
                 </div>
@@ -1618,15 +1635,19 @@
   <div id="testModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
     <div class="modal">
       <div class="modal-header">
-        <h1>Set Upcoming Test Exam Schedule</h1>
+        <h1 id="modalTitle">Set Upcoming Test Exam Schedule</h1>
         <button class="close-btn" onclick="closeTestModal()">×</button>
       </div>
       <div class="modal-content">
         <div class="form-group">
           <label class="form-label">Test name</label>
           <div class="input-with-button">
-            <input type="text" class="form-input" placeholder="Enter test name">
-            <button class="add-description-btn">Add Description</button>
+            <input type="text" class="form-input" id="testNameInput" placeholder="Enter test name">
+            <button class="add-description-btn" onclick="toggleDescription()">Add Description</button>
+          </div>
+          <div id="descriptionField" class="hidden mt-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-input" id="testDescriptionInput" placeholder="Enter test description" rows="3"></textarea>
           </div>
         </div>
         <div class="form-group">
@@ -2169,7 +2190,7 @@
         transition: margin-left 0.3s ease;
     }
     .main-content.expanded {
-        margin-left: -120px;
+        margin-left: 0;
     }
   </style>
 
@@ -2193,6 +2214,10 @@
 
     // Test Schedule Modal Functions
     function openTestModal() {
+        // Reset modal title for new test scheduling
+        const modalTitle = document.getElementById('modalTitle');
+        if (modalTitle) modalTitle.textContent = 'Set Upcoming Test Exam Schedule';
+        
         const modal = document.getElementById('testModal');
         const sidebar = document.querySelector('.sidebar');
         if (modal) {
@@ -2320,6 +2345,58 @@
         }
     });
 
+    // Edit scheduled test function
+    function editScheduledTest() {
+        // Open the modal first
+        const modal = document.getElementById('testModal');
+        const sidebar = document.querySelector('.sidebar');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            if (sidebar) sidebar.style.filter = 'blur(3px)';
+        }
+        
+        // Change modal title for editing
+        const modalTitle = document.getElementById('modalTitle');
+        if (modalTitle) modalTitle.textContent = 'Edit Upcoming Test Exam';
+        
+        // Pre-populate modal with existing test data
+        const testNameInput = document.getElementById('testNameInput');
+        const testDescriptionInput = document.getElementById('testDescriptionInput');
+        const dateInput = document.getElementById('dateInput');
+        const timeInput = document.getElementById('timeInput');
+        const durationInput = document.getElementById('durationInput');
+        const descriptionField = document.getElementById('descriptionField');
+        
+        // Fill in the existing test details
+        if (testNameInput) testNameInput.value = 'Python Advanced';
+        if (testDescriptionInput) {
+            testDescriptionInput.value = 'Advanced Python programming concepts including OOP, decorators, generators, and advanced data structures. This test covers topics from modules 8-12 of the Python curriculum.';
+            descriptionField.classList.remove('hidden');
+        }
+        if (dateInput) dateInput.value = 'Jun 12, 2025';
+        if (timeInput) timeInput.value = '10:30 AM';
+        if (durationInput) durationInput.value = '2h 30m';
+        
+        // Update the info text
+        updateInfoText();
+    }
+    
+    // Toggle description field
+    function toggleDescription() {
+        const descriptionField = document.getElementById('descriptionField');
+        const button = event.target;
+        
+        if (descriptionField.classList.contains('hidden')) {
+            descriptionField.classList.remove('hidden');
+            button.textContent = 'Remove Description';
+        } else {
+            descriptionField.classList.add('hidden');
+            button.textContent = 'Add Description';
+            document.getElementById('testDescriptionInput').value = '';
+        }
+    }
+
     // Make functions globally available
     window.openTestModal = openTestModal;
     window.closeTestModal = closeTestModal;
@@ -2328,6 +2405,8 @@
     window.openTimePicker = openTimePicker;
     window.openDurationPicker = openDurationPicker;
     window.addTest = addTest;
+    window.editScheduledTest = editScheduledTest;
+    window.toggleDescription = toggleDescription;
   </script>
 
 

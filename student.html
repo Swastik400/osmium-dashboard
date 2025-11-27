@@ -227,6 +227,41 @@
         .main-content {
             margin-left: 280px;
             width: calc(100% - 280px);
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-280px);
+        }
+
+        .sidebar-toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-toggle-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .main-content.expanded .sidebar-toggle-btn {
+            display: flex;
         }
 
         /* Sidebar overlay */
@@ -1860,6 +1895,9 @@
 
         <!-- Main Content -->
         <main class="main-content flex-1 flex flex-col h-full overflow-hidden relative">
+            <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Open sidebar">
+                <img src="../logos/toogel.svg" alt="Menu" style="width: 16px; height: 16px;">
+            </button>
 
             <!-- Mobile Header -->
             <div class="lg:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between">
@@ -2706,12 +2744,32 @@
                     <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                         <span class="text-sm text-gray-500">Select Course:</span>
                         <div class="relative">
-                            <select
+                            <select id="courseSelect" onchange="toggleSemesterDropdown()"
                                 class="appearance-none bg-gray-50 border border-gray-200 rounded-lg px-3 sm:px-4 py-2 sm:py-3 pr-8 sm:pr-10 text-sm text-gray-700 outline-none focus:border-gray-300 focus:bg-white w-full sm:w-auto">
-                                <option>B.Tech</option>
-                                <option>M.Tech</option>
-                                <option>BCA</option>
-                                <option>BSc</option>
+                                <option value="">Select Course</option>
+                                <option value="btech">B.Tech</option>
+                                <option value="mtech">M.Tech</option>
+                                <option value="bca">BCA</option>
+                                <option value="bsc">BSc</option>
+                            </select>
+                            <svg class="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <div id="semesterDropdown" class="relative hidden">
+                            <select id="semesterSelect"
+                                class="appearance-none bg-gray-50 border border-gray-200 rounded-lg px-3 sm:px-4 py-2 sm:py-3 pr-8 sm:pr-10 text-sm text-gray-700 outline-none focus:border-gray-300 focus:bg-white w-full sm:w-auto">
+                                <option value="">Select Semester</option>
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                                <option value="3">Semester 3</option>
+                                <option value="4">Semester 4</option>
+                                <option value="5">Semester 5</option>
+                                <option value="6">Semester 6</option>
+                                <option value="7">Semester 7</option>
+                                <option value="8">Semester 8</option>
                             </select>
                             <svg class="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2779,17 +2837,19 @@
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <input type="text" name="fatherName" placeholder="Enter Father Name"
                                 class="flex-1 h-10 sm:h-12 rounded-lg border border-gray-200 bg-gray-50 text-sm px-3 sm:px-4 outline-none focus:border-gray-300 focus:bg-white">
-                            <button type="button"
+                            <button type="button" onclick="addPhoneField('father')"
                                 class="px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-200 bg-white text-xs sm:text-sm text-gray-600 hover:bg-gray-50 whitespace-nowrap">Add
                                 Phone</button>
                         </div>
+                        <div id="fatherPhoneContainer"></div>
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <input type="text" name="motherName" placeholder="Enter Mother Name"
                                 class="flex-1 h-10 sm:h-12 rounded-lg border border-gray-200 bg-gray-50 text-sm px-3 sm:px-4 outline-none focus:border-gray-300 focus:bg-white">
-                            <button type="button"
+                            <button type="button" onclick="addPhoneField('mother')"
                                 class="px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-200 bg-white text-xs sm:text-sm text-gray-600 hover:bg-gray-50 whitespace-nowrap">Add
                                 Phone</button>
                         </div>
+                        <div id="motherPhoneContainer"></div>
                     </div>
                 </div>
 
@@ -2834,6 +2894,37 @@
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
+
+        // Semester dropdown functionality
+        function toggleSemesterDropdown() {
+            const courseSelect = document.getElementById('courseSelect');
+            const semesterDropdown = document.getElementById('semesterDropdown');
+            
+            if (courseSelect.value === 'btech') {
+                semesterDropdown.classList.remove('hidden');
+            } else {
+                semesterDropdown.classList.add('hidden');
+                document.getElementById('semesterSelect').value = '';
+            }
+        }
+
+        // Add phone field functionality
+        function addPhoneField(parent) {
+            const container = document.getElementById(parent + 'PhoneContainer');
+            const phoneDiv = document.createElement('div');
+            phoneDiv.className = 'flex gap-2 sm:gap-3 mt-2';
+            phoneDiv.innerHTML = `
+                <div class="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 bg-gray-50 border border-gray-200 rounded-lg h-10 sm:h-12">
+                    <span class="text-sm sm:text-lg">🇮🇳</span>
+                    <span class="text-xs sm:text-sm text-gray-600">+91</span>
+                </div>
+                <input type="tel" name="${parent}Phone" placeholder="Enter ${parent} phone number"
+                    class="flex-1 h-10 sm:h-12 rounded-lg border border-gray-200 bg-gray-50 text-sm px-3 sm:px-4 outline-none focus:border-gray-300 focus:bg-white">
+                <button type="button" onclick="this.parentElement.remove()"
+                    class="px-2 sm:px-3 py-2 sm:py-3 rounded-lg border border-red-200 bg-red-50 text-xs sm:text-sm text-red-600 hover:bg-red-100">×</button>
+            `;
+            container.appendChild(phoneDiv);
+        }
 
 
 
@@ -2950,21 +3041,18 @@
     <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
-            const overlay = document.querySelector('.sidebar-overlay');
-            sidebar.classList.toggle('open');
-
-            if (sidebar.classList.contains('open')) {
-                overlay.style.display = 'block';
-            } else {
-                overlay.style.display = 'none';
-            }
+            const mainContent = document.querySelector('.main-content');
+            
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
         }
 
         function closeSidebar() {
             const sidebar = document.querySelector('.sidebar');
-            const overlay = document.querySelector('.sidebar-overlay');
-            sidebar.classList.remove('open');
-            overlay.style.display = 'none';
+            const mainContent = document.querySelector('.main-content');
+            
+            sidebar.classList.remove('collapsed');
+            mainContent.classList.remove('expanded');
         }
     </script>
 

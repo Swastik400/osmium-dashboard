@@ -32,6 +32,11 @@
             overflow-y: auto;
             height: 100vh;
             position: fixed;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-280px);
         }
 
         .sidebar-top {
@@ -203,6 +208,39 @@
             padding: 32px;
             width: calc(100% - 280px);
             min-height: 100vh;
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+
+        .main-content.sidebar-collapsed {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .reopen-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border: 1px solid #ebe8e2;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .reopen-btn:hover {
+            background: #f5f3f0;
+            border-color: #d4cfc8;
+        }
+
+        .reopen-btn.show {
+            display: flex;
         }
 
         .content-wrapper {
@@ -764,29 +802,7 @@
         }
 
         .ask-mentor-btn {
-            background: #fff8e6;
-            border: 1px solid #f1d27b;
-            color: #7b6a3b;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s ease;
-            margin-left: auto;
-        }
-
-        .ask-mentor-btn:hover {
-            background: #f5e6a3;
-            border-color: #e6c76b;
-            transform: translateY(-1px);
-        }
-
-        .ask-mentor-btn svg {
-            flex-shrink: 0;
+            display: none;
         }
 
         .question-tags {
@@ -892,8 +908,8 @@
 
         .chart-container {
             position: relative;
-            width: 280px;
-            height: 280px;
+            width: 250px;
+            height: 250px;
             margin: 0 auto 32px;
         }
 
@@ -1165,8 +1181,8 @@
             }
 
             .chart-container {
-                width: 220px;
-                height: 220px;
+                width: 200px;
+                height: 200px;
             }
 
             .stats-table th,
@@ -1198,7 +1214,7 @@
         <div class="sidebar-top">
             <div class="logo-container">
                 <img src="./logos/logo.svg" alt="" class="logo">
-                <button type="button" class="menu-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+                <button type="button" class="menu-btn" onclick="collapseSidebar()" title="Toggle sidebar">
                     <img src="./logos/toogel.svg" alt="Toggle menu" style="width: 16px; height: 16px;">
                 </button>
             </div>
@@ -1283,6 +1299,11 @@
         </div>
     </div>
 
+    <!-- Reopen Button -->
+    <button type="button" class="reopen-btn" onclick="collapseSidebar()" title="Open sidebar">
+        <img src="./logos/toogel.svg" alt="Open menu" style="width: 16px; height: 16px;">
+    </button>
+
     <!-- Main Content -->
     <main class="main-content">
         <button type="button" class="mobile-menu-btn" onclick="toggleSidebar()" title="Open menu">
@@ -1294,28 +1315,30 @@
         </button>
 
         <!-- Breadcrumb Navigation -->
-        <div class="breadcrumb">
-            <span>Exam &amp; Test <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa"
-                    viewBox="0 0 256 256">
-                    <path
-                        d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
-                    </path>
-                </svg> B.Tech - Sem 4 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa"
-                    viewBox="0 0 256 256">
-                    <path
-                        d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
-                    </path>
-                </svg> Varun Kumar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa"
-                    viewBox="0 0 256 256">
-                    <path
-                        d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
-                    </path>
-                </svg> Python Advanced Test <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                    fill="#aaaaaa" viewBox="0 0 256 256">
-                    <path
-                        d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
-                    </path>
-                </svg> Result</span>
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 25px;">
+            <div class="breadcrumb" style="margin-bottom: 0;">
+                <a href="exam & test.html" style="color: #666; text-decoration: none;">Exam & Test</a> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa"
+                        viewBox="0 0 256 256">
+                        <path
+                            d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
+                        </path>
+                    </svg> <a href="#" style="color: #666; text-decoration: none;">B.Tech - Sem 4</a> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa"
+                        viewBox="0 0 256 256">
+                        <path
+                            d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
+                        </path>
+                    </svg> <a href="#" style="color: #666; text-decoration: none;">Varun Kumar</a> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaaaaa"
+                        viewBox="0 0 256 256">
+                        <path
+                            d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
+                        </path>
+                    </svg> <a href="#" style="color: #666; text-decoration: none;">Python Advanced Test</a> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="#aaaaaa" viewBox="0 0 256 256">
+                        <path
+                            d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z">
+                        </path>
+                    </svg> <span style="color: #0d0909;">Result</span>
+            </div>
         </div>
         <div class="content-wrapper">
             <!-- Left Content -->
@@ -1801,6 +1824,16 @@
             }
         }
 
+        function collapseSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            const reopenBtn = document.querySelector('.reopen-btn');
+            
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('sidebar-collapsed');
+            reopenBtn.classList.toggle('show');
+        }
+
         // Chart data
         const data = {
             labels: ['Physics', 'Chemistry', 'Mathematics'],
@@ -1819,7 +1852,7 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
-                cutout: '65%',
+                cutout: '45%',
                 plugins: {
                     legend: {
                         display: false
@@ -1839,7 +1872,8 @@
                         displayColors: true,
                         callbacks: {
                             label: function (context) {
-                                return context.label + ': ' + context.parsed + ' marks';
+                                const accuracies = ['86.2%', '56.6%', '85.56%'];
+                                return context.label + '\nAccuracy: ' + accuracies[context.dataIndex];
                             }
                         }
                     }
@@ -1848,31 +1882,7 @@
                     padding: 0
                 }
             },
-            plugins: [{
-                id: 'doughnutLabels',
-                afterDatasetsDraw: function (chart) {
-                    const ctx = chart.ctx;
-                    chart.data.datasets.forEach(function (dataset, i) {
-                        const meta = chart.getDatasetMeta(i);
-                        meta.data.forEach(function (element, index) {
-                            // Get position
-                            const position = element.tooltipPosition();
 
-                            // Set font
-                            ctx.fillStyle = '#333';
-                            ctx.font = 'bold 16px Inter';
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'middle';
-
-                            // Get data
-                            const data = dataset.data[index];
-
-                            // Display value
-                            ctx.fillText(data, position.x, position.y);
-                        });
-                    });
-                }
-            }]
         };
 
         // Create chart

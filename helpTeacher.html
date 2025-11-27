@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osmium Teacher Support</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Minimal scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #ffffff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cbd5e1;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-600 font-sans antialiased min-h-screen flex flex-col selection:bg-slate-200 selection:text-slate-900">
+
+    <!-- Main Content Area -->
+    <main class="flex-1 w-full max-w-4xl mx-auto px-6 py-12">
+        
+        <!-- HOME SECTION -->
+        <div id="view-home">
+            <!-- Professional Header -->
+            <div class="mb-10 pb-8 border-b border-slate-100">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-8 h-8 bg-slate-900 rounded-md flex items-center justify-center text-white text-sm font-bold">
+                        O
+                    </div>
+                    <span class="font-semibold text-slate-900 tracking-tight text-sm uppercase">Educator Portal</span>
+                </div>
+                <h1 class="text-3xl font-bold text-slate-900 mb-2 tracking-tight">Teacher Support</h1>
+                <p class="text-slate-500 text-lg">Documentation and tools for academic management.</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative mb-12 group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i data-lucide="search" class="w-5 h-5 text-slate-400 group-focus-within:text-slate-600"></i>
+                </div>
+                <input type="text" class="block w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:border-slate-400" placeholder="Search documentation...">
+            </div>
+
+            <!-- Quick Access Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <button onclick="router('faq')" class="flex flex-col p-6 bg-white border border-slate-200 rounded-lg hover:border-slate-400 hover:bg-slate-50 text-left group">
+                    <div class="w-10 h-10 bg-slate-100 rounded-md flex items-center justify-center text-slate-700 mb-4 group-hover:bg-white group-hover:border group-hover:border-slate-200">
+                        <i data-lucide="help-circle" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:underline decoration-slate-300 underline-offset-4">Educator FAQs</h3>
+                    <p class="text-sm text-slate-500 mb-6 leading-relaxed">Answers to common questions about project assignment, grading, and reports.</p>
+                    <div class="mt-auto flex items-center text-slate-700 font-semibold text-sm">
+                        <span>View Questions</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </div>
+                </button>
+
+                <button onclick="router('guides')" class="flex flex-col p-6 bg-white border border-slate-200 rounded-lg hover:border-slate-400 hover:bg-slate-50 text-left group">
+                    <div class="w-10 h-10 bg-slate-100 rounded-md flex items-center justify-center text-slate-700 mb-4 group-hover:bg-white group-hover:border group-hover:border-slate-200">
+                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:underline decoration-slate-300 underline-offset-4">Feature Guides</h3>
+                    <p class="text-sm text-slate-500 mb-6 leading-relaxed">Detailed walkthroughs for analytics, research modules, test scheduling, and reporting.</p>
+                    <div class="mt-auto flex items-center text-slate-700 font-semibold text-sm">
+                        <span>Browse Guides</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Contact Support (Professional) -->
+            <div class="border-t border-slate-200 pt-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Internal Support</h3>
+                    <span class="text-xs font-semibold bg-slate-100 text-slate-700 px-2.5 py-1 rounded border border-slate-200">Status: Online</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-lg bg-white border border-slate-200 hover:border-slate-300 flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-600">
+                            <i data-lucide="server" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wide">IT Administrator</p>
+                            <p class="text-sm font-bold text-slate-900">Mr. David Admin</p>
+                            <p class="text-xs text-slate-500">Ext: 4022</p>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-white border border-slate-200 hover:border-slate-300 flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-600">
+                            <i data-lucide="building-2" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wide">Department Head</p>
+                            <p class="text-sm font-bold text-slate-900">Dr. Emily Chen</p>
+                            <p class="text-xs text-slate-500">Science Dept</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ SECTION -->
+        <div id="view-faq" class="hidden">
+            <button onclick="router('home')" class="mb-8 flex items-center text-sm font-semibold text-slate-500 hover:text-slate-900 border border-slate-200 rounded-md px-3 py-1.5 bg-white w-fit">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Back
+            </button>
+            
+            <div class="mb-10">
+                <h1 class="text-2xl font-bold text-slate-900 mb-2">Frequently Asked Questions</h1>
+                <p class="text-slate-500">Administrative guidelines and solutions.</p>
+            </div>
+
+            <div class="space-y-4 max-w-3xl">
+                <!-- FAQ Item 1 -->
+                <details class="group bg-white rounded-lg border border-slate-200 open:ring-1 open:ring-slate-200">
+                    <summary class="flex items-center justify-between p-5 cursor-pointer list-none text-slate-900 font-semibold hover:bg-slate-50">
+                        <span>How do I assign a new project to a class?</span>
+                        <span class="text-slate-400 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                        </span>
+                    </summary>
+                    <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                        Go to the "Projects" module and click "Create New". You must select the specific Class (e.g., Grade 10-A) and Subject (e.g., Physics). Set the deadline and attach guidelines before publishing.
+                    </div>
+                </details>
+
+                <!-- FAQ Item 2 -->
+                <details class="group bg-white rounded-lg border border-slate-200 open:ring-1 open:ring-slate-200">
+                    <summary class="flex items-center justify-between p-5 cursor-pointer list-none text-slate-900 font-semibold hover:bg-slate-50">
+                        <span>Where can I view and grade student submissions?</span>
+                        <span class="text-slate-400 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                        </span>
+                    </summary>
+                    <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                        Click on the specific Project card to open the dashboard. Navigate to the "Submissions" tab. Here you can view uploaded files, verify timestamp (On Time/Late), and enter marks/remarks directly.
+                    </div>
+                </details>
+
+                <!-- FAQ Item 3 -->
+                <details class="group bg-white rounded-lg border border-slate-200 open:ring-1 open:ring-slate-200">
+                    <summary class="flex items-center justify-between p-5 cursor-pointer list-none text-slate-900 font-semibold hover:bg-slate-50">
+                        <span>How can I edit a published test schedule?</span>
+                        <span class="text-slate-400 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                        </span>
+                    </summary>
+                    <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                        In the "Examination" module, find the test in the "Upcoming" list. Click the "Edit" icon. Note that you cannot change the schedule if the test start time is within 1 hour.
+                    </div>
+                </details>
+                
+                 <!-- FAQ Item 4 -->
+                 <details class="group bg-white rounded-lg border border-slate-200 open:ring-1 open:ring-slate-200">
+                    <summary class="flex items-center justify-between p-5 cursor-pointer list-none text-slate-900 font-semibold hover:bg-slate-50">
+                        <span>How do I download monthly attendance reports?</span>
+                        <span class="text-slate-400 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                        </span>
+                    </summary>
+                    <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                        Navigate to "Analytics" > "Class Reports". Select the Class and Month. Click the "Export as PDF" or "Export as CSV" button at the top right corner.
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- GUIDES SECTION -->
+        <div id="view-guides" class="hidden">
+            <button onclick="router('home')" class="mb-8 flex items-center text-sm font-semibold text-slate-500 hover:text-slate-900 border border-slate-200 rounded-md px-3 py-1.5 bg-white w-fit">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Back
+            </button>
+
+            <div class="mb-10 pb-6 border-b border-slate-100">
+                <h1 class="text-2xl font-bold text-slate-900 mb-2">Guides & Tutorials</h1>
+                <p class="text-slate-500">Step-by-step documentation for platform features.</p>
+            </div>
+
+            <!-- Guides Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                <!-- Guide 1: Managing Students -->
+                <div onclick="openGuide('students')" class="cursor-pointer group block bg-white rounded-lg border border-slate-200 hover:border-slate-400 p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-10 h-10 bg-slate-50 text-slate-700 rounded-md flex items-center justify-center border border-slate-100 group-hover:bg-white group-hover:border-slate-200">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-300 group-hover:text-slate-600"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Managing Students</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">View student activity logs, check performance analytics, and monitor progress.</p>
+                </div>
+
+                <!-- Guide 2: Schedule Tests -->
+                <div onclick="openGuide('tests')" class="cursor-pointer group block bg-white rounded-lg border border-slate-200 hover:border-slate-400 p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-10 h-10 bg-slate-50 text-slate-700 rounded-md flex items-center justify-center border border-slate-100 group-hover:bg-white group-hover:border-slate-200">
+                            <i data-lucide="calendar-clock" class="w-5 h-5"></i>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-300 group-hover:text-slate-600"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Schedule Tests</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Set subject-specific tests, choose exam dates, and assign to classes.</p>
+                </div>
+
+                <!-- Guide 3: Research Paper -->
+                <div onclick="openGuide('research')" class="cursor-pointer group block bg-white rounded-lg border border-slate-200 hover:border-slate-400 p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-10 h-10 bg-slate-50 text-slate-700 rounded-md flex items-center justify-center border border-slate-100 group-hover:bg-white group-hover:border-slate-200">
+                            <i data-lucide="file-search" class="w-5 h-5"></i>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-300 group-hover:text-slate-600"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Research & Papers</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Start research on specific topics with assistance from an AI mentor.</p>
+                </div>
+
+                <!-- Guide 4: Analytics -->
+                <div onclick="openGuide('analytics')" class="cursor-pointer group block bg-white rounded-lg border border-slate-200 hover:border-slate-400 p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-10 h-10 bg-slate-50 text-slate-700 rounded-md flex items-center justify-center border border-slate-100 group-hover:bg-white group-hover:border-slate-200">
+                            <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-300 group-hover:text-slate-600"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Analytics</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">View detailed subject analytics, class performance, and student statistics.</p>
+                </div>
+
+                <!-- Guide 5: Project Management -->
+                <div onclick="openGuide('projects')" class="cursor-pointer group block bg-white rounded-lg border border-slate-200 hover:border-slate-400 p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-10 h-10 bg-slate-50 text-slate-700 rounded-md flex items-center justify-center border border-slate-100 group-hover:bg-white group-hover:border-slate-200">
+                            <i data-lucide="kanban-square" class="w-5 h-5"></i>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-300 group-hover:text-slate-600"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Project Management</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Assign projects to classes/subjects and view student submissions.</p>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- GUIDE POPUP MODAL -->
+    <div id="guide-modal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/40" onclick="closeModal()"></div>
+        
+        <!-- Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center">
+                <div class="relative bg-white text-left border border-slate-200 w-full max-w-lg rounded-lg">
+                    <!-- Modal Header -->
+                    <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-slate-900" id="modal-title">Guide Title</h3>
+                        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-900 p-1 rounded hover:bg-slate-100">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Modal Content -->
+                    <div class="px-6 py-8">
+                        <div class="flex gap-5">
+                            <div class="shrink-0">
+                                <div class="w-10 h-10 rounded-md bg-slate-100 text-slate-700 flex items-center justify-center">
+                                    <i data-lucide="info" class="w-5 h-5"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-4">Procedure</h4>
+                                <ul id="modal-content" class="space-y-4 text-slate-700 text-sm">
+                                    <!-- Content injected via JS -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="bg-slate-50 px-6 py-4 flex flex-row-reverse border-t border-slate-100 rounded-b-lg">
+                        <button type="button" onclick="closeModal()" class="inline-flex w-full justify-center rounded-md bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 sm:w-auto">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+
+        // Guide Content Data
+        const guideData = {
+            'students': {
+                title: 'Managing Students',
+                steps: [
+                    'Navigate to the Student List to view profiles.',
+                    'View detailed student activity logs.',
+                    'Check performance analytics for grades.',
+                    'Monitor overall student progress.'
+                ]
+            },
+            'tests': {
+                title: 'Schedule Tests & Exams',
+                steps: [
+                    'Select your specific subject for the test.',
+                    'Choose the exam date and time.',
+                    'Assign the test to the respective batch.',
+                    'Confirm scheduling details.'
+                ]
+            },
+            'research': {
+                title: 'Research & Papers',
+                steps: [
+                    'Start a new research topic.',
+                    'Use the AI Mentor for guidance.',
+                    'Collaborate on paper drafts.',
+                    'Submit for review.'
+                ]
+            },
+            'analytics': {
+                title: 'Analytics Dashboard',
+                steps: [
+                    'View performance data for your specific subjects.',
+                    'Analyze comparative class-level statistics.',
+                    'Drill down into individual student analytics.',
+                    'Export reports for administrative review.'
+                ]
+            },
+            'projects': {
+                title: 'Project & Assignment Management',
+                steps: [
+                    'Navigate to "Projects" module and click "Create New".',
+                    'Select the specific Class and Subject from the dropdown.',
+                    'Enter assignment details and submission deadline.',
+                    'Click "Submissions" on the project card to view and grade student work.'
+                ]
+            }
+        };
+
+        function openGuide(guideId) {
+            const data = guideData[guideId];
+            if (!data) return;
+
+            document.getElementById('modal-title').innerText = data.title;
+            const list = document.getElementById('modal-content');
+            list.innerHTML = data.steps.map((step, index) => `
+                <li class="flex gap-3 items-start">
+                    <span class="font-bold text-slate-400 text-xs mt-0.5 min-w-[1.25rem] select-none">${index + 1}.</span>
+                    <span class="leading-relaxed text-slate-700">${step}</span>
+                </li>
+            `).join('');
+            
+            document.getElementById('guide-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('guide-modal').classList.add('hidden');
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+
+        function router(viewName) {
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-faq').classList.add('hidden');
+            document.getElementById('view-guides').classList.add('hidden');
+
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            lucide.createIcons();
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
